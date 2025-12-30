@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7147335211570981271}
   - component: {fileID: 6124885302298978632}
+  - component: {fileID: 7970093835641492038}
   m_Layer: 0
   m_Name: Brut
   m_TagString: Untagged
@@ -56,6 +57,20 @@ MonoBehaviour:
   m_ObjectForwardAxis: 2
   m_ObjectUpAxis: 1
   m_StartOffset: 0
+--- !u!114 &7970093835641492038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 935630971784491445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43bc72f694da21b40a60f2461ff11b29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MonsterController
+  type: 4
+  spline: {fileID: 6124885302298978632}
 --- !u!1001 &5838579974006037082
 PrefabInstance:
   m_ObjectHideFlags: 0

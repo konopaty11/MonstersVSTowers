@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
+/// <summary>
+/// Основной менеджер
+/// </summary>
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] List<WaveSerializable> waves;
+    [SerializeField] WavesSerializable waves;
     [SerializeField] MonstersSpawn monsterSpawn;
 
     int _currentWave;
@@ -12,9 +16,18 @@ public class GameManager : MonoBehaviour
     float _minSpawnDelay = 1f;
     float _maxSpawnDelay = 1.5f;
 
+    void Start()
+    {
+        StartCoroutine(Game());
+    }
+
+    /// <summary>
+    /// корутина основного гемплея
+    /// </summary>
+    /// <returns></returns>
     IEnumerator Game()
     {
-        foreach (MonsterSerializable _monster in waves[_currentWave].Monsters)
+        foreach (MonsterWaveSerializable _monster in waves.waves[_currentWave].monsters)
         {
             for (int i = 0; i < _monster.count; i++)
             {

@@ -1589,7 +1589,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 100}
-  m_SizeDelta: {x: 600, y: 158}
+  m_SizeDelta: {x: 600, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &327822248
 PrefabInstance:
@@ -4024,9 +4024,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 8d189d6899db83545935115f32e9a2f5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4689448f10e67ce4986821a84e407bd6, type: 3}
   m_Type: 0
-  m_PreserveAspect: 1
+  m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -4054,11 +4054,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1996accb844034b45ab4ff0320e946ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnGunButtonsAnimate
-  towersMaterial: {fileID: 2100000, guid: 80ee5d0cd56b34844830929640b37797, type: 2}
-  pressedColor: {r: 0.5254902, g: 1, b: 0.40392157, a: 1}
   createBtn: {fileID: 924446733}
-  createBtnNotPressed: {fileID: 21300000, guid: 8d189d6899db83545935115f32e9a2f5, type: 3}
-  createBtnPressed: {fileID: 21300000, guid: 62ad8dace0e372f44901642987d9c391, type: 3}
+  createBtnNotPressed: {fileID: 21300000, guid: 4689448f10e67ce4986821a84e407bd6, type: 3}
+  createBtnPressed: {fileID: 21300000, guid: 978f88578e1224a4ebaa4a8b0c314197, type: 3}
   gunRenderer: {fileID: 91830956}
   speedRotate: 60
 --- !u!1 &937045589
