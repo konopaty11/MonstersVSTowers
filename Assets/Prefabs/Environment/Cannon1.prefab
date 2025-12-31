@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4983722105659067070}
   - component: {fileID: 5825038230125808563}
   - component: {fileID: 7349801653971655762}
+  - component: {fileID: 2280320529525352564}
   m_Layer: 0
   m_Name: Cannon1
   m_TagString: Untagged
@@ -91,3 +92,16 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2280320529525352564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7300999276191998898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c628a9403eab3c46a7d6ba9d887bf2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunController
+  type: 1

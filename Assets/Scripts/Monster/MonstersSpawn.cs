@@ -12,8 +12,6 @@ public class MonstersSpawn : MonoBehaviour
     [SerializeField] List<GameObject> monsterPrefabs;
     [SerializeField] SplineContainer spline;
 
-    List<MonsterController> _prefabControllers;
-
     /// <summary>
     /// спавн монстров
     /// </summary>

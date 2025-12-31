@@ -19,7 +19,7 @@ public class SpawnGunButtonsAnimate : MonoBehaviour
 
     [Header("Gun Renderer")]
     [SerializeField] Transform gunRenderer;
-    [SerializeField] float speedRotate = 5f;
+    [SerializeField] float speedRotate = 20f;
 
     bool _isPress = false;
     Coroutine _rotateGunRendereCoroutine;
