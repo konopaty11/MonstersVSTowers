@@ -33,6 +33,11 @@ public class ModeManager : MonoBehaviour
         Mode = _mode;
         OnModeChange?.Invoke(Mode);
     }
+
+    public static bool IsCreatingMode(Modes _mode)
+    {
+        return _mode >= Modes.CreatingCannon;
+    }
 }
 
 [Serializable]

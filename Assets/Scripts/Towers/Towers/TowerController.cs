@@ -13,6 +13,8 @@ public class TowerController : MonoBehaviour, IUpgradable
 
     bool _isFree = true;
 
+    GunController _currentGun;
+
     void OnEnable()
     {
         ModeManager.OnModeChange += LockControl;
@@ -34,7 +36,7 @@ public class TowerController : MonoBehaviour, IUpgradable
             case Modes.UpgradingGuns:
                 break;
 
-            case Modes.CreatingGuns:
+            case >= Modes.CreatingCannon:
                 IsLock = !_isFree;
                 break;
         }
@@ -47,8 +49,38 @@ public class TowerController : MonoBehaviour, IUpgradable
         meshRenderer.material = _isLock ? lockMaterial : unlockMaterial;
     }
 
-    public void Upgrade()
+    public bool HandleTowerInteraction(Modes _mode)
     {
-        
+        if (IsLock) return false;
+
+        bool _result = _mode switch
+        {
+            Modes.UpgradingTowers => Upgrade(),
+            Modes.UpgradingGuns => GunUpgrade(),
+            >= Modes.CreatingCannon => CreateGun(_mode),
+            _ => false
+        };
+
+        LockControl(_mode);
+
+        return _result;
+    }
+
+    public bool Upgrade()
+    {
+        return false;
+    }
+
+    bool CreateGun(Modes _mode)
+    {
+        _currentGun = gunSpawn.SpawnGun((GunType) _mode);
+        _isFree = false;
+
+        return true;
+    }
+
+    bool GunUpgrade()
+    {
+        return false;
     }
 }

@@ -13,13 +13,20 @@ public class GunSpawn : MonoBehaviour
     /// спавн орудия
     /// </summary>
     /// <param name="_type"></param>
-    public void SpawnGun(GunType _type)
+    public GunController SpawnGun(GunType _type)
     {
+        Debug.Log(_type);
         foreach (GameObject _gunPrefab in gunPrefabs)
         {
             GunController _gunPrefabController = _gunPrefab.GetComponent<GunController>();
             if (_gunPrefabController.Type == _type)
-                Instantiate(_gunPrefab, gunParent);
+            {
+                GameObject _gunObject = Instantiate(_gunPrefab, gunParent);
+
+                return _gunObject.GetComponent<GunController>();
+            }
         }
+
+        return null;
     }
 }

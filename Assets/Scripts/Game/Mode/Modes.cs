@@ -3,5 +3,8 @@ public enum Modes
     None,
     UpgradingTowers,
     UpgradingGuns,
-    CreatingGuns
+    // place to paste
+    CreatingCannon = 10,
+    CreatingCrossbow,
+    CreatingMagicCrystal,
 }

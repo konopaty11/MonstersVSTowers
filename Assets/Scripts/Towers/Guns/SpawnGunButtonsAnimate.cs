@@ -85,6 +85,4 @@ public class SpawnGunButtonsAnimate : MonoBehaviour
             yield return null;
         }
     }
-
-    
 }

@@ -20,29 +20,45 @@ public class GameManager : MonoBehaviour
     float _minSpawnDelay = 1f;
     float _maxSpawnDelay = 1.5f;
 
+    string _towerTag = "Tower";
+
+    InputSystem_Actions _inputSystem;
+
+    void Awake()
+    {
+        _inputSystem = new();
+    }
+
+    void OnEnable()
+    {
+        _inputSystem.Player.Attack.Enable();
+        _inputSystem.Player.Attack.performed += ThrowRaycast; 
+    }
+
+    void OnDisable()
+    {
+        _inputSystem.Player.Attack.Disable();
+        _inputSystem.Player.Attack.performed -= ThrowRaycast;
+    }
+
     void Start()
     {
         StartCoroutine(Game());
     }
 
-    void Update()
+    void ThrowRaycast(InputAction.CallbackContext _context)
     {
-        if (modeManager.Mode != Modes.None)
-            ThrowRaycast();
-    }
-
-    void ThrowRaycast()
-    {
-        if (Touchscreen.current == null) return;
+        if (Touchscreen.current == null || modeManager.Mode == Modes.None) return;
 
         foreach (TouchControl _touch in Touchscreen.current.touches)
         {
             Vector2 _position = _touch.position.ReadValue();
             Ray _ray = mainCamera.ScreenPointToRay(_position);
 
-            if (Physics.Raycast(_ray, out RaycastHit _hit))
+            if (Physics.Raycast(_ray, out RaycastHit _hit) && _hit.collider.CompareTag(_towerTag))
             {
-
+                TowerController _tower = _hit.collider.GetComponent<TowerController>();
+                _tower.HandleTowerInteraction(modeManager.Mode);
             }
         }
     }

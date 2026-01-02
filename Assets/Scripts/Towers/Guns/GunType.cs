@@ -1,7 +1,7 @@
 public enum GunType
 {
     None,
-    Cannon,
+    Cannon = 10,
     Crossbow,
     MagicCrystal
 }
