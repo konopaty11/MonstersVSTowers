@@ -8,6 +8,9 @@ using UnityEngine.UI;
 /// </summary>
 public class SpawnGunButtonsAnimate : MonoBehaviour
 {
+    [Header("Gun type")]
+    [SerializeField] GunType type;
+
     [Header("Towers")]
     [SerializeField] Material towersMaterial;
     [SerializeField] Color pressedColor;
@@ -25,6 +28,16 @@ public class SpawnGunButtonsAnimate : MonoBehaviour
     Coroutine _rotateGunRendereCoroutine;
     Vector3 _baseGunRendererRotation;
 
+    void OnEnable()
+    {
+        ModeManager.OnModeChange += UpdateMode;
+    }
+
+    void OnDisable()
+    {
+        ModeManager.OnModeChange -= UpdateMode;
+    }
+
     void Start()
     {
         Init();
@@ -33,6 +46,12 @@ public class SpawnGunButtonsAnimate : MonoBehaviour
     void Init()
     {
         _baseGunRendererRotation = gunRenderer.eulerAngles;
+    }
+
+    void UpdateMode(Modes _mode)
+    {
+        if ((GunType)_mode != type)
+            SetNotPressedBtn();
     }
 
     /// <summary>
@@ -57,7 +76,6 @@ public class SpawnGunButtonsAnimate : MonoBehaviour
     /// </summary>
     void SetPressedBtn()
     {
-        towersMaterial.color = pressedColor;
         createBtn.sprite = createBtnPressed;
         _rotateGunRendereCoroutine = StartCoroutine(RotateGunRenderer());
     }
@@ -67,10 +85,10 @@ public class SpawnGunButtonsAnimate : MonoBehaviour
     /// </summary>
     void SetNotPressedBtn()
     {
-        towersMaterial.color = Color.white;
         createBtn.sprite = createBtnNotPressed;
-        StopCoroutine(_rotateGunRendereCoroutine);
         gunRenderer.transform.eulerAngles = _baseGunRendererRotation;
+        if (_rotateGunRendereCoroutine != null)
+            StopCoroutine(_rotateGunRendereCoroutine);
     }
 
     /// <summary>
@@ -81,7 +99,7 @@ public class SpawnGunButtonsAnimate : MonoBehaviour
     {
         while (true)
         {
-            gunRenderer.Rotate(Vector3.back, speedRotate * Time.deltaTime);
+            gunRenderer.Rotate(Vector3.up, speedRotate * Time.deltaTime);
             yield return null;
         }
     }

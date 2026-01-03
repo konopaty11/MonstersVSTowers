@@ -8,6 +8,7 @@ public class GunSpawn : MonoBehaviour
 {
     [SerializeField] Transform gunParent;
     [SerializeField] List<GameObject> gunPrefabs;
+    [SerializeField] CollectMonsters collection;
     
     /// <summary>
     /// спавн орудия
@@ -15,15 +16,16 @@ public class GunSpawn : MonoBehaviour
     /// <param name="_type"></param>
     public GunController SpawnGun(GunType _type)
     {
-        Debug.Log(_type);
         foreach (GameObject _gunPrefab in gunPrefabs)
         {
             GunController _gunPrefabController = _gunPrefab.GetComponent<GunController>();
             if (_gunPrefabController.Type == _type)
             {
                 GameObject _gunObject = Instantiate(_gunPrefab, gunParent);
+                GunController _gun = _gunObject.GetComponent<GunController>();
+                _gun.Init(collection);
 
-                return _gunObject.GetComponent<GunController>();
+                return _gun;
             }
         }
 

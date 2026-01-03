@@ -17,8 +17,8 @@ public class GameManager : MonoBehaviour
 
     int _currentWave;
 
-    float _minSpawnDelay = 1f;
-    float _maxSpawnDelay = 1.5f;
+    float _minSpawnDelay = 5f;
+    float _maxSpawnDelay = 5.5f;
 
     string _towerTag = "Tower";
 

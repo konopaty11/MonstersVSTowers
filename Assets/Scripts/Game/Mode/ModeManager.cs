@@ -24,14 +24,28 @@ public class ModeManager : MonoBehaviour
     {
         foreach (ChangeModeButtonSerializable _modeButton in buttons)
         {
-            _modeButton.button.onClick.AddListener(() => SetMode(_modeButton.mode));
+            _modeButton.button.onClick.AddListener(() => SetModeControl(_modeButton.mode));
         }
     }
 
-    public void SetMode(Modes _mode)
+    public void SetModeControl(Modes _mode)
+    {
+        if (Mode != _mode)
+            SetMode(_mode);
+        else
+            UnsetMode();
+
+        OnModeChange?.Invoke(Mode);
+    }
+
+    void SetMode(Modes _mode)
     {
         Mode = _mode;
-        OnModeChange?.Invoke(Mode);
+    }
+
+    void UnsetMode()
+    {
+        Mode = Modes.None;
     }
 
     public static bool IsCreatingMode(Modes _mode)

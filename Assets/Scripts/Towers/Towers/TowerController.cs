@@ -2,8 +2,13 @@ using UnityEngine;
 
 public class TowerController : MonoBehaviour, IUpgradable
 {
+    [Header("Gun spawn")]
     [SerializeField] GunSpawn gunSpawn;
+
+    [Header("Configuration of upgrades")]
     [SerializeField] TowersUpgradeSerializable towerUpgrades;
+
+    [Header("Lock\\Unlock")]
     [SerializeField] MeshRenderer meshRenderer;
     [SerializeField] Material lockMaterial;
     [SerializeField] Material unlockMaterial;
@@ -29,6 +34,10 @@ public class TowerController : MonoBehaviour, IUpgradable
     {
         switch (_mode)
         {
+            case Modes.None:
+                SetLock();
+                return;
+
             case Modes.UpgradingTowers:
                 IsLock = towerUpgrades.towers.Count == Level;
                 break;
@@ -47,6 +56,11 @@ public class TowerController : MonoBehaviour, IUpgradable
     void SetLock(bool _isLock)
     {
         meshRenderer.material = _isLock ? lockMaterial : unlockMaterial;
+    }
+
+    void SetLock()
+    {
+        meshRenderer.material = lockMaterial;
     }
 
     public bool HandleTowerInteraction(Modes _mode)
