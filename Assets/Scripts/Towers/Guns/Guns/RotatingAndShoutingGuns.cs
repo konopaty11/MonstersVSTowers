@@ -46,7 +46,7 @@ public class RotatingAndShoutingGuns : GunController, IUpgradable
 
         for (int i = 0; i < _countGuns; i++)
         {
-            GameObject _cartridge = Instantiate(cartridgePrefab, spawnsAmmunition[i]);
+            GameObject _cartridge = Instantiate(cartridgePrefab, spawnsAmmunition[i].position, Quaternion.identity);
             Rigidbody _cartridgeRg = _cartridge.GetComponent<Rigidbody>();
 
             _cartridgeRg.linearVelocity = GetVelocity(_cartridge.transform.position, Collection.Monsters[0].transform.position, maxHeight);
@@ -57,7 +57,6 @@ public class RotatingAndShoutingGuns : GunController, IUpgradable
     {
         float _highestPoint = Mathf.Max(_start.y, _end.y) + _maxHeight;
         float _apexHeight = _highestPoint - _start.y;
-
 
         float _heightFromApex = _highestPoint - _end.y;
 

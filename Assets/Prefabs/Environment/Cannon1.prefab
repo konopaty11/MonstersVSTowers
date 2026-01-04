@@ -173,4 +173,4 @@ MonoBehaviour:
   spawnsAmmunition:
   - {fileID: 212655758384834322}
   gunSettings: {fileID: 11400000, guid: 4d0ca8cc47919f5468052628309c5034, type: 2}
-  maxHeight: 5
+  maxHeight: 1
