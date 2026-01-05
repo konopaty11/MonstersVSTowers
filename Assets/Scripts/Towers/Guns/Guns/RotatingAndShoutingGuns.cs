@@ -15,7 +15,7 @@ public class RotatingAndShoutingGuns : GunController, IUpgradable
 
     public int Level { get; private set; }
 
-    RotatingAndShoutingGunSettingsSerializable _settings;
+    public RotatingAndShoutingGunSettingsSerializable Settings { get; private set; }
 
     public override void SetSettings()
     {
@@ -23,7 +23,7 @@ public class RotatingAndShoutingGuns : GunController, IUpgradable
         {
             if (_gunSettings.type == Type)
             {
-                _settings = _gunSettings;
+                Settings = _gunSettings;
                 return;
             }
         }
@@ -46,10 +46,13 @@ public class RotatingAndShoutingGuns : GunController, IUpgradable
 
         for (int i = 0; i < _countGuns; i++)
         {
-            GameObject _cartridge = Instantiate(cartridgePrefab, spawnsAmmunition[i].position, Quaternion.identity);
-            Rigidbody _cartridgeRg = _cartridge.GetComponent<Rigidbody>();
+            GameObject _cartridgeObject = Instantiate(cartridgePrefab, spawnsAmmunition[i].position, spawnsAmmunition[i].rotation);
 
-            _cartridgeRg.linearVelocity = GetVelocity(_cartridge.transform.position, Collection.Monsters[0].transform.position, maxHeight);
+            CartridgeController _cartridge = _cartridgeObject.GetComponent<CartridgeController>();
+            _cartridge.Gun = this;
+
+            Rigidbody _cartridgeRg = _cartridgeObject.GetComponent<Rigidbody>();
+            _cartridgeRg.linearVelocity = GetVelocity(_cartridgeObject.transform.position, Collection.Monsters[0].transform.position, maxHeight);
         }
     }
 
@@ -63,6 +66,8 @@ public class RotatingAndShoutingGuns : GunController, IUpgradable
         float _timeToApex = Mathf.Sqrt(2 * _apexHeight / -Physics.gravity.y);
         float _timeFromApex = Mathf.Sqrt(2 * _heightFromApex / -Physics.gravity.y);
         float _totalTime = _timeToApex + _timeFromApex;
+
+        _end += Collection.Monsters[0].CurrentVelocity * _totalTime;
 
         Vector3 _horizontalDistance = new Vector3(_end.x - _start.x, 0, _end.z - _start.z);
         Vector3 _horizontalVelocity = _horizontalDistance / _totalTime;
@@ -91,8 +96,6 @@ public class RotatingAndShoutingGuns : GunController, IUpgradable
         }
     }
 
-
-
     public override void Init(CollectMonsters _collection)
     {
         base.Init(_collection);
@@ -101,7 +104,7 @@ public class RotatingAndShoutingGuns : GunController, IUpgradable
 
     public override GunLevelSettingsSerializable GetLevelSettings()
     {
-        foreach (RotatingAndShoutingGunLevelSettingsSerializable _levelSettings in _settings.levels)
+        foreach (RotatingAndShoutingGunLevelSettingsSerializable _levelSettings in Settings.levels)
         {
             if (_levelSettings.level == Level)
                 return _levelSettings;

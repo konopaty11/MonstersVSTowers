@@ -17,8 +17,8 @@ public class GameManager : MonoBehaviour
 
     int _currentWave;
 
-    float _minSpawnDelay = 5f;
-    float _maxSpawnDelay = 5.5f;
+    float _minSpawnDelay = 1.5f;
+    float _maxSpawnDelay = 2f;
 
     string _towerTag = "Tower";
 
@@ -59,6 +59,7 @@ public class GameManager : MonoBehaviour
             {
                 TowerController _tower = _hit.collider.GetComponent<TowerController>();
                 _tower.HandleTowerInteraction(modeManager.Mode);
+                modeManager.SetModeControl(Modes.None);
             }
         }
     }

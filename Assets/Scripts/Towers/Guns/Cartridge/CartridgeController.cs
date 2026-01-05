@@ -1,14 +1,28 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class CartridgeController : MonoBehaviour
 {
     [SerializeField] GameObject particleSystemPrefab;
     [SerializeField] float particleSystemDelayDestroy;
-    [SerializeField] Mesh mesh;
+
+    public RotatingAndShoutingGuns Gun { get; set; }
+    public float Damage { get; private set; }
+
+    string _monsterTag = "Monster";
+
+    void Start()
+    {
+        Damage = Gun.GetLevelSettings().damage;
+    }
 
     void OnCollisionEnter(Collision collision)
     {
+        if (collision.collider.CompareTag(_monsterTag))
+        {
+            MonsterController _monster = collision.collider.GetComponent<MonsterController>();
+            _monster.CartridgeHit(Gun, Damage);
+        }
+
         ContactPoint _contact = collision.contacts[0];
         GameObject _particleSystemObject = Instantiate
             (
@@ -22,31 +36,5 @@ public class CartridgeController : MonoBehaviour
 
         ParticleSystemRenderer _psRenderer = _particleSystemObject.GetComponent<ParticleSystemRenderer>();
         _psRenderer.renderMode = ParticleSystemRenderMode.Mesh;
-
-        FixMeshSettings(mesh);
-    }
-
-    void FixMeshSettings(Mesh mesh)
-    {
-        // Убедимся, что у меша есть нормали
-        if (mesh.normals == null || mesh.normals.Length == 0)
-        {
-            mesh.RecalculateNormals();
-        }
-
-        // Убедимся, что у меша есть UV
-        if (mesh.uv == null || mesh.uv.Length == 0)
-        {
-            // Создаем простые UV
-            Vector2[] uvs = new Vector2[mesh.vertices.Length];
-            for (int i = 0; i < uvs.Length; i++)
-            {
-                uvs[i] = new Vector2(mesh.vertices[i].x, mesh.vertices[i].z);
-            }
-            mesh.uv = uvs;
-        }
-
-        // Оптимизируем меш
-        mesh.Optimize();
     }
 }
