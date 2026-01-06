@@ -8,10 +8,32 @@ public class CollectMonsters : MonoBehaviour
 
     string _monsterTag = "Monster";
 
-    public CapsuleCollider Collider { get; private set; }
+    float _radiusMultyplier;
+    public float RadiusMultyplier 
+    {
+        get => _radiusMultyplier; 
+        set
+        {
+            _radiusMultyplier = value;
+            SetColliderRadius(Radius);
+        } 
+    }
 
-    public List<MonsterController> Monsters => _monsters;
+    float _radius;
+    public float Radius
+    {
+        get => _radius;
+        set
+        {
+            _radius = value;
+            SetColliderRadius(Radius);
+        }
+    }
+
+    CapsuleCollider _collider;
+
     List<MonsterController> _monsters = new();
+    public List<MonsterController> Monsters => _monsters;
 
     void OnEnable()
     {
@@ -25,7 +47,7 @@ public class CollectMonsters : MonoBehaviour
 
     void Start()
     {
-        Collider = GetComponent<CapsuleCollider>();
+        _collider = GetComponent<CapsuleCollider>();
     }
 
     void OnTriggerEnter(Collider other)
@@ -60,5 +82,10 @@ public class CollectMonsters : MonoBehaviour
     void RemoveMonster(MonsterController _monster)
     {
         _monsters.Remove(_monster);
+    }
+
+    void SetColliderRadius(float _radius)
+    {
+        _collider.radius = _radius * RadiusMultyplier;
     }
 }

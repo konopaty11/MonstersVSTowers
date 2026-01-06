@@ -100,7 +100,7 @@ public class RotatingAndShoutingGuns : GunController, IUpgradable
     {
         base.Init(_collection);
         SetSettings();
-        Collection.Collider.radius = GetLevelSettings().radius;
+        Collection.Radius = GetLevelSettings().radius;
     }
 
     public override GunLevelSettingsSerializable GetLevelSettings()

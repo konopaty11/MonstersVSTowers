@@ -129,6 +129,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TowerController
   gunSpawn: {fileID: 2822583747626148261}
   towerUpgrades: {fileID: 11400000, guid: 372b57a4567be08469c5b1377b205670, type: 2}
+  meshFilter: {fileID: 3382087509872590247}
+  collection: {fileID: 5038123332578256402}
   meshRenderer: {fileID: 1576486999947622904}
   lockMaterial: {fileID: 2100000, guid: 717bf4823b0cf3c44aaa303d54a4dbbc, type: 2}
   unlockMaterial: {fileID: 2100000, guid: 80ee5d0cd56b34844830929640b37797, type: 2}
@@ -195,6 +197,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e2ed198923026b4f9f9eb8aa308ce54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CollectMonsters
+  tower: {fileID: 5406995145452128022}
 --- !u!136 &3486683745719395239
 CapsuleCollider:
   m_ObjectHideFlags: 0

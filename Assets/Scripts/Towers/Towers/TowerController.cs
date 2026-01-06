@@ -5,8 +5,10 @@ public class TowerController : MonoBehaviour, IUpgradable
     [Header("Gun spawn")]
     [SerializeField] GunSpawn gunSpawn;
 
-    [Header("Configuration of upgrades")]
+    [Header("Upgrades")]
     [SerializeField] TowersUpgradeSerializable towerUpgrades;
+    [SerializeField] MeshFilter meshFilter;
+    [SerializeField] CollectMonsters collection;
 
     [Header("Lock\\Unlock")]
     [SerializeField] MeshRenderer meshRenderer;
@@ -30,6 +32,11 @@ public class TowerController : MonoBehaviour, IUpgradable
         ModeManager.OnModeChange -= LockControl;
     }
 
+    void Start()
+    {
+        Upgrade();
+    }
+
     void LockControl(Modes _mode)
     {
         switch (_mode)
@@ -39,7 +46,7 @@ public class TowerController : MonoBehaviour, IUpgradable
                 return;
 
             case Modes.UpgradingTowers:
-                IsLock = towerUpgrades.towers.Count == Level;
+                IsLock = IsCanUpgrade();
                 break;
 
             case Modes.UpgradingGuns:
@@ -51,6 +58,17 @@ public class TowerController : MonoBehaviour, IUpgradable
         }
 
         SetLock(IsLock);
+    }
+
+    bool IsCanUpgrade()
+    {
+        float _maxLevel = 0f;
+        foreach (TowerLevelUpgradeSerializable _levelUpgrade in towerUpgrades.towers)
+        {
+            _maxLevel = Mathf.Max(_maxLevel, _levelUpgrade.level);
+        }
+
+        return _maxLevel == Level;
     }
 
     void SetLock(bool _isLock)
@@ -82,6 +100,19 @@ public class TowerController : MonoBehaviour, IUpgradable
 
     public bool Upgrade()
     {
+        Level++;
+
+        foreach (TowerLevelUpgradeSerializable _levelUpgrade in towerUpgrades.towers)
+        {
+            if (_levelUpgrade.level == Level)
+            {
+                meshFilter.mesh = _levelUpgrade.mesh;
+                collection.RadiusMultyplier = _levelUpgrade.rangeMultiplier;
+
+                return true;
+            }
+        }
+
         return false;
     }
 

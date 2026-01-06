@@ -18,7 +18,7 @@ public class MagicCrystalController : GunController, IUpgradable
     {
         base.Init(_collection);
 
-        Collection.Collider.radius = GetLevelSettings().radius;
+        Collection.Radius = GetLevelSettings().radius;
         _currentTime = GetLevelSettings().attackInterval;
     }
 

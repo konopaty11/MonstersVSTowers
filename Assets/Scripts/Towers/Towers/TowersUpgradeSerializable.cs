@@ -5,12 +5,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "TowersUpdate", menuName = "Scriptable Objects/TowersUpdateSerializable")]
 public class TowersUpgradeSerializable : ScriptableObject
 {
-    public List<TowerUpgradeSerializable> towers;
+    public List<TowerLevelUpgradeSerializable> towers;
 }
 
 [Serializable]
-public class TowerUpgradeSerializable
+public class TowerLevelUpgradeSerializable
 {
+    public int level;
     public Mesh mesh;
     public float rangeMultiplier;
 }
