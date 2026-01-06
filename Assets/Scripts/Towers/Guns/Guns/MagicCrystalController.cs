@@ -1,37 +1,44 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MagicCrystalController : GunController, IUpgradable
 {
-    [SerializeField] GunsSettings gunSettings;
+    [SerializeField] MagicCrystalSettings settings;
 
-    public int Level { get; private set; }
-
-    GunSettingsSerializable _settings;
+    public int Level { get; private set; } = 1;
 
     float _currentTime;
-
-    public override void SetSettings()
-    {
-        foreach (GunSettingsSerializable _gunSettings in gunSettings.guns)
-        {
-            if (_gunSettings.type == Type)
-            {
-                _settings = _gunSettings;
-                return;
-            }
-        }
-    }
 
     public bool Upgrade()
     {
         throw new System.NotImplementedException();
     }
 
+    public override void Init(CollectMonsters _collection)
+    {
+        base.Init(_collection);
+
+        Collection.Collider.radius = GetLevelSettings().radius;
+        _currentTime = GetLevelSettings().attackInterval;
+    }
+
     void Attack()
     {
-        foreach (MonsterController _monster in Collection.Monsters)
+        float _slowSpeedCoefficient = ((MagicCrystalLevelSettingsSerializable) GetLevelSettings()).slowSpeedCoefficient;
+
+        MonsterController[] _monsters = new MonsterController[Collection.Monsters.Count];
+        Collection.Monsters.CopyTo(_monsters);
+
+        foreach (MonsterController _monster in _monsters)
         {
+            _monster.LastAttackedGun = this;
             _monster.SubstractHealth(GetLevelSettings().damage);
+
+            MonsterEffectController _monsterEffectController = _monster.GetComponent<MonsterEffectController>();
+            SlowEffect _slowEffect = (SlowEffect) _monsterEffectController.GetEffect(EffectType.Slow);
+
+            _slowEffect.SlowSpeedCoefficient = _slowSpeedCoefficient;
+            _slowEffect.StartEffect();
         }
     }
 
@@ -49,7 +56,7 @@ public class MagicCrystalController : GunController, IUpgradable
 
     public override GunLevelSettingsSerializable GetLevelSettings()
     {
-        foreach (GunLevelSettingsSerializable _levelSettings in _settings.levels)
+        foreach (MagicCrystalLevelSettingsSerializable _levelSettings in settings.levels)
         {
             if (_levelSettings.level == Level)
                 return _levelSettings;

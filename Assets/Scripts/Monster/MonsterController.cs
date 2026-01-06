@@ -9,15 +9,30 @@ using UnityEngine.UI;
 /// </summary>
 public class MonsterController : MonoBehaviour
 {
+    [Header("Type")]
     [SerializeField] MonsterType type;
-    [SerializeField] SplineAnimate spline;
-    [SerializeField] MonstersSettings monstersSettings;
-    [SerializeField] Slider healthSlider;
-    [SerializeField] Animator animator;
-    [SerializeField] Renderer monsterRenderer;
+
+    [Header("Movement")]
+    [SerializeField] SplineFollow splineFollow;
     [SerializeField] List<Transform> offsetObjects;
 
+    [Header("Settings")]
+    [SerializeField] MonstersSettings monstersSettings;
+
+    [Header("Animation")]
+    [SerializeField] Slider healthSlider;
+    [SerializeField] Animator animator;
+
+    [Header("Rendering")]
+    [SerializeField] Renderer monsterRenderer;
+    [SerializeField] Material diedMaterial;
+
+    [Header("Effect")]
+    [SerializeField] MonsterEffectController monsterEffectController;
+
     public MonsterType Type => type;
+
+    public GunController LastAttackedGun { get; set; }
 
     public Vector3 CurrentVelocity { get; private set; }
     Vector3 _previousPosition;
@@ -25,12 +40,11 @@ public class MonsterController : MonoBehaviour
     float _currentHealth;
     MonsterSettings _settings;
 
-    RotatingAndShoutingGuns _lastHittedGun;
-
     float _minXOffset = -0.5f;
     float _maxXOffset = 0.5f;
 
     float _speedCoefficient = 1f;
+
 
     void Update()
     {
@@ -40,19 +54,13 @@ public class MonsterController : MonoBehaviour
     public void SetSpeedCoefficient(float _newCoefficient)
     {
         _speedCoefficient = _newCoefficient;
-        spline.MaxSpeed = _speedCoefficient * _settings.speed;
+        splineFollow.Speed = _speedCoefficient * _settings.speed;
     }
 
     void CalculateVelocity()
     {
         CurrentVelocity = (transform.position - _previousPosition) / Time.deltaTime;
         _previousPosition = transform.position;
-    }
-
-    public void CartridgeHit(RotatingAndShoutingGuns _gun, float _damage)
-    {
-        _lastHittedGun = _gun;
-        SubstractHealth(_damage);
     }
 
     public void InitMonster(SplineContainer _spline)
@@ -63,8 +71,7 @@ public class MonsterController : MonoBehaviour
             _offsetObject.position = new(_offsetObject.position.x + _xOffset, _offsetObject.position.y, _offsetObject.position.z);
         }
 
-        spline.Container = _spline;
-        spline.Play();
+        splineFollow.Container = _spline;
 
         foreach (MonsterSettings _monsterSettings in monstersSettings.monsters)
         {
@@ -75,7 +82,7 @@ public class MonsterController : MonoBehaviour
             }
         }
 
-        spline.MaxSpeed = _settings.speed;
+        splineFollow.Speed = _settings.speed;
         _currentHealth = _settings.health;
     }
 
@@ -98,11 +105,12 @@ public class MonsterController : MonoBehaviour
 
         animator.enabled = false;
         _collider.enabled = false;
-        spline.enabled = false;
-
+        splineFollow.enabled = false;
+        
         healthSlider.gameObject.SetActive(false);
 
-        _lastHittedGun.Collection.HandleRemoveMonster(this);
+        LastAttackedGun.Collection.HandleRemoveMonster(this);
+        monsterEffectController.DestroyAllEffects();
 
         StartCoroutine(FadingMaterial(_duration));
         Destroy(gameObject, _duration);
@@ -110,11 +118,9 @@ public class MonsterController : MonoBehaviour
 
     IEnumerator FadingMaterial(float _duration)
     {
-        Material _originMaterial = monsterRenderer.material;
-        Material _materialCopy = new Material(_originMaterial);
-        monsterRenderer.material = _materialCopy;
+        Material _copyMaterial = SetCopyMaterial();
 
-        Color _color = _materialCopy.color;
+        Color _color = _copyMaterial.color;
         float _startAlpha = _color.a;
         float _finishAlpha = 0f;
 
@@ -124,9 +130,16 @@ public class MonsterController : MonoBehaviour
             _elapsed += Time.deltaTime;
 
             _color.a = Mathf.Lerp(_startAlpha, _finishAlpha, _elapsed / _duration);
-            _materialCopy.color = _color;
+            _copyMaterial.color = _color;
 
             yield return null;
         }
+    }
+
+    Material SetCopyMaterial()
+    {
+        Material _copyMaterial = new(diedMaterial);
+        monsterRenderer.material = _copyMaterial;
+        return _copyMaterial;
     }
 }

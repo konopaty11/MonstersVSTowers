@@ -13,15 +13,11 @@ public abstract class GunController : MonoBehaviour
         GunHandle();
     }
 
-    public abstract void SetSettings();
-
     public abstract GunLevelSettingsSerializable GetLevelSettings();
 
     public virtual void Init(CollectMonsters _collection)
     {
         Collection = _collection;
-
-        SetSettings();
     }
 
     protected abstract void GunHandle();

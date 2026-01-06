@@ -15,14 +15,14 @@ MonoBehaviour:
   guns:
   - type: 10
     levels:
-    - level: 0
+    - level: 1
       radius: 0.06
       damage: 5
       attackInterval: 2
       countGuns: 1
   - type: 11
     levels:
-    - level: 0
+    - level: 1
       radius: 0.06
       damage: 5
       attackInterval: 2

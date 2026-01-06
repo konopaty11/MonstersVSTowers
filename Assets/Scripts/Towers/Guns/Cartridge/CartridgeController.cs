@@ -20,7 +20,8 @@ public class CartridgeController : MonoBehaviour
         if (collision.collider.CompareTag(_monsterTag))
         {
             MonsterController _monster = collision.collider.GetComponent<MonsterController>();
-            _monster.CartridgeHit(Gun, Damage);
+            _monster.LastAttackedGun = Gun;
+            _monster.SubstractHealth(Damage);
         }
 
         ContactPoint _contact = collision.contacts[0];

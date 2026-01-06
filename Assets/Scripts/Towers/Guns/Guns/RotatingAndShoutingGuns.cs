@@ -13,11 +13,11 @@ public class RotatingAndShoutingGuns : GunController, IUpgradable
     float _maxDegreesDelta = 2f;
     float _currentTime = 0f;
 
-    public int Level { get; private set; }
+    public int Level { get; private set; } = 1;
 
     public RotatingAndShoutingGunSettingsSerializable Settings { get; private set; }
 
-    public override void SetSettings()
+    public void SetSettings()
     {
         foreach (RotatingAndShoutingGunSettingsSerializable _gunSettings in gunSettings.guns)
         {
@@ -99,6 +99,7 @@ public class RotatingAndShoutingGuns : GunController, IUpgradable
     public override void Init(CollectMonsters _collection)
     {
         base.Init(_collection);
+        SetSettings();
         Collection.Collider.radius = GetLevelSettings().radius;
     }
 
