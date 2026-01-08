@@ -1,21 +1,40 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class RotatingAndShoutingGuns : GunController, IUpgradable
+public class RotatingAndShoutingGuns : GunController
 {
     [SerializeField] GameObject cartridgePrefab;
-    [SerializeField] List<Transform> spawnsAmmunition;
+    [SerializeField] List<CartridgeSpawnSerializable> cartridgeSpawns;
     [SerializeField] RotatingAndShoutingGunsSettings gunSettings;
     [SerializeField] float maxHeight;
 
     float _maxDegreesDelta = 2f;
-    float _currentTime = 0f;
+    float _currentRechargeTime = 0f;
+    float _currentAttackTime = 0f;
 
-    public int Level { get; private set; } = 1;
+    int _countCartridges;
+    int _currentCartridgeIndex = 0;
+
+    public override int Level { get; protected set; }
 
     public RotatingAndShoutingGunSettingsSerializable Settings { get; private set; }
+    public RotatingAndShoutingGunLevelSettingsSerializable LevelSettings 
+    {
+        get => (RotatingAndShoutingGunLevelSettingsSerializable)_levelSettings;
+        set => _levelSettings = value; 
+    }
+
+    public override void Init(CollectMonsters _collection)
+    {
+        base.Init(_collection);
+        SetSettings();
+        Upgrade();
+
+        _currentAttackTime = LevelSettings.attackInterval;
+    }
 
     public void SetSettings()
     {
@@ -42,17 +61,25 @@ public class RotatingAndShoutingGuns : GunController, IUpgradable
 
     protected void Shout()
     {
-        int _countGuns = ((RotatingAndShoutingGunLevelSettingsSerializable) GetLevelSettings()).countGuns;
-
-        for (int i = 0; i < _countGuns; i++)
+        foreach (CartridgeSpawnSerializable _cartrides in cartridgeSpawns)
         {
-            GameObject _cartridgeObject = Instantiate(cartridgePrefab, spawnsAmmunition[i].position, spawnsAmmunition[i].rotation);
+            if (_cartrides.spawns.Count == _countCartridges)
+            {
+                GameObject _cartridgeObject = Instantiate
+                (
+                    cartridgePrefab, 
+                    _cartrides.spawns[_currentCartridgeIndex].position, 
+                    _cartrides.spawns[_currentCartridgeIndex].rotation
+                );
 
-            CartridgeController _cartridge = _cartridgeObject.GetComponent<CartridgeController>();
-            _cartridge.Gun = this;
+                _cartridgeObject.transform.SetParent(Collection.transform);
 
-            Rigidbody _cartridgeRg = _cartridgeObject.GetComponent<Rigidbody>();
-            _cartridgeRg.linearVelocity = GetVelocity(_cartridgeObject.transform.position, Collection.Monsters[0].transform.position, maxHeight);
+                CartridgeController _cartridge = _cartridgeObject.GetComponent<CartridgeController>();
+                _cartridge.Gun = this;
+
+                Rigidbody _cartridgeRg = _cartridgeObject.GetComponent<Rigidbody>();
+                _cartridgeRg.linearVelocity = GetVelocity(_cartridgeObject.transform.position, Collection.Monsters[0].transform.position, maxHeight);
+            }
         }
     }
 
@@ -77,9 +104,27 @@ public class RotatingAndShoutingGuns : GunController, IUpgradable
         return _horizontalVelocity + Vector3.up * _verticalVelocity;
     }
 
-    public bool Upgrade()
+    public override bool Upgrade()
     {
+        Level++;
+
+        LevelSettings = (RotatingAndShoutingGunLevelSettingsSerializable) GetLevelSettings();
+
+        meshFilter.mesh = LevelSettings.mesh;
+        Collection.Radius = LevelSettings.radius;
+
         return true;
+    }
+
+    public override bool IsCanUpgrade()
+    {
+        float _maxLevel = 0f;
+        foreach (LevelSettings _levelUpgrade in Settings.levels)
+        {
+            _maxLevel = Mathf.Max(_maxLevel, _levelUpgrade.level);
+        }
+
+        return _maxLevel != Level;
     }
 
     protected override void GunHandle()
@@ -88,19 +133,26 @@ public class RotatingAndShoutingGuns : GunController, IUpgradable
 
         Rotate();
 
-        _currentTime += Time.deltaTime;
-        if (GetLevelSettings().attackInterval <= _currentTime)
+        _currentRechargeTime += Time.deltaTime;
+        if (LevelSettings.rechargeTime <= _currentRechargeTime)
         {
-            Shout();
-            _currentTime = 0f;
-        }
-    }
+            _currentAttackTime += Time.deltaTime;
+            _countCartridges = LevelSettings.countCartridges;
 
-    public override void Init(CollectMonsters _collection)
-    {
-        base.Init(_collection);
-        SetSettings();
-        Collection.Radius = GetLevelSettings().radius;
+            if (LevelSettings.attackInterval <= _currentAttackTime)
+            {
+                Shout();
+                _currentCartridgeIndex++;
+                _currentAttackTime = 0f;
+            }
+
+            if (_currentCartridgeIndex >= _countCartridges)
+            {
+                _currentRechargeTime = 0f;
+                _currentCartridgeIndex = 0;
+                _currentAttackTime = LevelSettings.attackInterval;
+            }
+        }
     }
 
     public override GunLevelSettingsSerializable GetLevelSettings()
@@ -112,5 +164,11 @@ public class RotatingAndShoutingGuns : GunController, IUpgradable
         }
 
         return null;
+    }
+
+    [Serializable]
+    class CartridgeSpawnSerializable
+    {
+        public List<Transform> spawns;
     }
 }

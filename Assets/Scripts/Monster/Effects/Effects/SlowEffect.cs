@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class SlowEffect : MonsterEffect
 {
-    [SerializeField] float durationEffect = 5f;
+    [SerializeField] float durationEffect = 4f;
     [SerializeField] Renderer monsterRenderer;
     [SerializeField] Color slowEffectColor;
     [SerializeField] List<Image> slowEffectScale;

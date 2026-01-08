@@ -15,7 +15,7 @@ MonoBehaviour:
   waves:
   - monsters:
     - type: 1
-      count: 5
+      count: 1
   - monsters: []
   - monsters: []
   - monsters: []

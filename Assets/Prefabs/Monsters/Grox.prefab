@@ -56,6 +56,7 @@ MonoBehaviour:
   offsetObjects:
   - {fileID: 6407843886873263790}
   - {fileID: 7959896631208775334}
+  solidCollider: {fileID: 3609545978282375380}
   monstersSettings: {fileID: 11400000, guid: b5b5576a9749c6340b8f6cfcf55a796b, type: 2}
   healthSlider: {fileID: 2735207997849278518}
   animator: {fileID: 8250488181322760252}
@@ -126,7 +127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SlowEffect
   type: 1
   monster: {fileID: 7724737762330350571}
-  durationEffect: 5
+  durationEffect: 4
   monsterRenderer: {fileID: 5667919656039709740}
   slowEffectColor: {r: 0.5019608, g: 0.7764706, b: 1, a: 1}
   slowEffectScale:

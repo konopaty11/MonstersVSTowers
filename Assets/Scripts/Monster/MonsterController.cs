@@ -15,6 +15,7 @@ public class MonsterController : MonoBehaviour
     [Header("Movement")]
     [SerializeField] SplineFollow splineFollow;
     [SerializeField] List<Transform> offsetObjects;
+    [SerializeField] CapsuleCollider solidCollider;
 
     [Header("Settings")]
     [SerializeField] MonstersSettings monstersSettings;
@@ -55,6 +56,7 @@ public class MonsterController : MonoBehaviour
     {
         _speedCoefficient = _newCoefficient;
         splineFollow.Speed = _speedCoefficient * _settings.speed;
+        animator.speed = _speedCoefficient;
     }
 
     void CalculateVelocity()
@@ -65,11 +67,7 @@ public class MonsterController : MonoBehaviour
 
     public void InitMonster(SplineContainer _spline)
     {
-        float _xOffset = Random.Range(_minXOffset, _maxXOffset);
-        foreach (Transform _offsetObject in offsetObjects)
-        {
-            _offsetObject.position = new(_offsetObject.position.x + _xOffset, _offsetObject.position.y, _offsetObject.position.z);
-        }
+        SetXOffset();
 
         splineFollow.Container = _spline;
 
@@ -84,6 +82,17 @@ public class MonsterController : MonoBehaviour
 
         splineFollow.Speed = _settings.speed;
         _currentHealth = _settings.health;
+    }
+
+    void SetXOffset()
+    {
+        float _xOffset = Random.Range(_minXOffset, _maxXOffset);
+
+        solidCollider.center = new(solidCollider.center.x + _xOffset, solidCollider.center.y, solidCollider.center.z);
+        foreach (Transform _offsetObject in offsetObjects)
+        {
+            _offsetObject.localPosition = new(_offsetObject.localPosition.x + _xOffset, _offsetObject.localPosition.y, _offsetObject.localPosition.z);
+        }
     }
 
     public void SubstractHealth(float _damage)

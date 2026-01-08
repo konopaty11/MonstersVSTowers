@@ -6,14 +6,8 @@ public class CartridgeController : MonoBehaviour
     [SerializeField] float particleSystemDelayDestroy;
 
     public RotatingAndShoutingGuns Gun { get; set; }
-    public float Damage { get; private set; }
 
     string _monsterTag = "Monster";
-
-    void Start()
-    {
-        Damage = Gun.GetLevelSettings().damage;
-    }
 
     void OnCollisionEnter(Collision collision)
     {
@@ -21,7 +15,7 @@ public class CartridgeController : MonoBehaviour
         {
             MonsterController _monster = collision.collider.GetComponent<MonsterController>();
             _monster.LastAttackedGun = Gun;
-            _monster.SubstractHealth(Damage);
+            _monster.SubstractHealth(Gun.GetLevelSettings().damage);
         }
 
         ContactPoint _contact = collision.contacts[0];

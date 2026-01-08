@@ -9,9 +9,8 @@ public class TowersUpgradeSerializable : ScriptableObject
 }
 
 [Serializable]
-public class TowerLevelUpgradeSerializable
+public class TowerLevelUpgradeSerializable : LevelSettings
 {
-    public int level;
     public Mesh mesh;
     public float rangeMultiplier;
 }

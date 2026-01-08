@@ -1,30 +1,54 @@
-using System.Collections.Generic;
 using UnityEngine;
 
-public class MagicCrystalController : GunController, IUpgradable
+public class MagicCrystalController : GunController
 {
     [SerializeField] MagicCrystalSettings settings;
+    [SerializeField] MeshFilter stonesMeshFilter;
 
-    public int Level { get; private set; } = 1;
+    public override int Level { get; protected set; }
+
+    public MagicCrystalLevelSettingsSerializable LevelSettings
+    {
+        get => (MagicCrystalLevelSettingsSerializable)_levelSettings;
+        set => _levelSettings = value;
+    }
 
     float _currentTime;
 
-    public bool Upgrade()
+    public override bool Upgrade()
     {
-        throw new System.NotImplementedException();
+        Level++;
+        LevelSettings = (MagicCrystalLevelSettingsSerializable)GetLevelSettings();
+
+        stonesMeshFilter.mesh = LevelSettings.stonesMesh;
+        meshFilter.mesh = LevelSettings.mesh;
+        Collection.Radius = LevelSettings.radius;
+
+        return true;
+    }
+
+    public override bool IsCanUpgrade()
+    {
+        float _maxLevel = 0f;
+        foreach (LevelSettings _levelUpgrade in settings.levels)
+        {
+            _maxLevel = Mathf.Max(_maxLevel, _levelUpgrade.level);
+        }
+
+        return _maxLevel != Level;
     }
 
     public override void Init(CollectMonsters _collection)
     {
         base.Init(_collection);
+        Upgrade();
 
-        Collection.Radius = GetLevelSettings().radius;
-        _currentTime = GetLevelSettings().attackInterval;
+        _currentTime = LevelSettings.rechargeTime;
     }
 
     void Attack()
     {
-        float _slowSpeedCoefficient = ((MagicCrystalLevelSettingsSerializable) GetLevelSettings()).slowSpeedCoefficient;
+        float _slowSpeedCoefficient = LevelSettings.slowSpeedCoefficient;
 
         MonsterController[] _monsters = new MonsterController[Collection.Monsters.Count];
         Collection.Monsters.CopyTo(_monsters);
@@ -32,7 +56,7 @@ public class MagicCrystalController : GunController, IUpgradable
         foreach (MonsterController _monster in _monsters)
         {
             _monster.LastAttackedGun = this;
-            _monster.SubstractHealth(GetLevelSettings().damage);
+            _monster.SubstractHealth(LevelSettings.damage);
 
             MonsterEffectController _monsterEffectController = _monster.GetComponent<MonsterEffectController>();
             SlowEffect _slowEffect = (SlowEffect) _monsterEffectController.GetEffect(EffectType.Slow);
@@ -47,7 +71,7 @@ public class MagicCrystalController : GunController, IUpgradable
         if (Collection == null || Collection.Monsters.Count == 0) return;
 
         _currentTime += Time.deltaTime;
-        if (GetLevelSettings().attackInterval <= _currentTime)
+        if (LevelSettings.rechargeTime <= _currentTime)
         {
             Attack();
             _currentTime = 0f;

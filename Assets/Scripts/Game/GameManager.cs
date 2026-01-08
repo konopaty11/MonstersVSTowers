@@ -24,6 +24,9 @@ public class GameManager : MonoBehaviour
 
     InputSystem_Actions _inputSystem;
 
+    LayerMask _layerMask;
+    string _ignoreRaycastLayerName = "Ignore Raycast";
+
     void Awake()
     {
         _inputSystem = new();
@@ -43,7 +46,13 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        Init();
         StartCoroutine(Game());
+    }
+
+    void Init()
+    {
+        _layerMask = ~LayerMask.GetMask(_ignoreRaycastLayerName);
     }
 
     void ThrowRaycast(InputAction.CallbackContext _context)
@@ -55,7 +64,7 @@ public class GameManager : MonoBehaviour
             Vector2 _position = _touch.position.ReadValue();
             Ray _ray = mainCamera.ScreenPointToRay(_position);
 
-            if (Physics.Raycast(_ray, out RaycastHit _hit) && _hit.collider.CompareTag(_towerTag))
+            if (Physics.Raycast(_ray, out RaycastHit _hit, Mathf.Infinity,_layerMask) && _hit.collider.CompareTag(_towerTag))
             {
                 TowerController _tower = _hit.collider.GetComponent<TowerController>();
                 _tower.HandleTowerInteraction(modeManager.Mode);

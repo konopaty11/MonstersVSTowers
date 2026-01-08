@@ -11,5 +11,7 @@ public class MagicCrystalSettings : ScriptableObject
 [Serializable]
 public class MagicCrystalLevelSettingsSerializable : GunLevelSettingsSerializable
 {
+    public bool isExistStone;
+    public Mesh stonesMesh;
     public float slowSpeedCoefficient;
 }

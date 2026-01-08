@@ -16,10 +16,10 @@ public class GunSettingsSerializable
 }
 
 [Serializable]
-public class GunLevelSettingsSerializable
+public class GunLevelSettingsSerializable : LevelSettings
 {
-    public int level;
     public float radius;
     public float damage;
-    public float attackInterval;
+    public float rechargeTime;
+    public Mesh mesh;
 }

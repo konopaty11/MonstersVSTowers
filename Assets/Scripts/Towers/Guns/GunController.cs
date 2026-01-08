@@ -1,12 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class GunController : MonoBehaviour
+public abstract class GunController : MonoBehaviour, IUpgradable
 {
     [SerializeField] GunType type;
+    [SerializeField] protected MeshFilter meshFilter;
 
     public GunType Type => type;
     public CollectMonsters Collection { get; set; }
+    public abstract int Level { get; protected set; }
+
+    protected GunLevelSettingsSerializable _levelSettings;
 
     void Update()
     {
@@ -21,4 +25,8 @@ public abstract class GunController : MonoBehaviour
     }
 
     protected abstract void GunHandle();
+
+    public abstract bool Upgrade();
+
+    public abstract bool IsCanUpgrade();
 }

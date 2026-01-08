@@ -18,5 +18,6 @@ public class RotatingAndShoutingGunSettingsSerializable
 [Serializable]
 public class RotatingAndShoutingGunLevelSettingsSerializable : GunLevelSettingsSerializable
 {
-    public int countGuns;
+    public int countCartridges;
+    public float attackInterval;
 }

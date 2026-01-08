@@ -18,12 +18,44 @@ MonoBehaviour:
     - level: 1
       radius: 0.06
       damage: 5
-      attackInterval: 2
-      countGuns: 1
+      rechargeTime: 2
+      mesh: {fileID: -1617785810324624936, guid: 052c946269965e9498b9bf52a58281a7, type: 3}
+      countCartridges: 1
+      attackInterval: 0.5
+    - level: 2
+      radius: 0.075
+      damage: 4
+      rechargeTime: 2.5
+      mesh: {fileID: 2463973035164070446, guid: 052c946269965e9498b9bf52a58281a7, type: 3}
+      countCartridges: 2
+      attackInterval: 0.5
+    - level: 3
+      radius: 0.08
+      damage: 4
+      rechargeTime: 3
+      mesh: {fileID: 5966592872987490368, guid: 052c946269965e9498b9bf52a58281a7, type: 3}
+      countCartridges: 3
+      attackInterval: 0.5
   - type: 11
     levels:
     - level: 1
       radius: 0.06
-      damage: 5
-      attackInterval: 2
-      countGuns: 1
+      damage: 3.5
+      rechargeTime: 1.5
+      mesh: {fileID: -1036868352945458072, guid: 052c946269965e9498b9bf52a58281a7, type: 3}
+      countCartridges: 1
+      attackInterval: 0.5
+    - level: 2
+      radius: 0.07
+      damage: 3.5
+      rechargeTime: 2
+      mesh: {fileID: 1273654491477234696, guid: 052c946269965e9498b9bf52a58281a7, type: 3}
+      countCartridges: 2
+      attackInterval: 0.5
+    - level: 3
+      radius: 0.08
+      damage: 3
+      rechargeTime: 1.7
+      mesh: {fileID: -6929091992741096592, guid: 052c946269965e9498b9bf52a58281a7, type: 3}
+      countCartridges: 3
+      attackInterval: 0.5

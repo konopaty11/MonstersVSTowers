@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class TowerController : MonoBehaviour, IUpgradable
 {
-    [Header("Gun spawn")]
+    [Header("Gun")]
     [SerializeField] GunSpawn gunSpawn;
+    [SerializeField] Transform cartridgesSpawn;
 
     [Header("Upgrades")]
     [SerializeField] TowersUpgradeSerializable towerUpgrades;
@@ -46,10 +47,11 @@ public class TowerController : MonoBehaviour, IUpgradable
                 return;
 
             case Modes.UpgradingTowers:
-                IsLock = IsCanUpgrade();
+                IsLock = !IsCanUpgrade();
                 break;
 
             case Modes.UpgradingGuns:
+                IsLock = !IsCanGunUpgrade();
                 break;
 
             case >= Modes.CreatingCannon:
@@ -60,7 +62,7 @@ public class TowerController : MonoBehaviour, IUpgradable
         SetLock(IsLock);
     }
 
-    bool IsCanUpgrade()
+    public bool IsCanUpgrade()
     {
         float _maxLevel = 0f;
         foreach (TowerLevelUpgradeSerializable _levelUpgrade in towerUpgrades.towers)
@@ -68,7 +70,15 @@ public class TowerController : MonoBehaviour, IUpgradable
             _maxLevel = Mathf.Max(_maxLevel, _levelUpgrade.level);
         }
 
-        return _maxLevel == Level;
+        return _maxLevel != Level;
+    }
+
+    bool IsCanGunUpgrade()
+    {
+        if (_currentGun == null)
+            return false;
+
+        return _currentGun.IsCanUpgrade();
     }
 
     void SetLock(bool _isLock)
@@ -126,6 +136,6 @@ public class TowerController : MonoBehaviour, IUpgradable
 
     bool GunUpgrade()
     {
-        return false;
+        return _currentGun.Upgrade();
     }
 }
