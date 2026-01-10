@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ButtonsAnimate : MonoBehaviour
+public class ModeButtonsAnimate : MonoBehaviour
 {
     [Header("Type")]
     [SerializeField] protected Modes type;

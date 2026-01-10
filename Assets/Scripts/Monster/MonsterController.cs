@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Splines;
 using UnityEngine.UI;
 
 /// <summary>
 /// логика монстра
 /// </summary>
-public class MonsterController : MonoBehaviour
+public class MonsterController : MonoBehaviour, IDamageable
 {
     [Header("Type")]
     [SerializeField] MonsterType type;
@@ -31,6 +32,8 @@ public class MonsterController : MonoBehaviour
     [Header("Effect")]
     [SerializeField] MonsterEffectController monsterEffectController;
 
+    public static UnityAction OnMonsterDied;
+
     public MonsterType Type => type;
 
     public GunController LastAttackedGun { get; set; }
@@ -38,14 +41,13 @@ public class MonsterController : MonoBehaviour
     public Vector3 CurrentVelocity { get; private set; }
     Vector3 _previousPosition;
 
-    float _currentHealth;
+    public float CurrentHealth { get; private set; }
     MonsterSettings _settings;
 
     float _minXOffset = -0.5f;
     float _maxXOffset = 0.5f;
 
     float _speedCoefficient = 1f;
-
 
     void Update()
     {
@@ -81,7 +83,7 @@ public class MonsterController : MonoBehaviour
         }
 
         splineFollow.Speed = _settings.speed;
-        _currentHealth = _settings.health;
+        CurrentHealth = _settings.health;
     }
 
     void SetXOffset()
@@ -95,16 +97,16 @@ public class MonsterController : MonoBehaviour
         }
     }
 
-    public void SubstractHealth(float _damage)
+    public void SubtractHealth(float _damage)
     {
-        _currentHealth -= _damage;
-        if (_currentHealth <= 0)
+        CurrentHealth -= _damage;
+        if (CurrentHealth <= 0)
         {
             DestroyMonster();
             return;
         }
 
-        healthSlider.value = _currentHealth / _settings.health;
+        healthSlider.value = CurrentHealth / _settings.health;
     }
 
     void DestroyMonster()
@@ -123,6 +125,8 @@ public class MonsterController : MonoBehaviour
 
         StartCoroutine(FadingMaterial(_duration));
         Destroy(gameObject, _duration);
+
+        OnMonsterDied?.Invoke();
     }
 
     IEnumerator FadingMaterial(float _duration)

@@ -56,7 +56,7 @@ public class MagicCrystalController : GunController
         foreach (MonsterController _monster in _monsters)
         {
             _monster.LastAttackedGun = this;
-            _monster.SubstractHealth(LevelSettings.damage);
+            _monster.SubtractHealth(LevelSettings.damage);
 
             MonsterEffectController _monsterEffectController = _monster.GetComponent<MonsterEffectController>();
             SlowEffect _slowEffect = (SlowEffect) _monsterEffectController.GetEffect(EffectType.Slow);

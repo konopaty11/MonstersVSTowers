@@ -1,7 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 
@@ -15,7 +14,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] WavesSerializable waves;
     [SerializeField] MonstersSpawn monsterSpawn;
 
-    int _currentWave;
+    public static UnityAction<int> OnUpdateWave;
+
+    int _currentWaveIndex;
 
     float _minSpawnDelay = 1.5f;
     float _maxSpawnDelay = 2f;
@@ -26,6 +27,8 @@ public class GameManager : MonoBehaviour
 
     LayerMask _layerMask;
     string _ignoreRaycastLayerName = "Ignore Raycast";
+
+    bool _isLoose;
 
     void Awake()
     {
@@ -55,6 +58,19 @@ public class GameManager : MonoBehaviour
         _layerMask = ~LayerMask.GetMask(_ignoreRaycastLayerName);
     }
 
+    public void AllMonstersDied()
+    {
+        if (_isLoose) return;
+
+
+    }
+
+    public void Loose()
+    {
+        Debug.Log("Loose");
+        _isLoose = true;
+    }
+
     void ThrowRaycast(InputAction.CallbackContext _context)
     {
         if (Touchscreen.current == null || modeManager.Mode == Modes.None) return;
@@ -64,7 +80,7 @@ public class GameManager : MonoBehaviour
             Vector2 _position = _touch.position.ReadValue();
             Ray _ray = mainCamera.ScreenPointToRay(_position);
 
-            if (Physics.Raycast(_ray, out RaycastHit _hit, Mathf.Infinity,_layerMask) && _hit.collider.CompareTag(_towerTag))
+            if (Physics.Raycast(_ray, out RaycastHit _hit, Mathf.Infinity, _layerMask) && _hit.collider.CompareTag(_towerTag))
             {
                 TowerController _tower = _hit.collider.GetComponent<TowerController>();
                 _tower.HandleTowerInteraction(modeManager.Mode);
@@ -79,7 +95,7 @@ public class GameManager : MonoBehaviour
     /// <returns></returns>
     IEnumerator Game()
     {
-        foreach (MonsterWaveSerializable _monster in waves.waves[_currentWave].monsters)
+        foreach (MonsterWaveSerializable _monster in waves.waves[_currentWaveIndex].monsters)
         {
             for (int i = 0; i < _monster.count; i++)
             {

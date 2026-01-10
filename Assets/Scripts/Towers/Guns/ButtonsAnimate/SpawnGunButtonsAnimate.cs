@@ -6,7 +6,7 @@ using UnityEngine.UI;
 /// <summary>
 /// логика анимаций кнопок
 /// </summary>
-public class SpawnGunButtonsAnimate : ButtonsAnimate
+public class SpawnGunButtonsAnimate : ModeButtonsAnimate
 {
     [Header("Gun Renderer")]
     [SerializeField] protected Transform gunRenderer;

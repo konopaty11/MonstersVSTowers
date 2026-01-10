@@ -752,6 +752,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7939851055117687447, guid: 9ac24248be4d1484b94d97d0e066ef46, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 9ac24248be4d1484b94d97d0e066ef46, type: 3}
       propertyPath: m_Name
       value: monster

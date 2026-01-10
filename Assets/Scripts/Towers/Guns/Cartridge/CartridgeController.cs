@@ -15,7 +15,7 @@ public class CartridgeController : MonoBehaviour
         {
             MonsterController _monster = collision.collider.GetComponent<MonsterController>();
             _monster.LastAttackedGun = Gun;
-            _monster.SubstractHealth(Gun.GetLevelSettings().damage);
+            _monster.SubtractHealth(Gun.GetLevelSettings().damage);
         }
 
         ContactPoint _contact = collision.contacts[0];
