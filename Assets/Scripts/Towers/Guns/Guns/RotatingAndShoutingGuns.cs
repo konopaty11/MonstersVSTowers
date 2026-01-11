@@ -78,6 +78,7 @@ public class RotatingAndShoutingGuns : GunController
                 _cartridge.Gun = this;
 
                 Rigidbody _cartridgeRg = _cartridgeObject.GetComponent<Rigidbody>();
+                Debug.Log($"{_cartridgeObject.transform.position} --- {Collection.Monsters[0].transform.position}");
                 _cartridgeRg.linearVelocity = GetVelocity(_cartridgeObject.transform.position, Collection.Monsters[0].transform.position, maxHeight);
             }
         }
@@ -94,7 +95,8 @@ public class RotatingAndShoutingGuns : GunController
         float _timeFromApex = Mathf.Sqrt(2 * _heightFromApex / -Physics.gravity.y);
         float _totalTime = _timeToApex + _timeFromApex;
 
-        _end += Collection.Monsters[0].CurrentVelocity * _totalTime;
+        Vector3 _velocity = Collection.Monsters[0].CurrentVelocity;
+        _end += _velocity * _totalTime;
 
         Vector3 _horizontalDistance = new Vector3(_end.x - _start.x, 0, _end.z - _start.z);
         Vector3 _horizontalVelocity = _horizontalDistance / _totalTime;

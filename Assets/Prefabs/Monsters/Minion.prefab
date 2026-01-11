@@ -178,7 +178,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3673983805567618800}
   m_LocalRotation: {x: 0.70710015, y: 0.003075156, z: -0.0030751524, w: 0.70710003}
-  m_LocalPosition: {x: 0, y: 0, z: -27.390366}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.4666668, y: 0.46666667, z: 0.46666667}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -188,7 +188,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -13.530375, y: 1.651996}
+  m_AnchoredPosition: {x: 0, y: 1.651996}
   m_SizeDelta: {x: 3, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &6813466304982260846
@@ -285,7 +285,7 @@ Transform:
   m_GameObject: {fileID: 6207265255228951542}
   serializedVersion: 2
   m_LocalRotation: {x: 0.0000000053336544, y: 0.9985514, z: -0.00000009896404, w: 0.05380609}
-  m_LocalPosition: {x: 0.3433218, y: -0.0000023528016, z: -2.4018555}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -337,9 +337,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 1.4
+  m_Height: 1.2
   m_Direction: 1
-  m_Center: {x: 0, y: 0.5, z: 0}
+  m_Center: {x: 0, y: 0.7, z: 0}
 --- !u!54 &4318580018364554783
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -363,7 +363,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -380,13 +380,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SlowEffect
   type: 1
-  monster: {fileID: 7724737762330350571, guid: ff20a82a67d376d48a1a0c3ed3f13a44, type: 3}
+  monster: {fileID: -8230372882802057398}
   durationEffect: 4
-  monsterRenderer: {fileID: 5667919656039709740, guid: ff20a82a67d376d48a1a0c3ed3f13a44, type: 3}
+  monsterRenderer: {fileID: 3934481964518854452}
   slowEffectColor: {r: 0.5019608, g: 0.7764706, b: 1, a: 1}
   slowEffectScale:
-  - {fileID: 7685266744696455277, guid: ff20a82a67d376d48a1a0c3ed3f13a44, type: 3}
-  - {fileID: 6406520281855936891, guid: ff20a82a67d376d48a1a0c3ed3f13a44, type: 3}
+  - {fileID: 1565961487859317154}
+  - {fileID: 516683613693731926}
 --- !u!114 &7429196672751109070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -400,7 +400,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterEffectManager
   effects:
-  - {fileID: -3049966732644281974, guid: ff20a82a67d376d48a1a0c3ed3f13a44, type: 3}
+  - {fileID: 1972851360604253183}
 --- !u!114 &6842449200587558155
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -13,13 +13,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] ModeManager modeManager;
     [SerializeField] WavesSerializable waves;
     [SerializeField] MonstersSpawn monsterSpawn;
+    [SerializeField] GameObject looseCanvas;
+    [SerializeField] GameObject winCanvas;
+    [SerializeField] GeneralSettings generalSettings;
 
     public static UnityAction<int> OnUpdateWave;
 
     int _currentWaveIndex;
+    public int CurrentWave => _currentWaveIndex + 1;
 
-    float _minSpawnDelay = 1.5f;
-    float _maxSpawnDelay = 2f;
+    Coroutine _spawnCoroutine;
 
     string _towerTag = "Tower";
 
@@ -50,7 +53,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Init();
-        StartCoroutine(Game());
+        _spawnCoroutine = StartCoroutine(Spawn());
     }
 
     void Init()
@@ -62,13 +65,32 @@ public class GameManager : MonoBehaviour
     {
         if (_isLoose) return;
 
+        if (CurrentWave == waves.waves.Count)
+        {
+            Win();
+        }
+        else if (_spawnCoroutine == null)
+        {
+            NextWave();
+        }
+    }
 
+    void NextWave()
+    {
+        _currentWaveIndex++;
+        StartCoroutine(Spawn());
+        OnUpdateWave?.Invoke(CurrentWave);
+    }
+
+    public void Win()
+    {
+        winCanvas.SetActive(true);
     }
 
     public void Loose()
     {
-        Debug.Log("Loose");
         _isLoose = true;
+        looseCanvas.SetActive(true);
     }
 
     void ThrowRaycast(InputAction.CallbackContext _context)
@@ -90,19 +112,21 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// корутина основного гемплея
+    /// корутина спавна монстров
     /// </summary>
     /// <returns></returns>
-    IEnumerator Game()
+    IEnumerator Spawn()
     {
         foreach (MonsterWaveSerializable _monster in waves.waves[_currentWaveIndex].monsters)
         {
             for (int i = 0; i < _monster.count; i++)
             {
-                monsterSpawn.SpawnMonster(_monster.type);
+                yield return new WaitForSeconds(Random.Range(generalSettings.minSpawnDelay, generalSettings.maxSpawnDelay));
 
-                yield return new WaitForSeconds(Random.Range(_minSpawnDelay, _maxSpawnDelay));
+                monsterSpawn.SpawnMonster(_monster.type);
             }
         }
+
+        _spawnCoroutine = null;
     }
 }

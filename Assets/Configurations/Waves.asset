@@ -16,7 +16,16 @@ MonoBehaviour:
   - monsters:
     - type: 1
       count: 5
-  - monsters: []
-  - monsters: []
-  - monsters: []
-  - monsters: []
+  - monsters:
+    - type: 2
+      count: 3
+    - type: 1
+      count: 3
+  - monsters:
+    - type: 2
+      count: 4
+    - type: 3
+      count: 3
+  - monsters:
+    - type: 4
+      count: 5

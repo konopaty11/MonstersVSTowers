@@ -10,6 +10,7 @@ public class WaveUIManager : MonoBehaviour
     RectTransform _waveAnimatedRectTransfrom;
     Vector2 _startPosition;
     Vector2 _targetPosition;
+    Vector2 _offsetPosition = new(10f, 0f);
 
     string _patternWaveText = "Âîëíà: ";
     string _patternWaveAnimatedText = "ÂÎËÍÀ ";
@@ -36,6 +37,9 @@ public class WaveUIManager : MonoBehaviour
         float _widthWaveAnimated = _waveAnimatedRectTransfrom.rect.width;
         _startPosition = new(Screen.width + _widthWaveAnimated / 2f, 0f);
         _targetPosition = new(-_widthWaveAnimated / 2f, 0f);
+
+        _startPosition += _offsetPosition;
+        _targetPosition -= _offsetPosition;
     }
 
     void OnUpdateWave(int _currentWave)
@@ -51,16 +55,18 @@ public class WaveUIManager : MonoBehaviour
         float _duration = 2f;
         float _elapsed = 0f;
         float _speed;
-        while (_elapsed < _duration)
+        while (_elapsed <= _duration)
         {
-            if (_elapsed / _duration >= 0.45f && _elapsed / _duration <= 0.55f)
+            float _progress = _elapsed / _duration;
+
+            if (_progress >= 0.45f && _progress <= 0.55f)
                 _speed = 0.2f;
             else
                 _speed = 1f;
 
             _elapsed += Time.deltaTime * _speed;
 
-            _waveAnimatedRectTransfrom.anchoredPosition = Vector2.Lerp(_startPosition, _targetPosition, _elapsed / _duration);
+            _waveAnimatedRectTransfrom.anchoredPosition = Vector2.Lerp(_startPosition, _targetPosition, _progress);
 
             yield return null;
         }

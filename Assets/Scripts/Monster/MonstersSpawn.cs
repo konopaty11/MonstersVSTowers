@@ -17,12 +17,12 @@ public class MonstersSpawn : MonoBehaviour
 
     void OnEnable()
     {
-        MonsterController.OnMonsterDied += CheckMonsters;
+        MonsterController.OnMonsterDestroy += CheckMonsters;
     }
 
     void OnDisable()
     {
-        MonsterController.OnMonsterDied -= CheckMonsters;
+        MonsterController.OnMonsterDestroy -= CheckMonsters;
     }
 
     /// <summary>
@@ -45,14 +45,11 @@ public class MonstersSpawn : MonoBehaviour
         }    
     }
 
-    void CheckMonsters()
+    void CheckMonsters(MonsterController _monsterDestroy)
     {
-        foreach (GameObject _monster in _monsters)
-        {
-            if (!!_monster)
-                return;
-        }
+        _monsters.Remove(_monsterDestroy.gameObject);
 
-        gameManager.AllMonstersDied();
+        if (_monsters.Count == 0)
+            gameManager.AllMonstersDied();
     }
 }

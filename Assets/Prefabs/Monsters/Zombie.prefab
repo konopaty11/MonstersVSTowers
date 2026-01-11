@@ -102,7 +102,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2882050757725969459}
   m_LocalRotation: {x: 0.70710015, y: 0.003075156, z: -0.0030751524, w: 0.70710003}
-  m_LocalPosition: {x: 0, y: 0, z: -41.08555}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.7000002, y: 0.7, z: 0.70000005}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -112,7 +112,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -20.29556, y: 2.4779942}
+  m_AnchoredPosition: {x: 0, y: 2.4779942}
   m_SizeDelta: {x: 3, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1516141392710941510
@@ -539,7 +539,7 @@ CapsuleCollider:
   m_Radius: 0.5
   m_Height: 2.1
   m_Direction: 1
-  m_Center: {x: 0, y: 1.05, z: 0}
+  m_Center: {x: 0, y: 1.2, z: 0}
 --- !u!54 &-4913351808394865258
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -563,7 +563,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -580,13 +580,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SlowEffect
   type: 1
-  monster: {fileID: 7724737762330350571, guid: ff20a82a67d376d48a1a0c3ed3f13a44, type: 3}
+  monster: {fileID: -510504655372620464}
   durationEffect: 4
-  monsterRenderer: {fileID: 5667919656039709740, guid: ff20a82a67d376d48a1a0c3ed3f13a44, type: 3}
+  monsterRenderer: {fileID: 9104759942708869852}
   slowEffectColor: {r: 0.5019608, g: 0.7764706, b: 1, a: 1}
   slowEffectScale:
-  - {fileID: 7685266744696455277, guid: ff20a82a67d376d48a1a0c3ed3f13a44, type: 3}
-  - {fileID: 6406520281855936891, guid: ff20a82a67d376d48a1a0c3ed3f13a44, type: 3}
+  - {fileID: 3734122852437519292}
+  - {fileID: 7894460055712292130}
 --- !u!114 &4110229498886951426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -600,7 +600,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MonsterEffectManager
   effects:
-  - {fileID: -3049966732644281974, guid: ff20a82a67d376d48a1a0c3ed3f13a44, type: 3}
+  - {fileID: -347563980042249552}
 --- !u!114 &-519560404668273280
 MonoBehaviour:
   m_ObjectHideFlags: 0
