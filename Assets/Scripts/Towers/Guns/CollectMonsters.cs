@@ -35,6 +35,11 @@ public class CollectMonsters : MonoBehaviour
     List<MonsterController> _monsters = new();
     public List<MonsterController> Monsters => _monsters;
 
+    void Awake()
+    {
+        _collider = GetComponent<CapsuleCollider>();
+    }
+
     void OnEnable()
     {
         OnRemoveMonster += RemoveMonster;
@@ -43,11 +48,6 @@ public class CollectMonsters : MonoBehaviour
     void OnDisable()
     {
         OnRemoveMonster -= RemoveMonster;
-    }
-
-    void Start()
-    {
-        _collider = GetComponent<CapsuleCollider>();
     }
 
     void OnTriggerEnter(Collider other)

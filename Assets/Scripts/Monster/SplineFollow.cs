@@ -3,6 +3,8 @@ using UnityEngine.Splines;
 
 public class SplineFollow : MonoBehaviour
 {
+    [SerializeField] bool loop;
+
     public SplineContainer Container { get; set; }
     public float Speed { get; set; }
 
@@ -23,7 +25,10 @@ public class SplineFollow : MonoBehaviour
     void Follow()
     {
         _currentDistance += Speed * Time.deltaTime;
+
         _normalizePosition = _currentDistance / _splineLenght;
+        if (loop && _normalizePosition >= 1f)
+            _normalizePosition = 0f;
 
         transform.position = Container.EvaluatePosition(_normalizePosition);
 
