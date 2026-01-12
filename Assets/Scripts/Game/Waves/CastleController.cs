@@ -28,6 +28,9 @@ public class CastleController : MonoBehaviour, IDamageable
 
         MonsterController _monster = other.GetComponent<MonsterController>();
         SubtractHealth(_monster.CurrentHealth * _damageCoefficient);
+
+        if (CurrentHealth > 0)
+            _monster.SubtractHealth(_monster.CurrentHealth);
     }
 
     public void SubtractHealth(float _damage)

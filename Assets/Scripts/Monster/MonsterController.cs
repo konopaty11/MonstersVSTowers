@@ -120,7 +120,9 @@ public class MonsterController : MonoBehaviour, IDamageable
         
         healthSlider.gameObject.SetActive(false);
 
-        LastAttackedGun.Collection.HandleRemoveMonster(this);
+        if (LastAttackedGun != null)
+            LastAttackedGun.Collection.HandleRemoveMonster(this);
+
         monsterEffectController.DestroyAllEffects();
 
         StartCoroutine(FadingMaterial(_duration));

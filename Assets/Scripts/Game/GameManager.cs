@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject looseCanvas;
     [SerializeField] GameObject winCanvas;
     [SerializeField] GeneralSettings generalSettings;
+    [SerializeField] VisibilityUIManager visibleUIManager;
 
     public static UnityAction<int> OnUpdateWave;
 
@@ -32,6 +33,11 @@ public class GameManager : MonoBehaviour
     string _ignoreRaycastLayerName = "Ignore Raycast";
 
     bool _isLoose;
+
+    string _winBackgroundID = "Win background";
+    string _winID = "Win";
+    string _looseBackgroundID = "Loose background";
+    string _looseID = "Loose";
 
     void Awake()
     {
@@ -85,12 +91,16 @@ public class GameManager : MonoBehaviour
     public void Win()
     {
         winCanvas.SetActive(true);
+        visibleUIManager.ShowUI(_winBackgroundID, ShowType.Fading);
+        visibleUIManager.ShowUI(_winID, ShowType.Moving);
     }
 
     public void Loose()
     {
         _isLoose = true;
         looseCanvas.SetActive(true);
+        visibleUIManager.ShowUI(_looseBackgroundID, ShowType.Fading);
+        visibleUIManager.ShowUI(_looseID, ShowType.Moving);
     }
 
     void ThrowRaycast(InputAction.CallbackContext _context)

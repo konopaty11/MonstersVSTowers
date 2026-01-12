@@ -1868,83 +1868,6 @@ MonoBehaviour:
       m_Data: []
   m_Knots:
     m_KnotsLink: []
---- !u!1 &237724843
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 237724844}
-  - component: {fileID: 237724845}
-  m_Layer: 0
-  m_Name: VisibleUIManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &237724844
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 237724843}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 482157163}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &237724845
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 237724843}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 598861cf335a8aa49bcd40f276b8921d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::VisibilityUIManager
-  uiSerializers:
-  - id: Loose background
-    duration: 1
-    rectTransfrom: {fileID: 0}
-    startPositionType: 0
-    targetPositionType: 0
-    canvasGroup: {fileID: 1148178662}
-    startAlpha: 0
-    targetAlpha: 1
-  - id: Loose
-    duration: 1
-    rectTransfrom: {fileID: 711203739}
-    startPositionType: 5
-    targetPositionType: 1
-    canvasGroup: {fileID: 0}
-    startAlpha: 0
-    targetAlpha: 0
-  - id: Win background
-    duration: 1
-    rectTransfrom: {fileID: 0}
-    startPositionType: 0
-    targetPositionType: 0
-    canvasGroup: {fileID: 330131526}
-    startAlpha: 0
-    targetAlpha: 1
-  - id: Win background
-    duration: 1
-    rectTransfrom: {fileID: 711203739}
-    startPositionType: 5
-    targetPositionType: 1
-    canvasGroup: {fileID: 0}
-    startAlpha: 0
-    targetAlpha: 0
 --- !u!1 &237834593
 GameObject:
   m_ObjectHideFlags: 0
@@ -2197,7 +2120,6 @@ GameObject:
   - component: {fileID: 275906252}
   - component: {fileID: 275906254}
   - component: {fileID: 275906253}
-  - component: {fileID: 275906255}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -2231,7 +2153,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -1060}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1120, y: 920}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &275906253
@@ -2272,18 +2194,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 275906251}
   m_CullTransparentMesh: 1
---- !u!225 &275906255
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 275906251}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 1
 --- !u!1 &281011175
 GameObject:
   m_ObjectHideFlags: 0
@@ -2748,7 +2658,6 @@ GameObject:
   - component: {fileID: 330131523}
   - component: {fileID: 330131525}
   - component: {fileID: 330131524}
-  - component: {fileID: 330131526}
   m_Layer: 5
   m_Name: WinWindow
   m_TagString: Untagged
@@ -2814,18 +2723,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330131522}
   m_CullTransparentMesh: 1
---- !u!225 &330131526
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 330131522}
-  m_Enabled: 1
-  m_Alpha: 0
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -4982,7 +4879,6 @@ Transform:
   - {fileID: 6337595}
   - {fileID: 1583016667}
   - {fileID: 1245042321}
-  - {fileID: 237724844}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &492136214
@@ -6622,7 +6518,6 @@ GameObject:
   - component: {fileID: 711203739}
   - component: {fileID: 711203741}
   - component: {fileID: 711203740}
-  - component: {fileID: 711203742}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -6656,7 +6551,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -1060}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1120, y: 920}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &711203740
@@ -6697,18 +6592,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 711203738}
   m_CullTransparentMesh: 1
---- !u!225 &711203742
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 711203738}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 1
 --- !u!1 &711523548
 GameObject:
   m_ObjectHideFlags: 0
@@ -7578,7 +7461,6 @@ MonoBehaviour:
   looseCanvas: {fileID: 1051455752}
   winCanvas: {fileID: 1100609932}
   generalSettings: {fileID: 11400000, guid: 1c2b7f95990173c44abfa333ca16104c, type: 2}
-  visibleUIManager: {fileID: 237724845}
 --- !u!1 &809510178
 GameObject:
   m_ObjectHideFlags: 0
@@ -9943,7 +9825,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1051455753
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10005,7 +9887,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &1051455756
 RectTransform:
@@ -10752,7 +10634,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &1100609936
 RectTransform:
@@ -10861,7 +10743,6 @@ GameObject:
   - component: {fileID: 1148178659}
   - component: {fileID: 1148178661}
   - component: {fileID: 1148178660}
-  - component: {fileID: 1148178662}
   m_Layer: 5
   m_Name: LooseWindow
   m_TagString: Untagged
@@ -10927,18 +10808,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1148178658}
   m_CullTransparentMesh: 1
---- !u!225 &1148178662
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1148178658}
-  m_Enabled: 1
-  m_Alpha: 0
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
 --- !u!1001 &1149954495
 PrefabInstance:
   m_ObjectHideFlags: 0
