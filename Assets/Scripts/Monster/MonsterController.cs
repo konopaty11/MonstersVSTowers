@@ -67,11 +67,12 @@ public class MonsterController : MonoBehaviour, IDamageable
         _previousPosition = transform.position;
     }
 
-    public void InitMonster(SplineContainer _spline)
+    public void InitMonster(SplineContainer _spline, bool _loop = false)
     {
         SetXOffset();
 
         splineFollow.Container = _spline;
+        splineFollow.Loop = _loop;
 
         foreach (MonsterSettings _monsterSettings in monstersSettings.monsters)
         {

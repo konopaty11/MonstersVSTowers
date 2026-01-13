@@ -21,12 +21,16 @@ public class LoadManager : MonoBehaviour
 
     string _loadWindowID = "Load";
 
-    public void LoadGame(UnityAction _onComplete = null)
+    public void LoadGame() => LoadGame(null);
+
+    public void LoadMenu() => LoadMenu(null);
+
+    public void LoadGame(UnityAction _onComplete)
     {
         StartCoroutine(LoadControl(true, false, gameCameraTransform, _onComplete));
     }
 
-    public void LoadMenu(UnityAction _onComplete = null)
+    public void LoadMenu(UnityAction _onComplete)
     {
         StartCoroutine(LoadControl(false, true, menuCameraTransform, _onComplete));
     }

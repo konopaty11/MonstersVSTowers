@@ -17,8 +17,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject winCanvas;
     [SerializeField] GeneralSettings generalSettings;
     [SerializeField] VisibilityUIManager visibleUIManager;
+    [SerializeField] LoadManager loadManager;
 
     public static UnityAction<int> OnUpdateWave;
+    public static UnityAction OnRestart;
 
     int _currentWaveIndex = -1;
     public int CurrentWave => _currentWaveIndex + 1;
@@ -66,6 +68,11 @@ public class GameManager : MonoBehaviour
         _layerMask = ~LayerMask.GetMask(_ignoreRaycastLayerName);
     }
 
+    public void Play()
+    {
+        loadManager.LoadGame(NextWave);
+    }
+
     public void AllMonstersDied()
     {
         if (_isLoose) return;
@@ -85,6 +92,42 @@ public class GameManager : MonoBehaviour
         _currentWaveIndex++;
         StartCoroutine(Spawn());
         OnUpdateWave?.Invoke(CurrentWave);
+    }
+
+    public void Restart()
+    {
+        ResetWave();
+        CloseResultWindow();
+        NextWave();
+    }
+
+    public void ToMenu()
+    {
+        ResetWave();
+        CloseResultWindow();
+        loadManager.LoadMenu();
+    }
+
+    void ResetWave()
+    {
+        OnRestart?.Invoke();
+        _currentWaveIndex = -1;
+    }
+
+    void CloseResultWindow()
+    {
+        if (_isLoose)
+        {
+            visibleUIManager.HideUI(_looseBackgroundID, ShowType.Fading);
+            visibleUIManager.HideUI(_looseID, ShowType.Moving);
+            looseCanvas.SetActive(false);
+        }
+        else
+        {
+            visibleUIManager.HideUI(_winBackgroundID, ShowType.Fading);
+            visibleUIManager.HideUI(_winID, ShowType.Moving);
+            winCanvas.SetActive(false);
+        }
     }
 
     public void Win()

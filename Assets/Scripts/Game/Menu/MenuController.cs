@@ -14,9 +14,18 @@ public class MenuController : MonoBehaviour
     [Header("Guns spawn")]
     [SerializeField] List<TowerController> towers;
 
-    [Header("Managers")]
-    [SerializeField] LoadManager loadManager;
-    [SerializeField] GameManager gameManager;
+    List<GameObject> _monsterObjects = new();
+    int _targetCountMonsters = 1;
+
+    void OnEnable()
+    {
+        MonsterController.OnMonsterDestroy += CheckMonsters;
+    }
+
+    void OnDisable()
+    {
+        MonsterController.OnMonsterDestroy -= CheckMonsters;
+    }
 
     void Start()
     {
@@ -37,21 +46,30 @@ public class MenuController : MonoBehaviour
     {
         while (true)
         {
-            SpawnMonster();
+            for (int i = _monsterObjects.Count; i < _targetCountMonsters; i++)
+            {
+                SpawnMonster();
 
-            yield return new WaitForSeconds(Random.Range(generalSettings.minSpawnDelay, generalSettings.maxSpawnDelay));
+                yield return new WaitForSeconds(Random.Range(generalSettings.minSpawnDelay, generalSettings.maxSpawnDelay));
+            }
+
+            yield return null;
         }
     }
 
     void SpawnMonster()
     {
         GameObject _monsterObject = Instantiate(monsterPrefab, monsterParent);
+        _monsterObjects.Add(_monsterObject);
+
         MonsterController _monster = _monsterObject.GetComponent<MonsterController>();
-        _monster.InitMonster(spline);
+        _monster.InitMonster(spline, true);
     }
 
-    public void Play()
+    
+
+    void CheckMonsters(MonsterController _monsterDestroy)
     {
-        loadManager.LoadGame(gameManager.NextWave);
+        _monsterObjects.Remove(_monsterDestroy.gameObject);
     }
 }

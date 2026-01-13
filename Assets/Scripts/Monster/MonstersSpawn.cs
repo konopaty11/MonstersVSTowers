@@ -18,11 +18,13 @@ public class MonstersSpawn : MonoBehaviour
     void OnEnable()
     {
         MonsterController.OnMonsterDestroy += CheckMonsters;
+        GameManager.OnRestart += DestroyMonsters;
     }
 
     void OnDisable()
     {
         MonsterController.OnMonsterDestroy -= CheckMonsters;
+        GameManager.OnRestart -= DestroyMonsters;
     }
 
     /// <summary>
@@ -51,5 +53,13 @@ public class MonstersSpawn : MonoBehaviour
 
         if (_monsters.Count == 0)
             gameManager.AllMonstersDied();
+    }
+    
+    void DestroyMonsters()
+    {
+        foreach (GameObject _monsterObject in _monsters)
+        {
+            Destroy(_monsterObject);
+        }
     }
 }

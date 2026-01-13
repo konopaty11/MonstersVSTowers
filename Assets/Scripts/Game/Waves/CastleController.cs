@@ -12,6 +12,16 @@ public class CastleController : MonoBehaviour, IDamageable
 
     public float CurrentHealth { get; private set; }
 
+    void OnEnable()
+    {
+        GameManager.OnRestart += RestoreHealth;
+    }
+
+    void OnDisable()
+    {
+        GameManager.OnRestart -= RestoreHealth;
+    }
+
     void Start()
     {
         Init();
@@ -42,5 +52,12 @@ public class CastleController : MonoBehaviour, IDamageable
 
         if (CurrentHealth <= 0)
             gameManager.Loose();
+    }
+
+    public void RestoreHealth()
+    {
+        CurrentHealth = generalSettings.castleHealth;
+        healthSlider.value = 1f;
+        healthSlider.gameObject.SetActive(false);
     }
 }
