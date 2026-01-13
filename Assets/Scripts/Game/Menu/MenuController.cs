@@ -14,6 +14,10 @@ public class MenuController : MonoBehaviour
     [Header("Guns spawn")]
     [SerializeField] List<TowerController> towers;
 
+    [Header("Managers")]
+    [SerializeField] LoadManager loadManager;
+    [SerializeField] GameManager gameManager;
+
     void Start()
     {
         Init();
@@ -44,5 +48,10 @@ public class MenuController : MonoBehaviour
         GameObject _monsterObject = Instantiate(monsterPrefab, monsterParent);
         MonsterController _monster = _monsterObject.GetComponent<MonsterController>();
         _monster.InitMonster(spline);
+    }
+
+    public void Play()
+    {
+        loadManager.LoadGame(gameManager.NextWave);
     }
 }

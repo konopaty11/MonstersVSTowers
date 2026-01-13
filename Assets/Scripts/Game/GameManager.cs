@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
 
     public static UnityAction<int> OnUpdateWave;
 
-    int _currentWaveIndex;
+    int _currentWaveIndex = -1;
     public int CurrentWave => _currentWaveIndex + 1;
 
     Coroutine _spawnCoroutine;
@@ -59,7 +59,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Init();
-        //_spawnCoroutine = StartCoroutine(Spawn());
     }
 
     void Init()
@@ -81,7 +80,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void NextWave()
+    public void NextWave()
     {
         _currentWaveIndex++;
         StartCoroutine(Spawn());

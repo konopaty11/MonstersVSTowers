@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using NUnit.Framework;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +16,8 @@ public class ModeButtonsAnimate : MonoBehaviour
 
     bool _isPress = false;
 
+    List<Transform> _childTransforms = new();
+
     void OnEnable()
     {
         ModeManager.OnModeChange += UpdateMode;
@@ -21,6 +26,15 @@ public class ModeButtonsAnimate : MonoBehaviour
     void OnDisable()
     {
         ModeManager.OnModeChange -= UpdateMode;
+    }
+
+    void Start()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Transform _childTransform = transform.GetChild(i);
+            _childTransforms.Add(_childTransform);
+        }
     }
 
     void UpdateMode(Modes _mode)

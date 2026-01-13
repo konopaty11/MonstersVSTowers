@@ -78,7 +78,6 @@ public class RotatingAndShoutingGuns : GunController
                 _cartridge.Gun = this;
 
                 Rigidbody _cartridgeRg = _cartridgeObject.GetComponent<Rigidbody>();
-                Debug.Log($"{_cartridgeObject.transform.position} --- {Collection.Monsters[0].transform.position}");
                 _cartridgeRg.linearVelocity = GetVelocity(_cartridgeObject.transform.position, Collection.Monsters[0].transform.position, maxHeight);
             }
         }
