@@ -10,6 +10,8 @@ public class MenuController : MonoBehaviour
     [SerializeField] GameObject monsterPrefab;
     [SerializeField] Transform monsterParent;
     [SerializeField] GeneralSettings generalSettings;
+    [SerializeField] GameObject healthBarPrefab;
+    [SerializeField] Transform healthBarParent;
 
     [Header("Guns spawn")]
     [SerializeField] List<TowerController> towers;
@@ -36,7 +38,7 @@ public class MenuController : MonoBehaviour
     {
         foreach (TowerController _tower in towers)
         {
-            _tower.HandleTowerInteraction(Modes.CreatingCannon);
+            _tower.CreateMenuGun(Modes.CreatingCannon);
         }
 
         StartCoroutine(SpawnControl());
@@ -62,14 +64,20 @@ public class MenuController : MonoBehaviour
         GameObject _monsterObject = Instantiate(monsterPrefab, monsterParent);
         _monsterObjects.Add(_monsterObject);
 
+        GameObject _healthBarObject = Instantiate(healthBarPrefab, healthBarParent);
+        HealthBarController _healthBar = _healthBarObject.GetComponent<HealthBarController>();
+        _healthBar.Init(_monsterObject.transform);
+        Debug.Log(_healthBar);
         MonsterController _monster = _monsterObject.GetComponent<MonsterController>();
-        _monster.InitMonster(spline, true);
+        _monster.InitMonster(spline, _healthBar, true, true);
     }
 
     
 
-    void CheckMonsters(MonsterController _monsterDestroy)
+    void CheckMonsters(MonsterController _monsterDestroy, bool _isMenu)
     {
+        if (!_isMenu) return;
+
         _monsterObjects.Remove(_monsterDestroy.gameObject);
     }
 }

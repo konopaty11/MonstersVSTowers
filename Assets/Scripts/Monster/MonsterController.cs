@@ -22,7 +22,6 @@ public class MonsterController : MonoBehaviour, IDamageable
     [SerializeField] MonstersSettings monstersSettings;
 
     [Header("Animation")]
-    [SerializeField] Slider healthSlider;
     [SerializeField] Animator animator;
 
     [Header("Rendering")]
@@ -32,9 +31,13 @@ public class MonsterController : MonoBehaviour, IDamageable
     [Header("Effect")]
     [SerializeField] MonsterEffectController monsterEffectController;
 
-    public static UnityAction<MonsterController> OnMonsterDestroy;
+    public static UnityAction<MonsterController, bool> OnMonsterDestroy;
 
     public MonsterType Type => type;
+
+    public bool IsMenuMonster { get; private set; }
+
+    public Slider HealthSlider { get; private set; }
 
     public GunController LastAttackedGun { get; set; }
 
@@ -48,6 +51,8 @@ public class MonsterController : MonoBehaviour, IDamageable
     float _maxXOffset = 0.5f;
 
     float _speedCoefficient = 1f;
+
+    HealthBarController _healthBarController;
 
     void Update()
     {
@@ -67,12 +72,15 @@ public class MonsterController : MonoBehaviour, IDamageable
         _previousPosition = transform.position;
     }
 
-    public void InitMonster(SplineContainer _spline, bool _loop = false)
+    public void InitMonster(SplineContainer _spline, HealthBarController _healthBarController ,bool _loop = false, bool _isMenu = false)
     {
         SetXOffset();
+        monsterEffectController.InitSlowEffect(_healthBarController.SlowEffectScale);
 
-        splineFollow.Container = _spline;
-        splineFollow.Loop = _loop;
+        splineFollow.Init(_spline, _loop);
+        IsMenuMonster = _isMenu;
+        HealthSlider = _healthBarController.HealthSlider;
+        this._healthBarController = _healthBarController;
 
         foreach (MonsterSettings _monsterSettings in monstersSettings.monsters)
         {
@@ -103,14 +111,14 @@ public class MonsterController : MonoBehaviour, IDamageable
         CurrentHealth -= _damage;
         if (CurrentHealth <= 0)
         {
-            DestroyMonster();
+            DiedMonster();
             return;
         }
 
-        healthSlider.value = CurrentHealth / _settings.health;
+        HealthSlider.value = CurrentHealth / _settings.health;
     }
 
-    void DestroyMonster()
+    void DiedMonster()
     {
         float _duration = 5f;
         CapsuleCollider _collider = GetComponent<CapsuleCollider>();
@@ -119,7 +127,7 @@ public class MonsterController : MonoBehaviour, IDamageable
         _collider.enabled = false;
         splineFollow.enabled = false;
         
-        healthSlider.gameObject.SetActive(false);
+        HealthSlider.gameObject.SetActive(false);
 
         if (LastAttackedGun != null)
             LastAttackedGun.Collection.HandleRemoveMonster(this);
@@ -133,9 +141,14 @@ public class MonsterController : MonoBehaviour, IDamageable
     IEnumerator DestroyWithDelay(float _delay)
     {
         yield return new WaitForSeconds(_delay);
-        OnMonsterDestroy?.Invoke(this);
-        Destroy(gameObject);
+        OnMonsterDestroy?.Invoke(this, IsMenuMonster);
+        DestroyMonster();
+    }
 
+    public void DestroyMonster()
+    {
+        Destroy(_healthBarController.gameObject);
+        Destroy(gameObject);
     }
 
     IEnumerator FadingMaterial(float _duration)

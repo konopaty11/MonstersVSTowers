@@ -8,7 +8,8 @@ public class SlowEffect : MonsterEffect
     [SerializeField] float durationEffect = 4f;
     [SerializeField] Renderer monsterRenderer;
     [SerializeField] Color slowEffectColor;
-    [SerializeField] List<Image> slowEffectScale;
+
+    public List<Image> SlowEffectScale { get; set; }
 
     public float SlowSpeedCoefficient { get; set; }
     float _normalSpeedCoefficient = 1f;
@@ -38,7 +39,7 @@ public class SlowEffect : MonsterEffect
 
     public override void DestroyEffect()
     {
-        foreach (Image _image in slowEffectScale)
+        foreach (Image _image in SlowEffectScale)
         {
             _image.gameObject.SetActive(false);
         }
@@ -65,7 +66,7 @@ public class SlowEffect : MonsterEffect
     {
         float _fullFillAmount = 1f;
 
-        foreach (Image _image in slowEffectScale)
+        foreach (Image _image in SlowEffectScale)
         {
             _image.fillAmount = _fullFillAmount;
         }
@@ -76,9 +77,9 @@ public class SlowEffect : MonsterEffect
         float _speed = 1f / durationEffect;
         float _targetFillAmount = 0f;
 
-        while (slowEffectScale[0].fillAmount > 0)
+        while (SlowEffectScale[0].fillAmount > 0)
         {
-            foreach (Image _image in slowEffectScale)
+            foreach (Image _image in SlowEffectScale)
             {
                 _image.fillAmount = Mathf.MoveTowards(_image.fillAmount, _targetFillAmount, _speed * Time.deltaTime);
             }

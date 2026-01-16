@@ -16,6 +16,10 @@ public class TowerController : MonoBehaviour, IUpgradable
     [SerializeField] Material lockMaterial;
     [SerializeField] Material unlockMaterial;
 
+    [Header("Configurations")]
+    [SerializeField] Crystals crystals;
+    [SerializeField] Prices prices;
+
     public int Level { get; private set; }
     public bool IsLock { get; private set; }
 
@@ -23,19 +27,21 @@ public class TowerController : MonoBehaviour, IUpgradable
 
     GunController _currentGun;
 
+    void Awake()
+    {
+        Upgrade();
+    }
+
     void OnEnable()
     {
         ModeManager.OnModeChange += LockControl;
+        GameManager.OnRestart += DestroyGun;
     }
 
     void OnDisable()
     {
         ModeManager.OnModeChange -= LockControl;
-    }
-
-    void Start()
-    {
-        Upgrade();
+        GameManager.OnRestart -= DestroyGun;
     }
 
     void LockControl(Modes _mode)
@@ -91,25 +97,38 @@ public class TowerController : MonoBehaviour, IUpgradable
         meshRenderer.material = lockMaterial;
     }
 
-    public bool HandleTowerInteraction(Modes _mode)
+    public int HandleTowerInteraction(Modes _mode)
     {
-        if (IsLock) return false;
+        if (IsLock) return -1;
 
-        bool _result = _mode switch
+        int _result = _mode switch
         {
             Modes.UpgradingTowers => Upgrade(),
             Modes.UpgradingGuns => GunUpgrade(),
             >= Modes.CreatingCannon => CreateGun(_mode),
-            _ => false
+            _ => -1
         };
 
-        LockControl(_mode);
+        //LockControl(_mode);
 
         return _result;
     }
 
-    public bool Upgrade()
+    void DestroyGun()
     {
+        if (_currentGun != null)
+        {
+            Destroy(_currentGun.gameObject);
+            _currentGun = null;
+            _isFree = true;
+        }
+    }
+
+    public int Upgrade()
+    {
+        if (crystals.crystals < prices.upgradeTower)
+            return -1;
+
         Level++;
 
         foreach (TowerLevelUpgradeSerializable _levelUpgrade in towerUpgrades.towers)
@@ -118,24 +137,43 @@ public class TowerController : MonoBehaviour, IUpgradable
             {
                 meshFilter.mesh = _levelUpgrade.mesh;
                 collection.RadiusMultyplier = _levelUpgrade.rangeMultiplier;
-
-                return true;
+                return prices.upgradeTower;
             }
         }
 
-        return false;
+        return -1;
     }
 
-    bool CreateGun(Modes _mode)
+    int CreateGun(Modes _mode)
     {
+        int _price = GetGunCreatePrice(_mode); 
+        if (crystals.crystals < _price)
+            return -1;
+
         _currentGun = gunSpawn.SpawnGun((GunType) _mode);
         _isFree = false;
 
-        return true;
+        return _price;
     }
 
-    bool GunUpgrade()
+    public void CreateMenuGun(Modes _mode)
+    {
+        _currentGun = gunSpawn.SpawnGun((GunType)_mode);
+    }
+
+    int GunUpgrade()
     {
         return _currentGun.Upgrade();
+    }
+
+    int GetGunCreatePrice(Modes _mode)
+    {
+        return _mode switch
+        {
+            Modes.CreatingCannon => prices.createCannon,
+            Modes.CreatingCrossbow => prices.createCrossbow,
+            Modes.CreatingMagicCrystal => prices.createMagicCrystal,
+            _ => -1
+        };
     }
 }

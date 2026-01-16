@@ -21,6 +21,7 @@ MonoBehaviour:
     isExistStone: 0
     stonesMesh: {fileID: 0}
     slowSpeedCoefficient: 0.8
+    price: 0
   - level: 2
     radius: 0.08
     damage: 2
@@ -29,6 +30,7 @@ MonoBehaviour:
     isExistStone: 1
     stonesMesh: {fileID: 742358168251634693, guid: 052c946269965e9498b9bf52a58281a7, type: 3}
     slowSpeedCoefficient: 0.6
+    price: 30
   - level: 3
     radius: 0.09
     damage: 2
@@ -37,3 +39,4 @@ MonoBehaviour:
     isExistStone: 1
     stonesMesh: {fileID: -4339287631024105326, guid: 052c946269965e9498b9bf52a58281a7, type: 3}
     slowSpeedCoefficient: 0.4
+    price: 30

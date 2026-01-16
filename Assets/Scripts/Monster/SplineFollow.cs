@@ -3,35 +3,44 @@ using UnityEngine.Splines;
 
 public class SplineFollow : MonoBehaviour
 {
-    public SplineContainer Container { get; set; }
     public float Speed { get; set; }
-    public bool Loop { get; set; }
+
+    SplineContainer _container;
+    bool _loop;
 
     float _currentDistance = 0f;
     float _normalizePosition;
     float _splineLenght;
 
-    private void Start()
-    {
-        _splineLenght = Container.CalculateLength();
-    }
+    bool _initialized;
 
     void Update()
     {
         Follow();
     }
 
+    public void Init(SplineContainer _container, bool _loop)
+    {
+        this._container = _container;
+        this._loop = _loop;
+
+        _splineLenght = _container.CalculateLength();
+        _initialized = true;
+    }
+
     void Follow()
     {
+        if (!_initialized) return;
+
         _currentDistance += Speed * Time.deltaTime;
 
         _normalizePosition = _currentDistance / _splineLenght;
-        if (Loop && _normalizePosition >= 1f)
+        if (_loop && _normalizePosition >= 1f)
             _currentDistance = 0f;
 
-        transform.position = Container.EvaluatePosition(_normalizePosition);
+        transform.position = _container.EvaluatePosition(_normalizePosition);
 
-        Vector3 _tangent = Container.EvaluateTangent(_normalizePosition);
+        Vector3 _tangent = _container.EvaluateTangent(_normalizePosition);
         transform.rotation = Quaternion.LookRotation(_tangent);
     }
 }

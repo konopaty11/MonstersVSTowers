@@ -312,6 +312,7 @@ MonoBehaviour:
     - {fileID: 2912778383974130959}
     - {fileID: 1276042919747549999}
   gunSettings: {fileID: 11400000, guid: 4d0ca8cc47919f5468052628309c5034, type: 2}
+  crystals: {fileID: 11400000, guid: 94cc5327363d22846a789eaebe77ee16, type: 2}
   maxHeight: 1
 --- !u!1 &7487150352861962015
 GameObject:

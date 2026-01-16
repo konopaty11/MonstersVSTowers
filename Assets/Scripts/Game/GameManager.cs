@@ -13,11 +13,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] ModeManager modeManager;
     [SerializeField] WavesSerializable waves;
     [SerializeField] MonstersSpawn monsterSpawn;
-    [SerializeField] GameObject looseCanvas;
-    [SerializeField] GameObject winCanvas;
+    [SerializeField] ResultWindowController looseWindow;
+    [SerializeField] ResultWindowController winWindow;
     [SerializeField] GeneralSettings generalSettings;
     [SerializeField] VisibilityUIManager visibleUIManager;
     [SerializeField] LoadManager loadManager;
+    [SerializeField] Crystals crystals;
 
     public static UnityAction<int> OnUpdateWave;
     public static UnityAction OnRestart;
@@ -41,6 +42,13 @@ public class GameManager : MonoBehaviour
     string _looseBackgroundID = "Loose background";
     string _looseID = "Loose";
 
+    public int CountKilledMonsters { get; set; }
+    int _ñountCreatedGuns;
+    int _ñountUpdatedGuns;
+    int _ñountUpdatedTowers;
+    float _timer;
+    bool _timerActive;
+
     void Awake()
     {
         _inputSystem = new();
@@ -63,9 +71,22 @@ public class GameManager : MonoBehaviour
         Init();
     }
 
+    private void Update()
+    {
+        TimerControl();
+    }
+
     void Init()
     {
         _layerMask = ~LayerMask.GetMask(_ignoreRaycastLayerName);
+    }
+
+    void TimerControl()
+    {
+        if (_timerActive)
+            _timer += Time.deltaTime;
+        else
+            _timer = 0f;
     }
 
     public void Play()
@@ -89,6 +110,8 @@ public class GameManager : MonoBehaviour
 
     public void NextWave()
     {
+        _timerActive = true;
+
         _currentWaveIndex++;
         StartCoroutine(Spawn());
         OnUpdateWave?.Invoke(CurrentWave);
@@ -112,6 +135,12 @@ public class GameManager : MonoBehaviour
     {
         OnRestart?.Invoke();
         _currentWaveIndex = -1;
+
+        _ñountCreatedGuns = 0;
+        _ñountUpdatedGuns = 0;
+        _ñountUpdatedTowers = 0;
+        _timerActive = false;
+        _timer = 0f;
     }
 
     void CloseResultWindow()
@@ -120,27 +149,32 @@ public class GameManager : MonoBehaviour
         {
             visibleUIManager.HideUI(_looseBackgroundID, ShowType.Fading);
             visibleUIManager.HideUI(_looseID, ShowType.Moving);
-            looseCanvas.SetActive(false);
+            looseWindow.SetActive(false);
         }
         else
         {
             visibleUIManager.HideUI(_winBackgroundID, ShowType.Fading);
             visibleUIManager.HideUI(_winID, ShowType.Moving);
-            winCanvas.SetActive(false);
+            winWindow.SetActive(false);
         }
     }
 
     public void Win()
     {
-        winCanvas.SetActive(true);
+        winWindow.SetActive(true);
+        winWindow.UpdateUI(CurrentWave, CountKilledMonsters, _ñountCreatedGuns, _ñountUpdatedGuns, _ñountUpdatedTowers, _timer);
+
         visibleUIManager.ShowUI(_winBackgroundID, ShowType.Fading);
         visibleUIManager.ShowUI(_winID, ShowType.Moving);
+
     }
 
     public void Loose()
     {
         _isLoose = true;
-        looseCanvas.SetActive(true);
+        looseWindow.SetActive(true);
+        looseWindow.UpdateUI(CurrentWave, CountKilledMonsters, _ñountCreatedGuns, _ñountUpdatedGuns, _ñountUpdatedTowers, _timer);
+
         visibleUIManager.ShowUI(_looseBackgroundID, ShowType.Fading);
         visibleUIManager.ShowUI(_looseID, ShowType.Moving);
     }
@@ -157,9 +191,32 @@ public class GameManager : MonoBehaviour
             if (Physics.Raycast(_ray, out RaycastHit _hit, Mathf.Infinity, _layerMask) && _hit.collider.CompareTag(_towerTag))
             {
                 TowerController _tower = _hit.collider.GetComponent<TowerController>();
-                _tower.HandleTowerInteraction(modeManager.Mode);
+
+                int _result = _tower.HandleTowerInteraction(modeManager.Mode);
+                if (_result != -1)
+                {
+                    crystals.SubtractCrystals(_result);
+                    UpdateParams();
+                }
+
                 modeManager.SetModeControl(Modes.None);
             }
+        }
+    }
+
+    void UpdateParams()
+    {
+        switch (modeManager.Mode)
+        {
+            case >= Modes.CreatingCannon:
+                _ñountCreatedGuns++;
+                break;
+            case Modes.UpgradingGuns:
+                _ñountUpdatedGuns++;
+                break;
+            case Modes.UpgradingTowers:
+                _ñountUpdatedTowers++;
+                break;
         }
     }
 
@@ -180,5 +237,23 @@ public class GameManager : MonoBehaviour
         }
 
         _spawnCoroutine = null;
+    }
+
+    public static Vector2 GetRealScreenSize()
+    {
+        if (Screen.orientation == ScreenOrientation.LandscapeLeft ||
+            Screen.orientation == ScreenOrientation.LandscapeRight)
+        {
+            return new
+                (
+                Mathf.Max(Screen.height, Screen.width),
+                Mathf.Min(Screen.height, Screen.width)
+                );
+        }
+
+        return new(
+                Mathf.Min(Screen.height, Screen.width),
+                Mathf.Max(Screen.height, Screen.width)
+                );
     }
 }

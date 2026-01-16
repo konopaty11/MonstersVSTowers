@@ -9,6 +9,7 @@ public class RotatingAndShoutingGuns : GunController
     [SerializeField] GameObject cartridgePrefab;
     [SerializeField] List<CartridgeSpawnSerializable> cartridgeSpawns;
     [SerializeField] RotatingAndShoutingGunsSettings gunSettings;
+    [SerializeField] Crystals crystals;
     [SerializeField] float maxHeight;
 
     float _maxDegreesDelta = 2f;
@@ -105,16 +106,21 @@ public class RotatingAndShoutingGuns : GunController
         return _horizontalVelocity + Vector3.up * _verticalVelocity;
     }
 
-    public override bool Upgrade()
+    public override int Upgrade()
     {
         Level++;
+        LevelSettings = (RotatingAndShoutingGunLevelSettingsSerializable)GetLevelSettings();
 
-        LevelSettings = (RotatingAndShoutingGunLevelSettingsSerializable) GetLevelSettings();
+        if (crystals.crystals < LevelSettings.price)
+        {
+            Level--;
+            LevelSettings = (RotatingAndShoutingGunLevelSettingsSerializable)GetLevelSettings();
+            return -1;
+        }
 
         meshFilter.mesh = LevelSettings.mesh;
         Collection.Radius = LevelSettings.radius;
-
-        return true;
+        return LevelSettings.price;
     }
 
     public override bool IsCanUpgrade()

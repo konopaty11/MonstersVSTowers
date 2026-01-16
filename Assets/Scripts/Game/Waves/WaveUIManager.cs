@@ -34,8 +34,10 @@ public class WaveUIManager : MonoBehaviour
     {
         _waveAnimatedRectTransfrom = wavesAnimatedText.GetComponent<RectTransform>();
 
+        float _screenWidth = GameManager.GetRealScreenSize().x;
+
         float _widthWaveAnimated = _waveAnimatedRectTransfrom.rect.width;
-        _startPosition = new(Screen.width + _widthWaveAnimated / 2f, 0f);
+        _startPosition = new(_screenWidth + _widthWaveAnimated / 2f, 0f);
         _targetPosition = new(-_widthWaveAnimated / 2f, 0f);
 
         _startPosition += _offsetPosition;

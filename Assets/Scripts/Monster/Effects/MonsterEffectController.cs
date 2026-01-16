@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MonsterEffectController : MonoBehaviour
 {
@@ -14,6 +15,12 @@ public class MonsterEffectController : MonoBehaviour
         }
 
         throw new MissingReferenceException($"Missing {_type} monster effect in the Monster effects manager.");
+    }
+
+    public void InitSlowEffect(List<Image> _slowEffectScale)
+    {
+        SlowEffect _slowEffect = (SlowEffect)GetEffect(EffectType.Slow);
+        _slowEffect.SlowEffectScale = _slowEffectScale;
     }
 
     public void DestroyAllEffects()

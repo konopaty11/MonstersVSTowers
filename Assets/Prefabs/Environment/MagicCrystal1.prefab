@@ -82,6 +82,7 @@ MonoBehaviour:
   meshFilter: {fileID: 7862869155373349239}
   settings: {fileID: 11400000, guid: 6452b87d8ba6bbb40961aeac90a407f2, type: 2}
   stonesMeshFilter: {fileID: 1227043860889282299}
+  crystals: {fileID: 11400000, guid: 94cc5327363d22846a789eaebe77ee16, type: 2}
 --- !u!1 &7358825579196131842
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,7 +8,7 @@ public class CollectMonsters : MonoBehaviour
 
     string _monsterTag = "Monster";
 
-    float _radiusMultyplier;
+    float _radiusMultyplier = 1;
     public float RadiusMultyplier 
     {
         get => _radiusMultyplier; 

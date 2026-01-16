@@ -14,4 +14,5 @@ public class MagicCrystalLevelSettingsSerializable : GunLevelSettingsSerializabl
     public bool isExistStone;
     public Mesh stonesMesh;
     public float slowSpeedCoefficient;
+    public int price;
 }

@@ -22,6 +22,7 @@ MonoBehaviour:
       mesh: {fileID: -1617785810324624936, guid: 052c946269965e9498b9bf52a58281a7, type: 3}
       countCartridges: 1
       attackInterval: 0.5
+      price: 0
     - level: 2
       radius: 0.075
       damage: 4
@@ -29,6 +30,7 @@ MonoBehaviour:
       mesh: {fileID: 2463973035164070446, guid: 052c946269965e9498b9bf52a58281a7, type: 3}
       countCartridges: 2
       attackInterval: 0.5
+      price: 50
     - level: 3
       radius: 0.08
       damage: 4
@@ -36,6 +38,7 @@ MonoBehaviour:
       mesh: {fileID: 5966592872987490368, guid: 052c946269965e9498b9bf52a58281a7, type: 3}
       countCartridges: 3
       attackInterval: 0.5
+      price: 50
   - type: 11
     levels:
     - level: 1
@@ -45,6 +48,7 @@ MonoBehaviour:
       mesh: {fileID: -1036868352945458072, guid: 052c946269965e9498b9bf52a58281a7, type: 3}
       countCartridges: 1
       attackInterval: 0.5
+      price: 0
     - level: 2
       radius: 0.07
       damage: 3.5
@@ -52,6 +56,7 @@ MonoBehaviour:
       mesh: {fileID: 1273654491477234696, guid: 052c946269965e9498b9bf52a58281a7, type: 3}
       countCartridges: 2
       attackInterval: 0.5
+      price: 50
     - level: 3
       radius: 0.08
       damage: 3
@@ -59,3 +64,4 @@ MonoBehaviour:
       mesh: {fileID: -6929091992741096592, guid: 052c946269965e9498b9bf52a58281a7, type: 3}
       countCartridges: 3
       attackInterval: 0.5
+      price: 50

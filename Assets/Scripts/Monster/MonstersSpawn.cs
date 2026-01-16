@@ -12,6 +12,8 @@ public class MonstersSpawn : MonoBehaviour
     [SerializeField] List<GameObject> monsterPrefabs;
     [SerializeField] SplineContainer spline;
     [SerializeField] GameManager gameManager;
+    [SerializeField] GameObject healthBarPrefab;
+    [SerializeField] Transform healthBarParent;
 
     List<GameObject> _monsters = new();
 
@@ -41,15 +43,22 @@ public class MonstersSpawn : MonoBehaviour
                 GameObject _monster = Instantiate(_monsterPrefab, monsterParent);
                 _monsters.Add(_monster);
 
+                GameObject _healthBarObject = Instantiate(healthBarPrefab, healthBarParent);
+                HealthBarController _healthBar = _healthBarObject.GetComponent<HealthBarController>();
+                _healthBar.Init(_monster.transform);
+                Debug.Log(_healthBar);
                 MonsterController _monsterController = _monster.GetComponent<MonsterController>();
-                _monsterController.InitMonster(spline);
+                _monsterController.InitMonster(spline, _healthBar);
             }
         }    
     }
 
-    void CheckMonsters(MonsterController _monsterDestroy)
+    void CheckMonsters(MonsterController _monsterDestroy, bool _isMenu)
     {
+        if (_isMenu) return;
+
         _monsters.Remove(_monsterDestroy.gameObject);
+        gameManager.CountKilledMonsters++;
 
         if (_monsters.Count == 0)
             gameManager.AllMonstersDied();
@@ -59,7 +68,9 @@ public class MonstersSpawn : MonoBehaviour
     {
         foreach (GameObject _monsterObject in _monsters)
         {
-            Destroy(_monsterObject);
+            _monsterObject.GetComponent<MonsterController>().DestroyMonster();
         }
+
+        _monsters = new();
     }
 }
