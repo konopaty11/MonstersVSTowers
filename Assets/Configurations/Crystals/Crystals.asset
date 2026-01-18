@@ -12,4 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18b5831d11fefb64086601f25898d2d8, type: 3}
   m_Name: Crystals
   m_EditorClassIdentifier: Assembly-CSharp::Crystals
-  crystals: 1000
+  crystals: 9544
+  monsterPrices:
+  - type: 1
+    price: 20
+  - type: 2
+    price: 20
+  - type: 3
+    price: 30
+  - type: 4
+    price: 40
+  wavePrices:
+  - wave: 1
+    price: 0
+  - wave: 2
+    price: 45
+  - wave: 3
+    price: 70
+  - wave: 4
+    price: 75

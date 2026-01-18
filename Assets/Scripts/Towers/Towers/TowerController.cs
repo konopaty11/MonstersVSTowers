@@ -20,28 +20,43 @@ public class TowerController : MonoBehaviour, IUpgradable
     [SerializeField] Crystals crystals;
     [SerializeField] Prices prices;
 
-    public int Level { get; private set; }
+    [Header("Saves")]
+    [SerializeField] RestoreTower restoreTower;
+
+    public int Level { get; private set; } = 1;
     public bool IsLock { get; private set; }
 
     bool _isFree = true;
 
     GunController _currentGun;
+    public GunController CurrentGun => _currentGun;
 
-    void Awake()
+    private void Awake()
     {
-        Upgrade();
+        Init();
     }
 
     void OnEnable()
     {
         ModeManager.OnModeChange += LockControl;
-        GameManager.OnRestart += DestroyGun;
+        GameManager.OnRestart += OnRestart;
     }
 
     void OnDisable()
     {
         ModeManager.OnModeChange -= LockControl;
-        GameManager.OnRestart -= DestroyGun;
+        GameManager.OnRestart -= OnRestart;
+    }
+
+    void Init()
+    {
+        foreach (TowerLevelUpgradeSerializable _levelUpgrade in towerUpgrades.towers)
+        {
+            if (_levelUpgrade.level == Level)
+            {
+                collection.RadiusMultyplier = _levelUpgrade.rangeMultiplier;
+            }
+        }
     }
 
     void LockControl(Modes _mode)
@@ -103,9 +118,9 @@ public class TowerController : MonoBehaviour, IUpgradable
 
         int _result = _mode switch
         {
-            Modes.UpgradingTowers => Upgrade(),
-            Modes.UpgradingGuns => GunUpgrade(),
-            >= Modes.CreatingCannon => CreateGun(_mode),
+            Modes.UpgradingTowers => CanAffordUpgrade(),
+            Modes.UpgradingGuns => CanAffordGunUpgrade(),
+            >= Modes.CreatingCannon => CanAffordGun(_mode),
             _ => -1
         };
 
@@ -114,8 +129,18 @@ public class TowerController : MonoBehaviour, IUpgradable
         return _result;
     }
 
-    void DestroyGun()
+    void OnRestart()
     {
+        Level = 1;
+        foreach (TowerLevelUpgradeSerializable _levelUpgrade in towerUpgrades.towers)
+        {
+            if (_levelUpgrade.level == Level)
+            {
+                meshFilter.mesh = _levelUpgrade.mesh;
+                collection.RadiusMultyplier = _levelUpgrade.rangeMultiplier;
+            }
+        }
+
         if (_currentGun != null)
         {
             Destroy(_currentGun.gameObject);
@@ -124,11 +149,32 @@ public class TowerController : MonoBehaviour, IUpgradable
         }
     }
 
-    public int Upgrade()
+    public int CanAffordUpgrade()
     {
         if (crystals.crystals < prices.upgradeTower)
             return -1;
 
+        int _price = Upgrade();
+        restoreTower.TowerSerializable.level = Level;
+        return _price;
+    }
+
+    public int CanAffordGun(Modes _mode)
+    {
+        int _price = GetGunCreatePrice(_mode);
+        if (crystals.crystals < _price)
+            return -1;
+
+        CreateGun((GunType)_mode);
+
+        restoreTower.TowerSerializable.gunType = (GunType)_mode;
+        restoreTower.TowerSerializable.gunLevel = _currentGun.Level;
+
+        return _price;
+    }
+
+    public int Upgrade()
+    {
         Level++;
 
         foreach (TowerLevelUpgradeSerializable _levelUpgrade in towerUpgrades.towers)
@@ -144,26 +190,20 @@ public class TowerController : MonoBehaviour, IUpgradable
         return -1;
     }
 
-    int CreateGun(Modes _mode)
+    public void CreateGun(GunType _type)
     {
-        int _price = GetGunCreatePrice(_mode); 
-        if (crystals.crystals < _price)
-            return -1;
-
-        _currentGun = gunSpawn.SpawnGun((GunType) _mode);
+        _currentGun = gunSpawn.SpawnGun(_type);
         _isFree = false;
+    }
+
+    int CanAffordGunUpgrade()
+    {
+        int _price = _currentGun.CanAffordUpgrade();
+
+        if (_price != -1)
+            restoreTower.TowerSerializable.gunLevel = _currentGun.Level;
 
         return _price;
-    }
-
-    public void CreateMenuGun(Modes _mode)
-    {
-        _currentGun = gunSpawn.SpawnGun((GunType)_mode);
-    }
-
-    int GunUpgrade()
-    {
-        return _currentGun.Upgrade();
     }
 
     int GetGunCreatePrice(Modes _mode)

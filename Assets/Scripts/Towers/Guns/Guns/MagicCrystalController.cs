@@ -6,7 +6,7 @@ public class MagicCrystalController : GunController
     [SerializeField] MeshFilter stonesMeshFilter;
     [SerializeField] Crystals crystals;
 
-    public override int Level { get; protected set; }
+    public override int Level { get; protected set; } = 1;
 
     public MagicCrystalLevelSettingsSerializable LevelSettings
     {
@@ -16,17 +16,24 @@ public class MagicCrystalController : GunController
 
     float _currentTime;
 
-    public override int Upgrade()
+    public override int CanAffordUpgrade()
     {
-        Level++;
-        LevelSettings = (MagicCrystalLevelSettingsSerializable)GetLevelSettings();
+        int _price = Upgrade();
 
-        if (crystals.crystals < LevelSettings.price)
+        if (crystals.crystals < _price)
         {
             Level--;
             LevelSettings = (MagicCrystalLevelSettingsSerializable)GetLevelSettings();
             return -1;
         }
+
+        return _price;
+    }
+
+    public override int Upgrade()
+    {
+        Level++;
+        LevelSettings = (MagicCrystalLevelSettingsSerializable)GetLevelSettings();
 
         stonesMeshFilter.mesh = LevelSettings.stonesMesh;
         meshFilter.mesh = LevelSettings.mesh;
@@ -49,7 +56,8 @@ public class MagicCrystalController : GunController
     public override void Init(CollectMonsters _collection)
     {
         base.Init(_collection);
-        Upgrade();
+        LevelSettings = (MagicCrystalLevelSettingsSerializable)GetLevelSettings();
+        Collection.Radius = LevelSettings.radius;
 
         _currentTime = LevelSettings.rechargeTime;
     }

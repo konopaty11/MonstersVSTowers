@@ -6,6 +6,7 @@ public class CastleController : MonoBehaviour, IDamageable
     [SerializeField] Slider healthSlider;
     [SerializeField] GeneralSettings generalSettings;
     [SerializeField] GameManager gameManager;
+    [SerializeField] Saves saves;
 
     string _monsterTag = "Monster";
     float _damageCoefficient = 1.2f;
@@ -15,20 +16,23 @@ public class CastleController : MonoBehaviour, IDamageable
     void OnEnable()
     {
         GameManager.OnRestart += RestoreHealth;
+        Saves.OnDataLoaded += OnLoadData;
     }
 
     void OnDisable()
     {
         GameManager.OnRestart -= RestoreHealth;
+        Saves.OnDataLoaded -= OnLoadData;
     }
 
-    void Start()
+    void Awake()
     {
         Init();
     }
 
     void Init()
     {
+        Debug.Log("dsf");
         CurrentHealth = generalSettings.castleHealth;
     }
 
@@ -43,6 +47,19 @@ public class CastleController : MonoBehaviour, IDamageable
             _monster.SubtractHealth(_monster.CurrentHealth);
     }
 
+    void OnLoadData(SaveData _saveData)
+    {
+        CurrentHealth = _saveData.castleHealth;
+        float _value = CurrentHealth / generalSettings.castleHealth;
+        if (_value < 1)
+        {
+            healthSlider.gameObject.SetActive(true);
+            healthSlider.value = _value;
+        }
+        Debug.Log("sss");
+
+    }
+
     public void SubtractHealth(float _damage)
     {
         healthSlider.gameObject.SetActive(true);
@@ -52,6 +69,8 @@ public class CastleController : MonoBehaviour, IDamageable
 
         if (CurrentHealth <= 0)
             gameManager.Loose();
+
+        saves.SetCastleHealth(CurrentHealth);
     }
 
     public void RestoreHealth()
@@ -59,5 +78,6 @@ public class CastleController : MonoBehaviour, IDamageable
         CurrentHealth = generalSettings.castleHealth;
         healthSlider.value = 1f;
         healthSlider.gameObject.SetActive(false);
+        saves.SetCastleHealth(CurrentHealth);
     }
 }

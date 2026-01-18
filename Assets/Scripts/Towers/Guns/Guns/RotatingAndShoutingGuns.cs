@@ -19,7 +19,7 @@ public class RotatingAndShoutingGuns : GunController
     int _countCartridges;
     int _currentCartridgeIndex = 0;
 
-    public override int Level { get; protected set; }
+    public override int Level { get; protected set; } = 1;
 
     public RotatingAndShoutingGunSettingsSerializable Settings { get; private set; }
     public RotatingAndShoutingGunLevelSettingsSerializable LevelSettings 
@@ -32,7 +32,8 @@ public class RotatingAndShoutingGuns : GunController
     {
         base.Init(_collection);
         SetSettings();
-        Upgrade();
+        LevelSettings = (RotatingAndShoutingGunLevelSettingsSerializable)GetLevelSettings();
+        Collection.Radius = LevelSettings.radius;
 
         _currentAttackTime = LevelSettings.attackInterval;
     }
@@ -106,18 +107,25 @@ public class RotatingAndShoutingGuns : GunController
         return _horizontalVelocity + Vector3.up * _verticalVelocity;
     }
 
-    public override int Upgrade()
+    public override int CanAffordUpgrade()
     {
-        Level++;
-        LevelSettings = (RotatingAndShoutingGunLevelSettingsSerializable)GetLevelSettings();
+        int _price = Upgrade();
 
-        if (crystals.crystals < LevelSettings.price)
+        if (crystals.crystals < _price)
         {
             Level--;
             LevelSettings = (RotatingAndShoutingGunLevelSettingsSerializable)GetLevelSettings();
             return -1;
         }
 
+        return _price;
+    }
+
+    public override int Upgrade()
+    {
+        Level++;
+        LevelSettings = (RotatingAndShoutingGunLevelSettingsSerializable)GetLevelSettings();
+        Debug.Log(Level);
         meshFilter.mesh = LevelSettings.mesh;
         Collection.Radius = LevelSettings.radius;
         return LevelSettings.price;

@@ -17,7 +17,7 @@ public class MenuController : MonoBehaviour
     [SerializeField] List<TowerController> towers;
 
     List<GameObject> _monsterObjects = new();
-    int _targetCountMonsters = 1;
+    int _targetCountMonsters = 5;
 
     void OnEnable()
     {
@@ -38,7 +38,7 @@ public class MenuController : MonoBehaviour
     {
         foreach (TowerController _tower in towers)
         {
-            _tower.CreateMenuGun(Modes.CreatingCannon);
+            _tower.CreateGun(GunType.Cannon);
         }
 
         StartCoroutine(SpawnControl());

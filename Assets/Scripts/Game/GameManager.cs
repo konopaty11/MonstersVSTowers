@@ -19,11 +19,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] VisibilityUIManager visibleUIManager;
     [SerializeField] LoadManager loadManager;
     [SerializeField] Crystals crystals;
+    [SerializeField] SoundManager soundManager;
 
     public static UnityAction<int> OnUpdateWave;
     public static UnityAction OnRestart;
 
-    int _currentWaveIndex = -1;
+    int _currentWaveIndex = 0;
     public int CurrentWave => _currentWaveIndex + 1;
 
     Coroutine _spawnCoroutine;
@@ -57,13 +58,15 @@ public class GameManager : MonoBehaviour
     void OnEnable()
     {
         _inputSystem.Player.Attack.Enable();
-        _inputSystem.Player.Attack.performed += ThrowRaycast; 
+        _inputSystem.Player.Attack.performed += ThrowRaycast;
+        Saves.OnDataLoaded += OnLoadData;
     }
 
     void OnDisable()
     {
         _inputSystem.Player.Attack.Disable();
         _inputSystem.Player.Attack.performed -= ThrowRaycast;
+        Saves.OnDataLoaded -= OnLoadData;
     }
 
     void Start()
@@ -71,7 +74,7 @@ public class GameManager : MonoBehaviour
         Init();
     }
 
-    private void Update()
+    void Update()
     {
         TimerControl();
     }
@@ -79,6 +82,11 @@ public class GameManager : MonoBehaviour
     void Init()
     {
         _layerMask = ~LayerMask.GetMask(_ignoreRaycastLayerName);
+    }
+
+    void OnLoadData(SaveData _saveData)
+    {
+        _currentWaveIndex = _saveData.wave - 1;
     }
 
     void TimerControl()
@@ -91,7 +99,8 @@ public class GameManager : MonoBehaviour
 
     public void Play()
     {
-        loadManager.LoadGame(NextWave);
+        loadManager.LoadGame(StartGame);
+        soundManager.ToMainMusic();
     }
 
     public void AllMonstersDied()
@@ -108,6 +117,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void StartGame()
+    {
+        _timerActive = true;
+
+        StartCoroutine(Spawn());
+        OnUpdateWave?.Invoke(CurrentWave);
+    }
+
     public void NextWave()
     {
         _timerActive = true;
@@ -121,7 +138,7 @@ public class GameManager : MonoBehaviour
     {
         ResetWave();
         CloseResultWindow();
-        NextWave();
+        StartGame();
     }
 
     public void ToMenu()
@@ -129,12 +146,13 @@ public class GameManager : MonoBehaviour
         ResetWave();
         CloseResultWindow();
         loadManager.LoadMenu();
+        soundManager.ToMenuMusic();
     }
 
     void ResetWave()
     {
         OnRestart?.Invoke();
-        _currentWaveIndex = -1;
+        _currentWaveIndex = 0;
 
         _ñountCreatedGuns = 0;
         _ñountUpdatedGuns = 0;

@@ -7,5 +7,7 @@ public interface IUpgradable
 
     public int Upgrade();
 
+    public int CanAffordUpgrade();
+
     public bool IsCanUpgrade();
 }

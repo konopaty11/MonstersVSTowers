@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5810914856039772415}
   - component: {fileID: 5406995145452128022}
   - component: {fileID: 2822583747626148261}
+  - component: {fileID: 2915687943227557444}
   m_Layer: 0
   m_Name: SmallTower
   m_TagString: Tower
@@ -137,6 +138,7 @@ MonoBehaviour:
   unlockMaterial: {fileID: 2100000, guid: 80ee5d0cd56b34844830929640b37797, type: 2}
   crystals: {fileID: 11400000, guid: 94cc5327363d22846a789eaebe77ee16, type: 2}
   prices: {fileID: 11400000, guid: 20fd6a26554f3994aa9fe44a909ad22c, type: 2}
+  restoreTower: {fileID: 2915687943227557444}
 --- !u!114 &2822583747626148261
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,6 +157,20 @@ MonoBehaviour:
   - {fileID: 5273912865344236659, guid: 4a3790c0c6753624cbcc8dcac0fb131a, type: 3}
   - {fileID: 6930967204425954975, guid: d61865df24551624fb1a4e479a9dff2f, type: 3}
   collection: {fileID: 5038123332578256402}
+--- !u!114 &2915687943227557444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 15671441298522946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b582582d2801ed459a915e22f47604f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RestoreTower
+  id: 0
+  tower: {fileID: 5406995145452128022}
 --- !u!1 &9138454110163697461
 GameObject:
   m_ObjectHideFlags: 0

@@ -30,4 +30,6 @@ public abstract class GunController : MonoBehaviour, IUpgradable
     public abstract int Upgrade();
 
     public abstract bool IsCanUpgrade();
+
+    public abstract int CanAffordUpgrade();
 }
