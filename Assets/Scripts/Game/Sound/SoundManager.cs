@@ -1,12 +1,45 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SoundManager : MonoBehaviour
 {
     [SerializeField] AudioSource mainAudioSource;
     [SerializeField] AudioSource menuAudioSource;
+    [SerializeField] Slider volume;
+    [SerializeField] Saves saves;
+    [SerializeField] VisibilityUIManager visibleUIManager;
 
     float _duration = 2f;
+    float _volume = 1f;
+    public float Volume
+    {
+        get => _volume;
+        set 
+        {
+            _volume = value;
+            if (_isGameMusic)
+                mainAudioSource.volume = _volume;
+            else
+                menuAudioSource.volume = _volume;
+        }
+    }
+
+    string _soundWindowID = "Sound";
+
+    float _prefVolume;
+
+    bool _isGameMusic = false;
+
+    void OnEnable()
+    {
+        Saves.OnDataLoaded += OnLoadData;
+    }
+
+    void OnDisable()
+    {
+        Saves.OnDataLoaded -= OnLoadData;
+    }
 
     void Start()
     {
@@ -15,26 +48,69 @@ public class SoundManager : MonoBehaviour
 
     void Init()
     {
+        volume.onValueChanged.AddListener(OnSliderValueChanged);
+
         mainAudioSource.Play();
         mainAudioSource.Pause();
         menuAudioSource.Play();
     }
 
+    void OnLoadData(SaveData _saveData)
+    {
+        Volume = _saveData.volume;
+        volume.value = Volume;
+    }
+
     public void ToMenuMusic()
     {
+        _isGameMusic = false;
         StartCoroutine(FadeToPause(mainAudioSource));
         StartCoroutine(FadeToResume(menuAudioSource));
     }
 
     public void ToMainMusic()
     {
+        _isGameMusic = true;
         StartCoroutine(FadeToPause(menuAudioSource));
         StartCoroutine(FadeToResume(mainAudioSource));
     }
 
+    public void OpenSoundWindow()
+    {
+        _prefVolume = _volume;
+        visibleUIManager.ShowUI(_soundWindowID, ShowType.Moving);
+    }
+
+    public void CloseSoundWindow()
+    { 
+        visibleUIManager.HideUI(_soundWindowID, ShowType.Moving);
+    }
+
+    public void CloseSoundWindowWithoutSave()
+    {
+        Volume = _prefVolume;
+        volume.value = _volume;
+        
+        saves.SetVolume(_volume);
+        CloseSoundWindow();
+    }
+
+    void OnSliderValueChanged(float _value)
+    {
+        Volume = _value;
+
+        saves.SetVolume(_volume);
+    }
+
+    public void SaveVolume()
+    {
+        saves.SetVolume(_volume);
+        CloseSoundWindow();
+    }
+
     IEnumerator FadeToPause(AudioSource _audioSource)
     {
-        float _startVolume = 1f;
+        float _startVolume = _volume;
         _audioSource.volume = _startVolume;
         float _targetVolume = 0f;
         float _elapsed = 0f;
@@ -56,7 +132,7 @@ public class SoundManager : MonoBehaviour
 
         float _startVolume = 0f;
         _audioSource.volume = _startVolume;
-        float _targetVolume = 1f;
+        float _targetVolume = _volume;
         float _elapsed = 0f;
         while (_elapsed <= _duration)
         {

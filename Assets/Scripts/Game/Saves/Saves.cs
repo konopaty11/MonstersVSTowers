@@ -9,6 +9,7 @@ public class Saves : MonoBehaviour
     [SerializeField] Crystals crystals;
     [SerializeField] GeneralSettings generalSettings;
     [SerializeField] List<RestoreTower> towers;
+    [SerializeField] SoundManager soundManager;
 
     public static UnityAction<SaveData> OnDataLoaded;
 
@@ -53,7 +54,7 @@ public class Saves : MonoBehaviour
             _file.Create().Dispose();
 
             SetTowersSerializable();
-            _saveData = new(crystals.crystals, generalSettings.castleHealth, gameManager.CurrentWave, _towersSerializable);
+            _saveData = new(crystals.crystals, soundManager.Volume, generalSettings.castleHealth, gameManager.CurrentWave, _towersSerializable);
             OnDataLoaded?.Invoke(_saveData);
 
             SaveData();
@@ -95,6 +96,12 @@ public class Saves : MonoBehaviour
     public void SetWave(int _wave)
     {
         _saveData.wave = _wave;
+        SaveData();
+    }
+
+    public void SetVolume(float _volume)
+    {
+        _saveData.volume = _volume;
         SaveData();
     }
 

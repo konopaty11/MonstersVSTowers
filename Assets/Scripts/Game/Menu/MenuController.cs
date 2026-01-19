@@ -67,7 +67,6 @@ public class MenuController : MonoBehaviour
         GameObject _healthBarObject = Instantiate(healthBarPrefab, healthBarParent);
         HealthBarController _healthBar = _healthBarObject.GetComponent<HealthBarController>();
         _healthBar.Init(_monsterObject.transform);
-        Debug.Log(_healthBar);
         MonsterController _monster = _monsterObject.GetComponent<MonsterController>();
         _monster.InitMonster(spline, _healthBar, true, true);
     }

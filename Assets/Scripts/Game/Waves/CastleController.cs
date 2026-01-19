@@ -32,7 +32,6 @@ public class CastleController : MonoBehaviour, IDamageable
 
     void Init()
     {
-        Debug.Log("dsf");
         CurrentHealth = generalSettings.castleHealth;
     }
 
@@ -56,8 +55,6 @@ public class CastleController : MonoBehaviour, IDamageable
             healthSlider.gameObject.SetActive(true);
             healthSlider.value = _value;
         }
-        Debug.Log("sss");
-
     }
 
     public void SubtractHealth(float _damage)
