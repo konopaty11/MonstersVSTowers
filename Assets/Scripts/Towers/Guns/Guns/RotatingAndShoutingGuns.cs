@@ -125,7 +125,7 @@ public class RotatingAndShoutingGuns : GunController
     {
         Level++;
         LevelSettings = (RotatingAndShoutingGunLevelSettingsSerializable)GetLevelSettings();
-        Debug.Log(Level);
+
         meshFilter.mesh = LevelSettings.mesh;
         Collection.Radius = LevelSettings.radius;
         return LevelSettings.price;

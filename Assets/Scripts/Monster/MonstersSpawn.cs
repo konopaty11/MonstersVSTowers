@@ -46,7 +46,7 @@ public class MonstersSpawn : MonoBehaviour
                 GameObject _healthBarObject = Instantiate(healthBarPrefab, healthBarParent);
                 HealthBarController _healthBar = _healthBarObject.GetComponent<HealthBarController>();
                 _healthBar.Init(_monster.transform);
-                Debug.Log(_healthBar);
+
                 MonsterController _monsterController = _monster.GetComponent<MonsterController>();
                 _monsterController.InitMonster(spline, _healthBar);
             }

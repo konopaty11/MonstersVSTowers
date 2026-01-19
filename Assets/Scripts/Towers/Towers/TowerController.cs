@@ -31,6 +31,8 @@ public class TowerController : MonoBehaviour, IUpgradable
     GunController _currentGun;
     public GunController CurrentGun => _currentGun;
 
+    float _refundRatioForDeleteGun = 0.75f;
+
     private void Awake()
     {
         Init();
@@ -73,6 +75,10 @@ public class TowerController : MonoBehaviour, IUpgradable
 
             case Modes.UpgradingGuns:
                 IsLock = !IsCanGunUpgrade();
+                break;
+
+            case Modes.DeletingGun:
+                IsLock = _isFree;
                 break;
 
             case >= Modes.CreatingCannon:
@@ -120,6 +126,7 @@ public class TowerController : MonoBehaviour, IUpgradable
         {
             Modes.UpgradingTowers => CanAffordUpgrade(),
             Modes.UpgradingGuns => CanAffordGunUpgrade(),
+            Modes.DeletingGun => DeleteGun(),
             >= Modes.CreatingCannon => CanAffordGun(_mode),
             _ => -1
         };
@@ -143,10 +150,24 @@ public class TowerController : MonoBehaviour, IUpgradable
 
         if (_currentGun != null)
         {
-            Destroy(_currentGun.gameObject);
-            _currentGun = null;
-            _isFree = true;
+            DestroyGun();
         }
+    }
+
+    public int DeleteGun()
+    {
+        crystals.AddCrystals((int)(GetGunCreatePrice((Modes)_currentGun.Type) * _refundRatioForDeleteGun));
+
+        DestroyGun();
+
+        return -1;
+    }
+
+    void DestroyGun()
+    {
+        Destroy(_currentGun.gameObject);
+        _currentGun = null;
+        _isFree = true;
     }
 
     public int CanAffordUpgrade()
