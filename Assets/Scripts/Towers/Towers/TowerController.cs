@@ -5,6 +5,7 @@ public class TowerController : MonoBehaviour, IUpgradable
     [Header("Gun")]
     [SerializeField] GunSpawn gunSpawn;
     [SerializeField] Transform cartridgesSpawn;
+    [SerializeField] Transform deltaCrystals;
 
     [Header("Upgrades")]
     [SerializeField] TowersUpgradeSerializable towerUpgrades;
@@ -16,7 +17,7 @@ public class TowerController : MonoBehaviour, IUpgradable
     [SerializeField] Material lockMaterial;
     [SerializeField] Material unlockMaterial;
 
-    [Header("Configurations")]
+    [Header("Crystals")]
     [SerializeField] Crystals crystals;
     [SerializeField] Prices prices;
 
@@ -33,7 +34,9 @@ public class TowerController : MonoBehaviour, IUpgradable
 
     float _refundRatioForDeleteGun = 0.75f;
 
-    private void Awake()
+    CrystalsAnimateManager _crystalsAnimate;
+
+    void Start()
     {
         Init();
     }
@@ -59,6 +62,9 @@ public class TowerController : MonoBehaviour, IUpgradable
                 collection.RadiusMultyplier = _levelUpgrade.rangeMultiplier;
             }
         }
+
+        _crystalsAnimate = ServiceLocator.Get<CrystalsAnimateManager>();
+        Debug.Log(_crystalsAnimate);
     }
 
     void LockControl(Modes _mode)
@@ -156,7 +162,9 @@ public class TowerController : MonoBehaviour, IUpgradable
 
     public int DeleteGun()
     {
-        crystals.AddCrystals((int)(GetGunCreatePrice((Modes)_currentGun.Type) * _refundRatioForDeleteGun));
+        int _crystalsRefund = (int)(GetGunCreatePrice((Modes)_currentGun.Type) * _refundRatioForDeleteGun);
+        crystals.AddCrystals(_crystalsRefund);
+        _crystalsAnimate.DeltaCrystalsPositionAnimate(deltaCrystals.position, _crystalsRefund);
 
         DestroyGun();
 
@@ -177,6 +185,10 @@ public class TowerController : MonoBehaviour, IUpgradable
 
         int _price = Upgrade();
         restoreTower.TowerSerializable.level = Level;
+
+        if(_price != -1)
+            _crystalsAnimate.DeltaCrystalsPositionAnimate(deltaCrystals.position, -_price);
+
         return _price;
     }
 
@@ -187,6 +199,8 @@ public class TowerController : MonoBehaviour, IUpgradable
             return -1;
 
         CreateGun((GunType)_mode);
+
+        _crystalsAnimate.DeltaCrystalsPositionAnimate(deltaCrystals.position, -_price);
 
         restoreTower.TowerSerializable.gunType = (GunType)_mode;
         restoreTower.TowerSerializable.gunLevel = _currentGun.Level;
@@ -222,7 +236,10 @@ public class TowerController : MonoBehaviour, IUpgradable
         int _price = _currentGun.CanAffordUpgrade();
 
         if (_price != -1)
+        {
             restoreTower.TowerSerializable.gunLevel = _currentGun.Level;
+            _crystalsAnimate.DeltaCrystalsPositionAnimate(deltaCrystals.position, -_price);
+        }
 
         return _price;
     }

@@ -36,6 +36,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8551983459350619104}
+  - {fileID: 8941243682837536831}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!33 &3382087509872590247
@@ -130,6 +131,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TowerController
   gunSpawn: {fileID: 2822583747626148261}
   cartridgesSpawn: {fileID: 0}
+  deltaCrystals: {fileID: 8941243682837536831}
   towerUpgrades: {fileID: 11400000, guid: 372b57a4567be08469c5b1377b205670, type: 2}
   meshFilter: {fileID: 3382087509872590247}
   collection: {fileID: 5038123332578256402}
@@ -171,6 +173,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RestoreTower
   id: 0
   tower: {fileID: 5406995145452128022}
+--- !u!1 &2755090339509466240
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8941243682837536831}
+  m_Layer: 0
+  m_Name: CrystalsDeltaPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8941243682837536831
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2755090339509466240}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.0216, z: 0.04914}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1664748988765425368}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9138454110163697461
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,27 +1,33 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
 [CreateAssetMenu(fileName = "Crystals", menuName = "Scriptable Objects/Crystals")]
 public class Crystals : ScriptableObject
 {
+    [SerializeField] Vector3 castleDeltaCrystalPosition;
+
     public static UnityAction<int> OnCountCrystalsChange;
 
     public int crystals;
     public List<MonsterPriceSerializable> monsterPrices;
     public List<WavePriceSerializable> wavePrices;
 
+    CrystalsAnimateManager _crystalsAnimate;
+
     void OnEnable()
     {
-        MonsterController.OnMonsterDestroy += AddCrystalsForMonster;
+        MonsterController.OnMonsterDied += AddCrystalsForMonster;
         GameManager.OnUpdateWave += AddCrystalsForPassedWave;
         Saves.OnDataLoaded += OnLoadData;
     }
 
     void OnDisable()
     {
-        MonsterController.OnMonsterDestroy -= AddCrystalsForMonster;
+        MonsterController.OnMonsterDied -= AddCrystalsForMonster;
         GameManager.OnUpdateWave -= AddCrystalsForPassedWave;
         Saves.OnDataLoaded -= OnLoadData;
     }
@@ -50,7 +56,14 @@ public class Crystals : ScriptableObject
         foreach (MonsterPriceSerializable _monsterPrice in monsterPrices)
         {
             if (_monsterPrice.type == _monster.Type)
+            {
                 AddCrystals(_monsterPrice.price);
+
+                if (_crystalsAnimate == null)
+                    _crystalsAnimate = ServiceLocator.Get<CrystalsAnimateManager>();
+
+                _crystalsAnimate.DeltaCrystalsPositionAnimate(_monster.transform.position, _monsterPrice.price);
+            }
         }
     }
 
@@ -59,7 +72,14 @@ public class Crystals : ScriptableObject
         foreach (WavePriceSerializable _wavePrice in wavePrices)
         {
             if (_wavePrice.wave == _wave)
+            {
                 AddCrystals(_wavePrice.price);
+
+                if (_crystalsAnimate == null)
+                    _crystalsAnimate = ServiceLocator.Get<CrystalsAnimateManager>();
+
+                _crystalsAnimate.DeltaCrystalsPositionAnimate(castleDeltaCrystalPosition, _wavePrice.price);
+            }
         }
     }
 }

@@ -32,6 +32,7 @@ public class MonsterController : MonoBehaviour, IDamageable
     [SerializeField] MonsterEffectController monsterEffectController;
 
     public static UnityAction<MonsterController, bool> OnMonsterDestroy;
+    public static UnityAction<MonsterController, bool> OnMonsterDied;
 
     public MonsterType Type => type;
 
@@ -136,6 +137,8 @@ public class MonsterController : MonoBehaviour, IDamageable
 
         StartCoroutine(FadingMaterial(_duration));
         StartCoroutine(DestroyWithDelay(_duration));
+
+        OnMonsterDied?.Invoke(this, IsMenuMonster);
     }
 
     IEnumerator DestroyWithDelay(float _delay)

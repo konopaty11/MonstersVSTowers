@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18b5831d11fefb64086601f25898d2d8, type: 3}
   m_Name: Crystals
   m_EditorClassIdentifier: Assembly-CSharp::Crystals
-  crystals: 9544
+  castleDeltaCrystalPosition: {x: 2, y: 4, z: -0.1672}
+  crystals: 12759
   monsterPrices:
   - type: 1
     price: 20
