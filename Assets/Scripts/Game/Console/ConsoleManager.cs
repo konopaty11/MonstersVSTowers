@@ -7,7 +7,10 @@ using UnityEngine.UI;
 
 public class ConsoleManager : MonoBehaviour
 {
-    [SerializeField] InputField inputField;
+    [SerializeField] TMP_InputField inputField;
+    [SerializeField] Crystals crystals;
+    [SerializeField] MonstersSpawn spawn;
+    [SerializeField] GameObject consoleObject;
 
     Vector2 _startPosition;
     Vector2 _finishPosition;
@@ -15,12 +18,23 @@ public class ConsoleManager : MonoBehaviour
     float _distanceThreshold = 100f;
     float _diagonalThreshold = 0.4f;
 
-    Dictionary<string, ConsoleCommand> _comands = new();
+    Dictionary<string, ConsoleCommand> _commands = new();
+
+    void Start()
+    {
+        Init();
+    }
 
     void Update()
     {
         ReadTouch();
+    }
 
+    void Init()
+    {
+        AddCommand(new("get", HandleGet));
+        AddCommand(new("spawn", HandleSpawn));
+        AddCommand(new("console", HandleConsole));
     }
 
     void ReadTouch()
@@ -49,10 +63,73 @@ public class ConsoleManager : MonoBehaviour
         Vector2 _swipeVectorNormalized = _swipeVector.normalized;
         if (_swipeVectorNormalized.x < _diagonalThreshold || 
             _swipeVectorNormalized.y < _diagonalThreshold) return;
+
+        OpenConsole();
+    }
+
+    void OpenConsole()
+    {
+        consoleObject.SetActive(true);
+    }
+
+    void CloseConsole()
+    {
+        consoleObject.SetActive(false);
+    }
+
+    public void AddCommand(ConsoleCommand _command)
+    {
+        _commands[_command.Name] = _command;
     }
 
     public void ExecuteCommand()
     {
+        string[] _command = inputField.text.Split();
+        _commands[_command[0]].Execute(_command[1..]);
+    }
 
+    public void HandleGet(string[]  _args)
+    {
+        var (_item, _count) = (_args[0].ToLower(), int.Parse(_args[1]));
+
+        switch (_item)
+        {
+            case "crystals":
+                crystals.AddCrystals(_count);
+                break;
+        }
+    }
+
+    public void HandleSpawn(string[] _args)
+    {
+        string _monster = _args[0].ToLower();
+
+        switch (_monster)
+        {
+            case "grox":
+                spawn.SpawnMonster(MonsterType.Grox);
+                break;
+            case "minion":
+                spawn.SpawnMonster(MonsterType.Minion);
+                break;
+            case "zombie":
+                spawn.SpawnMonster(MonsterType.Zombie);
+                break;
+            case "brut":
+                spawn.SpawnMonster(MonsterType.Brut);
+                break;
+        }
+    }
+
+    public void HandleConsole(string[] _args)
+    {
+        string _action = _args[0].ToLower();
+
+        switch (_action)
+        {
+            case "close":
+                CloseConsole(); 
+                break;
+        }
     }
 }

@@ -64,7 +64,6 @@ public class TowerController : MonoBehaviour, IUpgradable
         }
 
         _crystalsAnimate = ServiceLocator.Get<CrystalsAnimateManager>();
-        Debug.Log(_crystalsAnimate);
     }
 
     void LockControl(Modes _mode)

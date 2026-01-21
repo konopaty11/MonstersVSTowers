@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
 
     Coroutine _spawnCoroutine;
 
-    string _towerTag = "Tower";
+    string _towerTag = "Tower"; 
 
     InputSystem_Actions _inputSystem;
 
