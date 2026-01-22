@@ -10,17 +10,7 @@ public class RestoreTower : MonoBehaviour
     TowerSerializable _currentTowerSerializable = new();
     public TowerSerializable TowerSerializable => _currentTowerSerializable;
 
-    void OnEnable()
-    {
-        Saves.OnDataLoaded += OnLoadData;
-    }
-
-    void OnDisable()
-    {
-        Saves.OnDataLoaded -= OnLoadData;
-    }
-
-    public void OnLoadData(SaveData _saveData)
+    public void LoadData(SaveData _saveData)
     {
         foreach (TowerSerializable _towerSerializable in _saveData.towers)
         {

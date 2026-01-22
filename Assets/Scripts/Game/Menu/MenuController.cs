@@ -16,6 +16,9 @@ public class MenuController : MonoBehaviour
     [Header("Guns spawn")]
     [SerializeField] List<TowerController> towers;
 
+    [Header("Menu UI")]
+    [SerializeField] CanvasGroup loadGameCanvasGroup;
+
     List<GameObject> _monsterObjects = new();
     int _targetCountMonsters = 5;
 
@@ -44,6 +47,12 @@ public class MenuController : MonoBehaviour
         StartCoroutine(SpawnControl());
     }
 
+    public void LoadGameButtonActive(bool _active)
+    {
+        loadGameCanvasGroup.interactable = _active;
+        loadGameCanvasGroup.alpha = _active ? 1 : 0;
+    }
+
     IEnumerator SpawnControl()
     {
         while (true)
@@ -68,11 +77,10 @@ public class MenuController : MonoBehaviour
         HealthBarController _healthBar = _healthBarObject.GetComponent<HealthBarController>();
         _healthBar.Init(_monsterObject.transform);
         MonsterController _monster = _monsterObject.GetComponent<MonsterController>();
-        _monster.InitMonster(spline, _healthBar, true, true);
+        _monster.InitMonster(spline, _healthBar, null, true, true);
     }
 
-    
-
+ 
     void CheckMonsters(MonsterController _monsterDestroy, bool _isMenu)
     {
         if (!_isMenu) return;

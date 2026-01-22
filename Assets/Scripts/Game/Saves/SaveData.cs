@@ -10,6 +10,7 @@ public class SaveData
     public float castleHealth;
     public List<TowerSerializable> towers = new();
     public List<MonsterSerializable> monsters = new();
+    public bool isWaveSave;
 
     public SaveData(int _crystals, float _volume, float _castleHealth, int _wave, List<TowerSerializable> _towers)
     {
@@ -38,4 +39,12 @@ public class MonsterSerializable
     public MonsterType monsterType;
     public float health;
     public float normalizePosition;
+    public bool isDied;
+
+    public MonsterSerializable(MonsterType type)
+    {
+        monsterType = type;
+    }
+
+    public MonsterSerializable() { }
 }

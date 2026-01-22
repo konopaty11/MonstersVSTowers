@@ -33,7 +33,7 @@ public class MonstersSpawn : MonoBehaviour
     /// спавн монстров
     /// </summary>
     /// <param name="_type"> тип монстра </param>
-    public void SpawnMonster(MonsterType _type)
+    public void SpawnMonster(MonsterType _type, MonsterSerializable _monsterSerializable = null)
     {
         foreach (GameObject _monsterPrefab in monsterPrefabs)
         {
@@ -48,9 +48,22 @@ public class MonstersSpawn : MonoBehaviour
                 _healthBar.Init(_monster.transform);
 
                 MonsterController _monsterController = _monster.GetComponent<MonsterController>();
-                _monsterController.InitMonster(spline, _healthBar);
+                _monsterController.InitMonster(spline, _healthBar, _monsterSerializable);
             }
         }    
+    }
+
+    public List<MonsterSerializable> SaveMonsters()
+    {
+        List<MonsterSerializable> _monstersSerializable = new List<MonsterSerializable>();
+
+        foreach (GameObject _monsterObject in _monsters)
+        {
+            MonsterController _monster = _monsterObject.GetComponent<MonsterController>();
+            _monstersSerializable.Add(_monster.SaveMonsterSerializable());
+        }
+
+        return _monstersSerializable;
     }
 
     void CheckMonsters(MonsterController _monsterDestroy, bool _isMenu)

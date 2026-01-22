@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -20,6 +21,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] LoadManager loadManager;
     [SerializeField] Crystals crystals;
     [SerializeField] SoundManager soundManager;
+    [SerializeField] MenuController menuController;
+    [SerializeField] CastleController castleController;
+    [SerializeField] List<RestoreTower> restoreTowers;
+    [SerializeField] Saves saves;
 
     public static UnityAction<int> OnUpdateWave;
     public static UnityAction OnRestart;
@@ -49,6 +54,10 @@ public class GameManager : MonoBehaviour
     int _ñountUpdatedTowers;
     float _timer;
     bool _timerActive;
+
+    SaveData _data;
+
+    List<MonsterSerializable> _monstersSerializable;
 
     void Awake()
     {
@@ -86,7 +95,32 @@ public class GameManager : MonoBehaviour
 
     void OnLoadData(SaveData _saveData)
     {
-        _currentWaveIndex = _saveData.wave - 1;
+        _data = _saveData;
+        menuController.LoadGameButtonActive(_saveData.isWaveSave);
+
+        _monstersSerializable = _data.monsters;
+    }
+
+    public void LoadGame()
+    {
+        _currentWaveIndex = _data.wave - 1;
+        castleController.LoadData(_data);
+        foreach (RestoreTower _restoreTower in restoreTowers)
+        {
+            _restoreTower.LoadData(_data);
+        }
+    }
+
+    public void QuitGame()
+    {
+        SaveGame();
+        Application.Quit();
+    }
+
+    void SaveGame()
+    {
+        saves.SetWave(CurrentWave);
+        saves.SetMonsters(monsterSpawn.SaveMonsters());
     }
 
     void TimerControl()
@@ -97,7 +131,7 @@ public class GameManager : MonoBehaviour
             _timer = 0f;
     }
 
-    public void Play()
+    public void NewGame()
     {
         loadManager.LoadGame(StartGame);
         soundManager.ToMainMusic();
@@ -244,13 +278,25 @@ public class GameManager : MonoBehaviour
     /// <returns></returns>
     IEnumerator Spawn()
     {
-        foreach (MonsterWaveSerializable _monster in waves.waves[_currentWaveIndex].monsters)
+        if (_monstersSerializable.Count == 0)
         {
-            for (int i = 0; i < _monster.count; i++)
+            foreach (MonsterWaveSerializable _monster in waves.waves[_currentWaveIndex].monsters)
+            {
+                for (int i = 0; i < _monster.count; i++)
+                {
+                    yield return new WaitForSeconds(Random.Range(generalSettings.minSpawnDelay, generalSettings.maxSpawnDelay));
+
+                    monsterSpawn.SpawnMonster(_monster.type, new(_monster.type));
+                }
+            }
+        }
+        else
+        {
+            foreach (MonsterSerializable _monster in _monstersSerializable)
             {
                 yield return new WaitForSeconds(Random.Range(generalSettings.minSpawnDelay, generalSettings.maxSpawnDelay));
 
-                monsterSpawn.SpawnMonster(_monster.type);
+                monsterSpawn.SpawnMonster(_monster.monsterType, _monster);
             }
         }
 

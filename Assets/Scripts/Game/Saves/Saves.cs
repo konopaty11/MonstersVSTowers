@@ -13,7 +13,7 @@ public class Saves : MonoBehaviour
 
     public static UnityAction<SaveData> OnDataLoaded;
 
-    SaveData _saveData;
+    SaveData _data;
 
     string _fileName = "UserData.json";
     string _path;
@@ -54,14 +54,14 @@ public class Saves : MonoBehaviour
             _file.Create().Dispose();
 
             SetTowersSerializable();
-            _saveData = new(crystals.crystals, soundManager.Volume, generalSettings.castleHealth, gameManager.CurrentWave, _towersSerializable);
-            OnDataLoaded?.Invoke(_saveData);
+            _data = new(crystals.crystals, soundManager.Volume, generalSettings.castleHealth, gameManager.CurrentWave, _towersSerializable);
+            OnDataLoaded?.Invoke(_data);
 
             SaveData();
             return;
         }
 
-        LoadData();
+        LoadGeneralData();
     }
 
     void SetTowersSerializable()
@@ -74,39 +74,45 @@ public class Saves : MonoBehaviour
         }
     }
 
-    public void LoadData()
+    public void LoadGeneralData()
     {
-        string _data = File.ReadAllText(_path);
-        _saveData = JsonUtility.FromJson<SaveData>(_data);
-        OnDataLoaded?.Invoke(_saveData);
+        string _jsonData = File.ReadAllText(_path);
+        _data = JsonUtility.FromJson<SaveData>(_jsonData);
+        OnDataLoaded?.Invoke(_data);
     }
 
     public void SaveData()
     {
-        string _data = JsonUtility.ToJson(_saveData, true);
-        File.WriteAllText(_path, _data);
+        string _jsonData = JsonUtility.ToJson(_data, true);
+        File.WriteAllText(_path, _jsonData);
     }
 
     public void SetCrystals(int _crystals)
     {
-        _saveData.crystals = _crystals;
+        _data.crystals = _crystals;
         SaveData();
     }
 
     public void SetWave(int _wave)
     {
-        _saveData.wave = _wave;
+        _data.wave = _wave;
         SaveData();
     }
 
     public void SetVolume(float _volume)
     {
-        _saveData.volume = _volume;
+        _data.volume = _volume;
         SaveData();
     }
 
     public void SetCastleHealth(float _health)
     {
-        _saveData.castleHealth = _health;
+        _data.castleHealth = _health;
+    }
+
+    public void SetMonsters(List<MonsterSerializable> _monsters)
+    {
+        _data.monsters = _monsters;
+        SaveData();
     }
 }

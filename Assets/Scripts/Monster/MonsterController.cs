@@ -48,12 +48,15 @@ public class MonsterController : MonoBehaviour, IDamageable
     public float CurrentHealth { get; private set; }
     MonsterSettings _settings;
 
+    bool _isDied;
+
     float _minXOffset = -0.5f;
     float _maxXOffset = 0.5f;
 
     float _speedCoefficient = 1f;
 
     HealthBarController _healthBarController;
+    public MonsterSerializable Serializable { get; private set; }
 
     void Update()
     {
@@ -66,6 +69,15 @@ public class MonsterController : MonoBehaviour, IDamageable
         splineFollow.Speed = _speedCoefficient * _settings.speed;
         animator.speed = _speedCoefficient;
     }
+    
+    public MonsterSerializable SaveMonsterSerializable()
+    {
+        Serializable.health = CurrentHealth;
+        Serializable.normalizePosition = splineFollow.NormalizePosition;
+        Serializable.isDied = _isDied;
+
+        return Serializable;
+    }
 
     void CalculateVelocity()
     {
@@ -73,7 +85,7 @@ public class MonsterController : MonoBehaviour, IDamageable
         _previousPosition = transform.position;
     }
 
-    public void InitMonster(SplineContainer _spline, HealthBarController _healthBarController ,bool _loop = false, bool _isMenu = false)
+    public void InitMonster(SplineContainer _spline, HealthBarController _healthBarController, MonsterSerializable _monsterSerializable ,bool _loop = false, bool _isMenu = false)
     {
         SetXOffset();
         monsterEffectController.InitSlowEffect(_healthBarController.SlowEffectScale);
@@ -82,6 +94,7 @@ public class MonsterController : MonoBehaviour, IDamageable
         IsMenuMonster = _isMenu;
         HealthSlider = _healthBarController.HealthSlider;
         this._healthBarController = _healthBarController;
+        Serializable = _monsterSerializable;
 
         foreach (MonsterSettings _monsterSettings in monstersSettings.monsters)
         {
@@ -127,6 +140,7 @@ public class MonsterController : MonoBehaviour, IDamageable
         animator.enabled = false;
         _collider.enabled = false;
         splineFollow.enabled = false;
+        _isDied = true;
         
         HealthSlider.gameObject.SetActive(false);
 

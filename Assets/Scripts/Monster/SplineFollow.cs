@@ -9,7 +9,7 @@ public class SplineFollow : MonoBehaviour
     bool _loop;
 
     float _currentDistance = 0f;
-    float _normalizePosition;
+    public float NormalizePosition { get; private set; }
     float _splineLenght;
 
     bool _initialized;
@@ -34,13 +34,13 @@ public class SplineFollow : MonoBehaviour
 
         _currentDistance += Speed * Time.deltaTime;
 
-        _normalizePosition = _currentDistance / _splineLenght;
-        if (_loop && _normalizePosition >= 1f)
+        NormalizePosition = _currentDistance / _splineLenght;
+        if (_loop && NormalizePosition >= 1f)
             _currentDistance = 0f;
 
-        transform.position = _container.EvaluatePosition(_normalizePosition);
+        transform.position = _container.EvaluatePosition(NormalizePosition);
 
-        Vector3 _tangent = _container.EvaluateTangent(_normalizePosition);
+        Vector3 _tangent = _container.EvaluateTangent(NormalizePosition);
         transform.rotation = Quaternion.LookRotation(_tangent);
     }
 }

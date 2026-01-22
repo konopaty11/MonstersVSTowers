@@ -16,13 +16,11 @@ public class CastleController : MonoBehaviour, IDamageable
     void OnEnable()
     {
         GameManager.OnRestart += RestoreHealth;
-        Saves.OnDataLoaded += OnLoadData;
     }
 
     void OnDisable()
     {
         GameManager.OnRestart -= RestoreHealth;
-        Saves.OnDataLoaded -= OnLoadData;
     }
 
     void Awake()
@@ -46,7 +44,7 @@ public class CastleController : MonoBehaviour, IDamageable
             _monster.SubtractHealth(_monster.CurrentHealth);
     }
 
-    void OnLoadData(SaveData _saveData)
+    public void LoadData(SaveData _saveData)
     {
         CurrentHealth = _saveData.castleHealth;
         float _value = CurrentHealth / generalSettings.castleHealth;
