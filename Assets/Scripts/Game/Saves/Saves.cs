@@ -68,9 +68,7 @@ public class Saves : MonoBehaviour
     {
         foreach (RestoreTower _tower in towers)
         {
-            TowerSerializable _towerSerializable = new();
-            _towerSerializable.id = _tower.ID;
-            _towersSerializable.Add(_towerSerializable);
+            _towersSerializable.Add(_tower.TowerSerializable);
         }
     }
 
@@ -96,6 +94,7 @@ public class Saves : MonoBehaviour
     public void SetWave(int _wave)
     {
         _data.wave = _wave;
+        _data.isWaveSave = true;
         SaveData();
     }
 
@@ -113,6 +112,7 @@ public class Saves : MonoBehaviour
     public void SetMonsters(List<MonsterSerializable> _monsters)
     {
         _data.monsters = _monsters;
+        _data.isWaveSave = true;
         SaveData();
     }
 }

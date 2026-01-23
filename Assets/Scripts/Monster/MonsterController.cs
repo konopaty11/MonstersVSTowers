@@ -94,7 +94,6 @@ public class MonsterController : MonoBehaviour, IDamageable
         IsMenuMonster = _isMenu;
         HealthSlider = _healthBarController.HealthSlider;
         this._healthBarController = _healthBarController;
-        Serializable = _monsterSerializable;
 
         foreach (MonsterSettings _monsterSettings in monstersSettings.monsters)
         {
@@ -104,6 +103,18 @@ public class MonsterController : MonoBehaviour, IDamageable
                 break;
             }
         }
+
+        if (_monsterSerializable != null)
+        {
+            Serializable = _monsterSerializable;
+            splineFollow.SetCurrentDistanceOnNormalizePosition(_monsterSerializable.normalizePosition);
+
+            CurrentHealth = _settings.health;
+
+            SubtractHealth(CurrentHealth - _monsterSerializable.health);
+        }
+        else
+            Serializable = new(MonsterType.Grox, _settings.health);
 
         splineFollow.Speed = _settings.speed;
         CurrentHealth = _settings.health;
@@ -123,12 +134,13 @@ public class MonsterController : MonoBehaviour, IDamageable
     public void SubtractHealth(float _damage)
     {
         CurrentHealth -= _damage;
+
         if (CurrentHealth <= 0)
         {
             DiedMonster();
             return;
         }
-
+        Debug.Log($"health -- {CurrentHealth} -- value -- {CurrentHealth / _settings.health}");
         HealthSlider.value = CurrentHealth / _settings.health;
     }
 

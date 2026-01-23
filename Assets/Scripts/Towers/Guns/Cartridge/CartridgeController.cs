@@ -11,10 +11,12 @@ public class CartridgeController : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+        Debug.Log(collision.collider.gameObject);
         if (collision.collider.CompareTag(_monsterTag))
         {
             MonsterController _monster = collision.collider.GetComponent<MonsterController>();
             _monster.LastAttackedGun = Gun;
+            Debug.Log(Gun.GetLevelSettings().damage);
             _monster.SubtractHealth(Gun.GetLevelSettings().damage);
         }
 

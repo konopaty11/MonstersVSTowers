@@ -31,6 +31,13 @@ public class TowerSerializable
     public int level;
     public GunType gunType = GunType.None;
     public int gunLevel;
+
+    public TowerSerializable(int _id)
+    {
+        id = _id;
+    }
+
+    public TowerSerializable() { }
 }
 
 [Serializable]
@@ -41,9 +48,10 @@ public class MonsterSerializable
     public float normalizePosition;
     public bool isDied;
 
-    public MonsterSerializable(MonsterType type)
+    public MonsterSerializable(MonsterType type, float _health)
     {
         monsterType = type;
+        health = _health;
     }
 
     public MonsterSerializable() { }

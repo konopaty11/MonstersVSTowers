@@ -28,6 +28,11 @@ public class SplineFollow : MonoBehaviour
         _initialized = true;
     }
 
+    public void SetCurrentDistanceOnNormalizePosition(float _newNormalizePosition)
+    {
+        _currentDistance = _newNormalizePosition * _splineLenght;
+    }
+
     void Follow()
     {
         if (!_initialized) return;

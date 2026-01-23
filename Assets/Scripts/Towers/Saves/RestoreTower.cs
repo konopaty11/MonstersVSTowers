@@ -7,8 +7,13 @@ public class RestoreTower : MonoBehaviour
 
     public int ID => id;
 
-    TowerSerializable _currentTowerSerializable = new();
+    TowerSerializable _currentTowerSerializable;
     public TowerSerializable TowerSerializable => _currentTowerSerializable;
+
+    void Awake()
+    {
+        _currentTowerSerializable = new(ID);
+    }
 
     public void LoadData(SaveData _saveData)
     {
@@ -22,7 +27,6 @@ public class RestoreTower : MonoBehaviour
             tower.Upgrade();
 
         if (_currentTowerSerializable.gunType == GunType.None) return;
-
         tower.CreateGun(_currentTowerSerializable.gunType);
 
         for (int i = 1; i < _currentTowerSerializable.gunLevel; i++)

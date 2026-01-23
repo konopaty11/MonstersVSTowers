@@ -109,6 +109,8 @@ public class GameManager : MonoBehaviour
         {
             _restoreTower.LoadData(_data);
         }
+
+        NewGame();
     }
 
     public void QuitGame()
@@ -164,6 +166,7 @@ public class GameManager : MonoBehaviour
         _timerActive = true;
 
         _currentWaveIndex++;
+        _monstersSerializable = new();
         StartCoroutine(Spawn());
         OnUpdateWave?.Invoke(CurrentWave);
     }
@@ -218,7 +221,6 @@ public class GameManager : MonoBehaviour
 
         visibleUIManager.ShowUI(_winBackgroundID, ShowType.Fading);
         visibleUIManager.ShowUI(_winID, ShowType.Moving);
-
     }
 
     public void Loose()
@@ -285,8 +287,8 @@ public class GameManager : MonoBehaviour
                 for (int i = 0; i < _monster.count; i++)
                 {
                     yield return new WaitForSeconds(Random.Range(generalSettings.minSpawnDelay, generalSettings.maxSpawnDelay));
-
-                    monsterSpawn.SpawnMonster(_monster.type, new(_monster.type));
+                    
+                    monsterSpawn.SpawnMonster(_monster.type);
                 }
             }
         }
@@ -294,8 +296,6 @@ public class GameManager : MonoBehaviour
         {
             foreach (MonsterSerializable _monster in _monstersSerializable)
             {
-                yield return new WaitForSeconds(Random.Range(generalSettings.minSpawnDelay, generalSettings.maxSpawnDelay));
-
                 monsterSpawn.SpawnMonster(_monster.monsterType, _monster);
             }
         }
