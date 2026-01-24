@@ -11,7 +11,7 @@ public class SoundManager : MonoBehaviour
     [SerializeField] Saves saves;
     [SerializeField] VisibilityUIManager visibleUIManager;
 
-    float _duration = 2f;
+    float _durationFade = 2f;
     float _volume = 1f;
     public float Volume
     {
@@ -65,15 +65,15 @@ public class SoundManager : MonoBehaviour
     public void ToMenuMusic()
     {
         _isGameMusic = false;
-        StartCoroutine(FadeToPause(mainAudioSource));
-        StartCoroutine(FadeToResume(menuAudioSource));
+        StartCoroutine(FadeToPause(mainAudioSource, _durationFade));
+        StartCoroutine(FadeToResume(menuAudioSource, _durationFade));
     }
 
     public void ToMainMusic()
     {
         _isGameMusic = true;
-        StartCoroutine(FadeToPause(menuAudioSource));
-        StartCoroutine(FadeToResume(mainAudioSource));
+        StartCoroutine(FadeToPause(menuAudioSource, _durationFade));
+        StartCoroutine(FadeToResume(mainAudioSource, _durationFade));
     }
 
     public void OpenSoundWindow()
@@ -109,7 +109,17 @@ public class SoundManager : MonoBehaviour
         CloseSoundWindow();
     }
 
-    IEnumerator FadeToPause(AudioSource _audioSource)
+    public void FadeAudioSourceToPause(AudioSource _audioSource, float _duration)
+    {
+        StartCoroutine(FadeToPause(_audioSource, _duration));
+    }
+
+    public void FadeAudioSourceToResume(AudioSource _audioSource, float _duration)
+    {
+        StartCoroutine(FadeToResume(_audioSource, _duration));
+    }
+
+    IEnumerator FadeToPause(AudioSource _audioSource, float _duration)
     {
         float _startVolume = _volume;
         _audioSource.volume = _startVolume;
@@ -127,7 +137,7 @@ public class SoundManager : MonoBehaviour
         _audioSource.Pause();
     }
 
-    IEnumerator FadeToResume(AudioSource _audioSource)
+    IEnumerator FadeToResume(AudioSource _audioSource, float _duration)
     {
         _audioSource.UnPause();
 

@@ -67,8 +67,10 @@ public class Crystals : ScriptableObject
         }
     }
 
-    public void AddCrystalsForPassedWave(int _wave)
+    public void AddCrystalsForPassedWave(int _wave, bool _isStartWave)
     {
+        if (_isStartWave) return;
+
         foreach (WavePriceSerializable _wavePrice in wavePrices)
         {
             if (_wavePrice.wave == _wave)

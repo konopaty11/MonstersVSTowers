@@ -44,7 +44,7 @@ public class WaveUIManager : MonoBehaviour
         _targetPosition -= _offsetPosition;
     }
 
-    void OnUpdateWave(int _currentWave)
+    void OnUpdateWave(int _currentWave, bool _isStartWave)
     {
         StartCoroutine(WavesTextAnimate(_currentWave));
     }

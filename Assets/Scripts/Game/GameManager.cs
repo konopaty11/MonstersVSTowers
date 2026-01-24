@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] List<RestoreTower> restoreTowers;
     [SerializeField] Saves saves;
 
-    public static UnityAction<int> OnUpdateWave;
+    public static UnityAction<int, bool> OnUpdateWave;
     public static UnityAction OnRestart;
 
     int _currentWaveIndex = 0;
@@ -110,6 +110,20 @@ public class GameManager : MonoBehaviour
             _restoreTower.LoadData(_data);
         }
 
+        bool _allDied = true;
+        foreach (MonsterSerializable _monsterSerializable in _monstersSerializable)
+        {
+            if (!_monsterSerializable.isDied)
+                _allDied = false;
+        }
+
+        if (_allDied)
+        {
+            _monstersSerializable = new();
+            _currentWaveIndex++;
+        } 
+            
+
         NewGame();
     }
 
@@ -121,7 +135,7 @@ public class GameManager : MonoBehaviour
 
     void SaveGame()
     {
-        saves.SetWave(CurrentWave);
+        saves.SetWave(CurrentWave, false);
         saves.SetMonsters(monsterSpawn.SaveMonsters());
     }
 
@@ -158,7 +172,7 @@ public class GameManager : MonoBehaviour
         _timerActive = true;
 
         StartCoroutine(Spawn());
-        OnUpdateWave?.Invoke(CurrentWave);
+        OnUpdateWave?.Invoke(CurrentWave, true);
     }
 
     public void NextWave()
@@ -167,8 +181,9 @@ public class GameManager : MonoBehaviour
 
         _currentWaveIndex++;
         _monstersSerializable = new();
+        saves.SetMonsters(_monstersSerializable);
         StartCoroutine(Spawn());
-        OnUpdateWave?.Invoke(CurrentWave);
+        OnUpdateWave?.Invoke(CurrentWave, false);
     }
 
     public void Restart()
@@ -180,7 +195,7 @@ public class GameManager : MonoBehaviour
 
     public void ToMenu()
     {
-        ResetWave();
+        SaveGame();
         CloseResultWindow();
         loadManager.LoadMenu();
         soundManager.ToMenuMusic();
@@ -221,6 +236,7 @@ public class GameManager : MonoBehaviour
 
         visibleUIManager.ShowUI(_winBackgroundID, ShowType.Fading);
         visibleUIManager.ShowUI(_winID, ShowType.Moving);
+        ResetWave();
     }
 
     public void Loose()
@@ -231,6 +247,7 @@ public class GameManager : MonoBehaviour
 
         visibleUIManager.ShowUI(_looseBackgroundID, ShowType.Fading);
         visibleUIManager.ShowUI(_looseID, ShowType.Moving);
+        ResetWave();
     }
 
     void ThrowRaycast(InputAction.CallbackContext _context)

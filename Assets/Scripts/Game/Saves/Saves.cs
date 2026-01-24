@@ -91,7 +91,7 @@ public class Saves : MonoBehaviour
         SaveData();
     }
 
-    public void SetWave(int _wave)
+    public void SetWave(int _wave, bool _isStartWave)
     {
         _data.wave = _wave;
         _data.isWaveSave = true;

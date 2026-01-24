@@ -114,7 +114,7 @@ public class MonsterController : MonoBehaviour, IDamageable
             SubtractHealth(CurrentHealth - _monsterSerializable.health);
         }
         else
-            Serializable = new(MonsterType.Grox, _settings.health);
+            Serializable = new(Type, _settings.health);
 
         splineFollow.Speed = _settings.speed;
         CurrentHealth = _settings.health;
