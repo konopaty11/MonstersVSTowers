@@ -51,6 +51,9 @@ public class WaveUIManager : MonoBehaviour
 
     IEnumerator WavesTextAnimate(int _currentWave)
     {
+        float _delay = 0.5f;
+        yield return new WaitForSeconds(_delay);
+
         wavesAnimatedText.text = _patternWaveAnimatedText + _currentWave;
         _waveAnimatedRectTransfrom.anchoredPosition = _startPosition;
 

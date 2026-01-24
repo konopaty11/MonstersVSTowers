@@ -88,4 +88,9 @@ public class CollectMonsters : MonoBehaviour
     {
         _collider.radius = _radius * RadiusMultyplier;
     }
+
+    public void ResetMonsters()
+    {
+        _monsters = new();
+    }
 }

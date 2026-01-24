@@ -16,15 +16,12 @@ public class PauseManager : MonoBehaviour
     public void OpenPause()
     {
         visibilityUIManager.ShowUI(_pauseID, ShowType.Moving);
-        StartCoroutine(DelayBeforePause());
+        StartCoroutine(PauseSound());
     }
 
     IEnumerator PauseSound()
     {
-        foreach (AudioSource _audioSource in audioSources)
-        {
-            soundManager.FadeAudioSourceToPause(_audioSource, _duration);
-        }
+        soundManager.FadeActiveAudioSourceToPause(_duration);
 
         yield return new WaitForSeconds(_duration);
         PauseGame();
@@ -42,8 +39,9 @@ public class PauseManager : MonoBehaviour
 
     public void ToMenu()
     {
+        visibilityUIManager.HideUI(_pauseID, ShowType.Moving);
         ResumeGame();
-        gameManager.ToMenu();
+        gameManager.LoadMenu();
     }
 
     public void ClosePause()
@@ -55,10 +53,7 @@ public class PauseManager : MonoBehaviour
 
     void ResumeSound()
     {
-        foreach (AudioSource _audioSource in audioSources)
-        {
-            soundManager.FadeAudioSourceToResume(_audioSource, _duration);
-        }
+        soundManager.FadeActiveAudioSourceToResume(_duration);
     }
 
 }

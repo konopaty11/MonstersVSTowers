@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class TowerController : MonoBehaviour, IUpgradable
 {
+    [Header("Menu")]
+    [SerializeField] bool isMenu;
+
     [Header("Gun")]
     [SerializeField] GunSpawn gunSpawn;
     [SerializeField] Transform cartridgesSpawn;
@@ -44,13 +47,15 @@ public class TowerController : MonoBehaviour, IUpgradable
     void OnEnable()
     {
         ModeManager.OnModeChange += LockControl;
-        GameManager.OnRestart += OnRestart;
+        GameManager.OnRestart += ResetTower;
+        GameManager.OnMenuTransition += ResetTower;
     }
 
     void OnDisable()
     {
         ModeManager.OnModeChange -= LockControl;
-        GameManager.OnRestart -= OnRestart;
+        GameManager.OnRestart -= ResetTower;
+        GameManager.OnMenuTransition -= ResetTower;
     }
 
     void Init()
@@ -141,8 +146,13 @@ public class TowerController : MonoBehaviour, IUpgradable
         return _result;
     }
 
-    void OnRestart()
+    void ResetTower()
     {
+        if (isMenu) return;
+
+        if (_currentGun != null)
+            _currentGun.Collection.ResetMonsters();
+
         Level = 1;
         foreach (TowerLevelUpgradeSerializable _levelUpgrade in towerUpgrades.towers)
         {

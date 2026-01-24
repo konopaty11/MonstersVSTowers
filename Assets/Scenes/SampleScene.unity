@@ -3638,6 +3638,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5406995145452128022, guid: 30c0f97be8f37dd44a956316ffb24f57, type: 3}
+      propertyPath: isMenu
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5406995145452128022, guid: 30c0f97be8f37dd44a956316ffb24f57, type: 3}
       propertyPath: restoreTower
       value: 
       objectReference: {fileID: 0}
@@ -7501,7 +7505,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &574821594
 Transform:
   m_ObjectHideFlags: 0
@@ -8549,8 +8553,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 808669872}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+      - m_Target: {fileID: 1708703028}
+        m_TargetAssemblyTypeName: PauseManager, Assembly-CSharp
         m_MethodName: ToMenu
         m_Mode: 1
         m_Arguments:
@@ -20742,6 +20746,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5406995145452128022, guid: 30c0f97be8f37dd44a956316ffb24f57, type: 3}
+      propertyPath: isMenu
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5406995145452128022, guid: 30c0f97be8f37dd44a956316ffb24f57, type: 3}
       propertyPath: restoreTower
       value: 
       objectReference: {fileID: 0}
@@ -23665,6 +23673,7 @@ MonoBehaviour:
   audioSources:
   - {fileID: 1753819102}
   - {fileID: 729816589}
+  gameManager: {fileID: 808669872}
 --- !u!1 &1709551773
 GameObject:
   m_ObjectHideFlags: 0

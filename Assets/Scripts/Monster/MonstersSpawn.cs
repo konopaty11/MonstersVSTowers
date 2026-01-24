@@ -21,12 +21,14 @@ public class MonstersSpawn : MonoBehaviour
     {
         MonsterController.OnMonsterDestroy += CheckMonsters;
         GameManager.OnRestart += DestroyMonsters;
+        GameManager.OnMenuTransition += DestroyMonsters;
     }
 
     void OnDisable()
     {
         MonsterController.OnMonsterDestroy -= CheckMonsters;
         GameManager.OnRestart -= DestroyMonsters;
+        GameManager.OnMenuTransition -= DestroyMonsters;
     }
 
     /// <summary>

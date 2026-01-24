@@ -53,7 +53,6 @@ public class RotatingAndShoutingGuns : GunController
     protected void Rotate()
     {
         MonsterController _monster = Collection.Monsters[0];
-
         Vector3 _direction = _monster.transform.position - transform.position;
         _direction.y = 0;
 

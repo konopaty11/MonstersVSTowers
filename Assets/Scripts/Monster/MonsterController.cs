@@ -140,7 +140,7 @@ public class MonsterController : MonoBehaviour, IDamageable
             DiedMonster();
             return;
         }
-        Debug.Log($"health -- {CurrentHealth} -- value -- {CurrentHealth / _settings.health}");
+
         HealthSlider.value = CurrentHealth / _settings.health;
     }
 

@@ -109,13 +109,15 @@ public class SoundManager : MonoBehaviour
         CloseSoundWindow();
     }
 
-    public void FadeAudioSourceToPause(AudioSource _audioSource, float _duration)
+    public void FadeActiveAudioSourceToPause(float _duration)
     {
+        AudioSource _audioSource = _isGameMusic ? mainAudioSource : menuAudioSource;
         StartCoroutine(FadeToPause(_audioSource, _duration));
     }
 
-    public void FadeAudioSourceToResume(AudioSource _audioSource, float _duration)
+    public void FadeActiveAudioSourceToResume(float _duration)
     {
+        AudioSource _audioSource = _isGameMusic ? mainAudioSource : menuAudioSource;
         StartCoroutine(FadeToResume(_audioSource, _duration));
     }
 

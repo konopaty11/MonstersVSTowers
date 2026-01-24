@@ -50,13 +50,13 @@ public class LoadManager : MonoBehaviour
         gameCanvas.SetActive(_gameCanvasActive);
         menuCanvas.SetActive(_menuCanvasActive);
 
+        if (_onComplete != null)
+            _onComplete();
+
         camera.position = _cameraTransform.position;
 
         visibilityUIManager.HideUI(_loadWindowID, ShowType.Moving);
         yield return new WaitForSeconds(delayLoad);
         loadCanvas.SetActive(false);
-
-        if (_onComplete != null)
-            _onComplete();
     }
 }

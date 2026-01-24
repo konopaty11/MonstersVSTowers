@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
 
     public static UnityAction<int, bool> OnUpdateWave;
     public static UnityAction OnRestart;
+    public static UnityAction OnMenuTransition;
 
     int _currentWaveIndex = 0;
     public int CurrentWave => _currentWaveIndex + 1;
@@ -114,15 +115,17 @@ public class GameManager : MonoBehaviour
         foreach (MonsterSerializable _monsterSerializable in _monstersSerializable)
         {
             if (!_monsterSerializable.isDied)
+            {
                 _allDied = false;
+                break;
+            }
         }
 
-        if (_allDied)
+        if (_allDied && _monstersSerializable.Count != 0)
         {
             _monstersSerializable = new();
             _currentWaveIndex++;
         } 
-            
 
         NewGame();
     }
@@ -136,7 +139,12 @@ public class GameManager : MonoBehaviour
     void SaveGame()
     {
         saves.SetWave(CurrentWave, false);
-        saves.SetMonsters(monsterSpawn.SaveMonsters());
+
+        if (!StopSpawn())
+        {
+            _monstersSerializable = monsterSpawn.SaveMonsters();
+            saves.SetMonsters(_monstersSerializable);
+        }
     }
 
     void TimerControl()
@@ -171,7 +179,7 @@ public class GameManager : MonoBehaviour
     {
         _timerActive = true;
 
-        StartCoroutine(Spawn());
+        _spawnCoroutine = StartCoroutine(Spawn());
         OnUpdateWave?.Invoke(CurrentWave, true);
     }
 
@@ -182,7 +190,7 @@ public class GameManager : MonoBehaviour
         _currentWaveIndex++;
         _monstersSerializable = new();
         saves.SetMonsters(_monstersSerializable);
-        StartCoroutine(Spawn());
+        _spawnCoroutine = StartCoroutine(Spawn());
         OnUpdateWave?.Invoke(CurrentWave, false);
     }
 
@@ -193,12 +201,20 @@ public class GameManager : MonoBehaviour
         StartGame();
     }
 
-    public void ToMenu()
+    public void LoadMenu()
+    {
+        loadManager.LoadMenu(ToMenu);
+    }
+
+    void ToMenu()
     {
         SaveGame();
         CloseResultWindow();
-        loadManager.LoadMenu();
         soundManager.ToMenuMusic();
+
+        menuController.LoadGameButtonActive(_data.isWaveSave);
+
+        OnMenuTransition?.Invoke();
     }
 
     void ResetWave()
@@ -289,6 +305,17 @@ public class GameManager : MonoBehaviour
                 _ñountUpdatedTowers++;
                 break;
         }
+    }
+
+    bool StopSpawn()
+    {
+        if (_spawnCoroutine != null)
+        {
+            StopCoroutine(_spawnCoroutine);
+            return true;
+        }
+
+        return false;
     }
 
     /// <summary>
