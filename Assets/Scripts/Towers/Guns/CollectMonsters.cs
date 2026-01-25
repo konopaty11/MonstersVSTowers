@@ -91,6 +91,7 @@ public class CollectMonsters : MonoBehaviour
 
     public void ResetMonsters()
     {
+        Radius = 0f;
         _monsters = new();
     }
 }

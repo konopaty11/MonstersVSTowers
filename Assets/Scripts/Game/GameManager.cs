@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -25,6 +27,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] CastleController castleController;
     [SerializeField] List<RestoreTower> restoreTowers;
     [SerializeField] Saves saves;
+    [SerializeField] TextMeshProUGUI timerText;
 
     public static UnityAction<int, bool> OnUpdateWave;
     public static UnityAction OnRestart;
@@ -104,6 +107,12 @@ public class GameManager : MonoBehaviour
 
     public void LoadGame()
     {
+        CountKilledMonsters = _data.countKilledMonsters;
+        _ñountCreatedGuns = _data.countCreatedGuns;
+        _ñountUpdatedGuns = _data.ñountUpdatedGuns;
+        _ñountUpdatedTowers = _data.ñountUpdatedTowers;
+        _timer = _data.timer;
+
         _currentWaveIndex = _data.wave - 1;
         castleController.LoadData(_data);
         foreach (RestoreTower _restoreTower in restoreTowers)
@@ -125,16 +134,20 @@ public class GameManager : MonoBehaviour
         {
             _monstersSerializable = new();
             _currentWaveIndex++;
-        } 
+        }
 
-        NewGame();
+        loadManager.LoadGame(StartGame);
+        soundManager.ToMainMusic();
+    }
+
+    public void SaveAndQuitGame()
+    {
+        SaveGame();
+        QuitGame();
     }
 
     public void QuitGame()
-    {
-        SaveGame();
-        Application.Quit();
-    }
+        => Application.Quit();
 
     void SaveGame()
     {
@@ -145,18 +158,25 @@ public class GameManager : MonoBehaviour
             _monstersSerializable = monsterSpawn.SaveMonsters();
             saves.SetMonsters(_monstersSerializable);
         }
+
+        saves.SetResultParams(CountKilledMonsters, _ñountCreatedGuns, _ñountUpdatedGuns, _ñountUpdatedTowers, _timer);
     }
 
     void TimerControl()
     {
         if (_timerActive)
             _timer += Time.deltaTime;
-        else
-            _timer = 0f;
+
+        TimeSpan _span = TimeSpan.FromSeconds(_timer);
+        timerText.text = _span.ToString(@"m\:ss");
     }
 
     public void NewGame()
     {
+        _timer = 0f;
+        _monstersSerializable = new();
+        saves.ResetData();
+        
         loadManager.LoadGame(StartGame);
         soundManager.ToMainMusic();
     }
@@ -201,9 +221,15 @@ public class GameManager : MonoBehaviour
         StartGame();
     }
 
-    public void LoadMenu()
+    public void LoadSaveMenu()
     {
         loadManager.LoadMenu(ToMenu);
+    }
+
+    public void LoadResetMenu()
+    {
+        loadManager.LoadMenu(ResetWave);
+        CloseResultWindow();
     }
 
     void ToMenu()
@@ -211,6 +237,7 @@ public class GameManager : MonoBehaviour
         SaveGame();
         CloseResultWindow();
         soundManager.ToMenuMusic();
+        _timerActive = false;
 
         menuController.LoadGameButtonActive(_data.isWaveSave);
 
@@ -227,6 +254,10 @@ public class GameManager : MonoBehaviour
         _ñountUpdatedTowers = 0;
         _timerActive = false;
         _timer = 0f;
+
+        saves.SetWave(CurrentWave, false);
+        _monstersSerializable = new();
+        saves.SetMonsters(_monstersSerializable);
     }
 
     void CloseResultWindow()
@@ -252,18 +283,18 @@ public class GameManager : MonoBehaviour
 
         visibleUIManager.ShowUI(_winBackgroundID, ShowType.Fading);
         visibleUIManager.ShowUI(_winID, ShowType.Moving);
-        ResetWave();
     }
 
     public void Loose()
     {
+        if (_isLoose) return;
+
         _isLoose = true;
         looseWindow.SetActive(true);
         looseWindow.UpdateUI(CurrentWave, CountKilledMonsters, _ñountCreatedGuns, _ñountUpdatedGuns, _ñountUpdatedTowers, _timer);
 
         visibleUIManager.ShowUI(_looseBackgroundID, ShowType.Fading);
         visibleUIManager.ShowUI(_looseID, ShowType.Moving);
-        ResetWave();
     }
 
     void ThrowRaycast(InputAction.CallbackContext _context)
@@ -330,7 +361,7 @@ public class GameManager : MonoBehaviour
             {
                 for (int i = 0; i < _monster.count; i++)
                 {
-                    yield return new WaitForSeconds(Random.Range(generalSettings.minSpawnDelay, generalSettings.maxSpawnDelay));
+                    yield return new WaitForSeconds(UnityEngine.Random.Range(generalSettings.minSpawnDelay, generalSettings.maxSpawnDelay));
                     
                     monsterSpawn.SpawnMonster(_monster.type);
                 }

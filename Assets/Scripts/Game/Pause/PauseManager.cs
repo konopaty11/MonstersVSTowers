@@ -8,10 +8,29 @@ public class PauseManager : MonoBehaviour
     [SerializeField] SoundManager soundManager;
     [SerializeField] List<AudioSource> audioSources;
     [SerializeField] GameManager gameManager;
+    [SerializeField] GameObject menuButtons;
+    [SerializeField] GameObject gameButtons;
 
     string _pauseID = "Pause";
     float _duration = 0.5f;
 
+    void OnEnable()
+    {
+        LoadManager.OnLoad += ChangeButtons;
+    }
+
+    void OnDisable()
+    {
+        LoadManager.OnLoad -= ChangeButtons;
+    }
+
+    void ChangeButtons(LocationType _type)
+    {
+        bool _isMenuLocation = _type == LocationType.Menu;
+
+        menuButtons.SetActive(_isMenuLocation);
+        gameButtons.SetActive(!_isMenuLocation);
+    }
 
     public void OpenPause()
     {
@@ -41,7 +60,7 @@ public class PauseManager : MonoBehaviour
     {
         visibilityUIManager.HideUI(_pauseID, ShowType.Moving);
         ResumeGame();
-        gameManager.LoadMenu();
+        gameManager.LoadSaveMenu();
     }
 
     public void ClosePause()

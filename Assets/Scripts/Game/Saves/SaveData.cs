@@ -12,6 +12,12 @@ public class SaveData
     public List<MonsterSerializable> monsters = new();
     public bool isWaveSave;
 
+    public int countKilledMonsters;
+    public int countCreatedGuns;
+    public int ñountUpdatedGuns;
+    public int ñountUpdatedTowers;
+    public float timer;
+
     public SaveData(int _crystals, float _volume, float _castleHealth, int _wave, List<TowerSerializable> _towers)
     {
         crystals = _crystals;

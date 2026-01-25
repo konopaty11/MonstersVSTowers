@@ -16,8 +16,10 @@ public class LoadManager : MonoBehaviour
     [SerializeField] float delayLoad;
     [SerializeField] List<Image> points;
 
-    float _shiftElapsed = 0.2f;
-    float _pointsAnimationDuration = 2f;
+    public static UnityAction<LocationType> OnLoad;
+
+    //float _shiftElapsed = 0.2f;
+    //float _pointsAnimationDuration = 2f;
 
     string _loadWindowID = "Load";
 
@@ -28,11 +30,13 @@ public class LoadManager : MonoBehaviour
     public void LoadGame(UnityAction _onComplete)
     {
         StartCoroutine(LoadControl(true, false, gameCameraTransform, _onComplete));
+        OnLoad?.Invoke(LocationType.Game);
     }
 
     public void LoadMenu(UnityAction _onComplete)
     {
         StartCoroutine(LoadControl(false, true, menuCameraTransform, _onComplete));
+        OnLoad?.Invoke(LocationType.Menu);
     }
 
     //IEnumerator PointsAnimation()

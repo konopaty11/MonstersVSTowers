@@ -5,7 +5,8 @@ using UnityEngine;
 public class CrystalsAnimateManager : MonoBehaviour
 {
     [SerializeField] GameObject deltaCrystalsPrefab;
-    [SerializeField] Color targetColor;
+    [SerializeField] Color positiveTargetColor;
+    [SerializeField] Color negativeTargetColor;
 
     float _heightFlying = 2.5f;
     float _durationAnimation = 4f;
@@ -21,8 +22,9 @@ public class CrystalsAnimateManager : MonoBehaviour
         TextMeshPro _text = _deltaCrystalsObject.GetComponent<TextMeshPro>();
 
         _text.text = _crystals <= 0 ? _crystals.ToString() : "+" + _crystals.ToString();
-
+        Color _targetColor = _crystals <= 0 ? negativeTargetColor : positiveTargetColor;
         Vector3 _targetPosition = _startPosition + Vector3.left * _heightFlying;
+
         StartCoroutine(DeltaPositionAnimation
             (
             _deltaCrystalsObject.transform,
@@ -30,10 +32,9 @@ public class CrystalsAnimateManager : MonoBehaviour
             _targetPosition,
             _text,
             _text.color,
-            targetColor,
+            _targetColor,
             _durationAnimation
             ));
-
     }
 
     IEnumerator DeltaPositionAnimation(Transform _deltaCrystalsTransform, Vector3 _startPosition, Vector3 _targetPosition, TextMeshPro _text, Color _startColor, Color _targetColor, float _duration)

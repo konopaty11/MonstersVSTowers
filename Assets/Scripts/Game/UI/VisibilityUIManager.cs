@@ -59,6 +59,8 @@ public class VisibilityUIManager : MonoBehaviour
 
             yield return null;
         }
+
+        _rectTransform.anchoredPosition = _targetPosition;
     }
 
     IEnumerator Fading(CanvasGroup _canvasGroup, float _startAlpha, float _targetAlpha, float _duration)
@@ -72,6 +74,8 @@ public class VisibilityUIManager : MonoBehaviour
 
             yield return null;
         }
+
+        _canvasGroup.alpha = _targetAlpha;
     }
 
     Vector3 GetPositionFromPositionType(RectTransform _rectTransform, UIPositionType _positionType)

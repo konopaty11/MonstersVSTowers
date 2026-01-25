@@ -175,6 +175,8 @@ public class TowerController : MonoBehaviour, IUpgradable
         crystals.AddCrystals(_crystalsRefund);
         _crystalsAnimate.DeltaCrystalsPositionAnimate(deltaCrystals.position, _crystalsRefund);
 
+        restoreTower.TowerSerializable.gunType = GunType.None;
+
         DestroyGun();
 
         return -1;
@@ -182,6 +184,8 @@ public class TowerController : MonoBehaviour, IUpgradable
 
     void DestroyGun()
     {
+        _currentGun.Collection.ResetMonsters();
+
         Destroy(_currentGun.gameObject);
         _currentGun = null;
         _isFree = true;

@@ -54,7 +54,7 @@ public class Saves : MonoBehaviour
             _file.Create().Dispose();
 
             SetTowersSerializable();
-            _data = new(crystals.crystals, soundManager.Volume, generalSettings.castleHealth, gameManager.CurrentWave, _towersSerializable);
+            ResetData();
             OnDataLoaded?.Invoke(_data);
 
             SaveData();
@@ -114,5 +114,21 @@ public class Saves : MonoBehaviour
         _data.monsters = _monsters;
         _data.isWaveSave = true;
         SaveData();
+    }
+
+    public void SetResultParams(int _countKilledMonsters,  int _countCreatedGuns, int _ñountUpdatedGuns, int _ñountUpdatedTowers, float _timer)
+    {
+        _data.countKilledMonsters = _countKilledMonsters;
+        _data.countCreatedGuns = _countCreatedGuns;
+        _data.ñountUpdatedGuns = _ñountUpdatedGuns;
+        _data.ñountUpdatedTowers = _ñountUpdatedTowers;
+        _data.timer = _timer;
+
+        SaveData();
+    }
+
+    public void ResetData()
+    {
+        _data = new(crystals.crystals, soundManager.Volume, generalSettings.castleHealth, gameManager.CurrentWave, _towersSerializable);
     }
 }
