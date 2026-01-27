@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Crystals
   m_EditorClassIdentifier: Assembly-CSharp::Crystals
   castleDeltaCrystalPosition: {x: 2, y: 4, z: -0.1672}
-  crystals: 12759
+  baseCrystals: 500
+  crystals: 15554
   monsterPrices:
   - type: 1
     price: 20

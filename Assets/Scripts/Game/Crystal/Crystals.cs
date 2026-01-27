@@ -12,6 +12,7 @@ public class Crystals : ScriptableObject
 
     public static UnityAction<int> OnCountCrystalsChange;
 
+    public int baseCrystals;
     public int crystals;
     public List<MonsterPriceSerializable> monsterPrices;
     public List<WavePriceSerializable> wavePrices;
@@ -35,6 +36,12 @@ public class Crystals : ScriptableObject
     void OnLoadData(SaveData _saveData)
     {
         crystals = _saveData.crystals;
+    }
+
+    public void SetCrystals(int _value)
+    {
+        crystals = _value;
+        OnCountCrystalsChange?.Invoke(crystals);
     }
 
     public void SubtractCrystals(int _value)

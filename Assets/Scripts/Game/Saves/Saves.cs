@@ -129,6 +129,7 @@ public class Saves : MonoBehaviour
 
     public void ResetData()
     {
-        _data = new(crystals.crystals, soundManager.Volume, generalSettings.castleHealth, gameManager.CurrentWave, _towersSerializable);
+        _data = new(crystals.baseCrystals, soundManager.Volume, generalSettings.castleHealth, 1, _towersSerializable);
+        _data.isWaveSave = false;
     }
 }

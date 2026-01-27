@@ -174,6 +174,8 @@ public class GameManager : MonoBehaviour
     public void NewGame()
     {
         _timer = 0f;
+        _currentWaveIndex = 0;
+        crystals.SetCrystals(crystals.baseCrystals);
         _monstersSerializable = new();
         saves.ResetData();
         
