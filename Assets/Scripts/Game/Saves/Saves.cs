@@ -28,7 +28,7 @@ public class Saves : MonoBehaviour
         Crystals.OnCountCrystalsChange += SetCrystals;
     }
 
-    private void OnDisable()
+    void OnDisable()
     {
         GameManager.OnUpdateWave -= SetWave;
         Crystals.OnCountCrystalsChange -= SetCrystals;
