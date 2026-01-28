@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] List<RestoreTower> restoreTowers;
     [SerializeField] Saves saves;
     [SerializeField] TextMeshProUGUI timerText;
+    [SerializeField] StarsController starsController;
 
     public static UnityAction<int, bool> OnUpdateWave;
     public static UnityAction OnRestart;
@@ -58,6 +59,9 @@ public class GameManager : MonoBehaviour
     int _ñountUpdatedTowers;
     float _timer;
     bool _timerActive;
+
+    float _previusCatleHealth;
+    float _previusTime;
 
     SaveData _data;
 
@@ -201,17 +205,36 @@ public class GameManager : MonoBehaviour
     {
         _timerActive = true;
 
+        SetPreviusParams();
         _spawnCoroutine = StartCoroutine(Spawn());
         OnUpdateWave?.Invoke(CurrentWave, true);
+    }
+
+    void SetPreviusParams()
+    {
+        _previusCatleHealth = castleController.CurrentHealth;
+        _previusTime = _timer;
     }
 
     public void NextWave()
     {
         _timerActive = true;
 
+        int _countStars = 1;
+        if (castleController.CurrentHealth == _previusCatleHealth)
+            _countStars++;
+        if (_timer - _previusTime <= generalSettings.timeThresholdForStar)
+            _countStars++;
+
+        starsController.ShowStars(_countStars);
+
+        SetPreviusParams();
+
         _currentWaveIndex++;
         _monstersSerializable = new();
         saves.SetMonsters(_monstersSerializable);
+
+        _previusCatleHealth = castleController.CurrentHealth;
         _spawnCoroutine = StartCoroutine(Spawn());
         OnUpdateWave?.Invoke(CurrentWave, false);
     }
