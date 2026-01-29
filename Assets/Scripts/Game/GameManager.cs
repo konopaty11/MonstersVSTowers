@@ -75,14 +75,14 @@ public class GameManager : MonoBehaviour
     void OnEnable()
     {
         _inputSystem.Player.Attack.Enable();
-        _inputSystem.Player.Attack.performed += ThrowRaycast;
+        //_inputSystem.Player.Attack.performed += ThrowRaycast;
         Saves.OnDataLoaded += OnLoadData;
     }
 
     void OnDisable()
     {
         _inputSystem.Player.Attack.Disable();
-        _inputSystem.Player.Attack.performed -= ThrowRaycast;
+        //_inputSystem.Player.Attack.performed -= ThrowRaycast;
         Saves.OnDataLoaded -= OnLoadData;
     }
 
@@ -322,19 +322,22 @@ public class GameManager : MonoBehaviour
         visibleUIManager.ShowUI(_looseID, ShowType.Moving);
     }
 
-    void ThrowRaycast(InputAction.CallbackContext _context)
+    public void ThrowRaycast(Vector2 _position)
     {
-        if (Touchscreen.current == null || modeManager.Mode == Modes.None) return;
+        //if (Touchscreen.current == null || modeManager.Mode == Modes.None) return;
 
-        foreach (TouchControl _touch in Touchscreen.current.touches)
-        {
-            Vector2 _position = _touch.position.ReadValue();
+        //foreach (TouchControl _touch in Touchscreen.current.touches)
+        //{
+        //    Vector2 _position = _touch.position.ReadValue();
+        Debug.Log(_position);
             Ray _ray = mainCamera.ScreenPointToRay(_position);
 
-            if (Physics.Raycast(_ray, out RaycastHit _hit, Mathf.Infinity, _layerMask) && _hit.collider.CompareTag(_towerTag))
+        Debug.DrawRay(_ray.origin, _ray.direction * 100f, Color.red, Mathf.Infinity);
+
+        if (Physics.Raycast(_ray, out RaycastHit _hit, Mathf.Infinity, _layerMask) && _hit.collider.CompareTag(_towerTag))
             {
                 TowerController _tower = _hit.collider.GetComponent<TowerController>();
-
+            Debug.Log(modeManager.Mode);
                 int _result = _tower.HandleTowerInteraction(modeManager.Mode);
                 if (_result != -1)
                 {
@@ -344,7 +347,7 @@ public class GameManager : MonoBehaviour
 
                 modeManager.SetModeControl(Modes.None);
             }
-        }
+        //}
     }
 
     void UpdateParams()
