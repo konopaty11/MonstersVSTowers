@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] List<RestoreTower> restoreTowers;
     [SerializeField] Saves saves;
     [SerializeField] TextMeshProUGUI timerText;
-    [SerializeField] StarsController starsController;
+    [SerializeField] WaveResultWindowController waveResultWindowController;
 
     public static UnityAction<int, bool> OnUpdateWave;
     public static UnityAction OnRestart;
@@ -75,14 +75,14 @@ public class GameManager : MonoBehaviour
     void OnEnable()
     {
         _inputSystem.Player.Attack.Enable();
-        //_inputSystem.Player.Attack.performed += ThrowRaycast;
+        _inputSystem.Player.Attack.performed += ClickHandle;
         Saves.OnDataLoaded += OnLoadData;
     }
 
     void OnDisable()
     {
         _inputSystem.Player.Attack.Disable();
-        //_inputSystem.Player.Attack.performed -= ThrowRaycast;
+        _inputSystem.Player.Attack.performed -= ClickHandle;
         Saves.OnDataLoaded -= OnLoadData;
     }
 
@@ -197,8 +197,19 @@ public class GameManager : MonoBehaviour
         }
         else if (_spawnCoroutine == null)
         {
-            NextWave();
+            OpenWaveResultWindow();
         }
+    }
+
+    void OpenWaveResultWindow()
+    {
+        int _countStars = 1;
+        if (castleController.CurrentHealth == _previusCatleHealth)
+            _countStars++;
+        if (_timer - _previusTime <= generalSettings.timeThresholdForStar)
+            _countStars++;
+
+        waveResultWindowController.OpenWindow(_timer, 0, 0, _countStars);
     }
 
     void StartGame()
@@ -209,7 +220,7 @@ public class GameManager : MonoBehaviour
         _spawnCoroutine = StartCoroutine(Spawn());
         OnUpdateWave?.Invoke(CurrentWave, true);
     }
-
+    
     void SetPreviusParams()
     {
         _previusCatleHealth = castleController.CurrentHealth;
@@ -219,14 +230,6 @@ public class GameManager : MonoBehaviour
     public void NextWave()
     {
         _timerActive = true;
-
-        int _countStars = 1;
-        if (castleController.CurrentHealth == _previusCatleHealth)
-            _countStars++;
-        if (_timer - _previusTime <= generalSettings.timeThresholdForStar)
-            _countStars++;
-
-        starsController.ShowStars(_countStars);
 
         SetPreviusParams();
 
@@ -322,32 +325,48 @@ public class GameManager : MonoBehaviour
         visibleUIManager.ShowUI(_looseID, ShowType.Moving);
     }
 
+    void ClickHandle(InputAction.CallbackContext context)
+    {
+        if (Touchscreen.current == null || modeManager.Mode == Modes.None) return;
+
+        foreach (TouchControl _touch in Touchscreen.current.touches)
+        {
+            Vector2 _position = _touch.position.ReadValue();
+            ThrowRaycast(_position);
+        }
+    }
+
     public void ThrowRaycast(Vector2 _position)
     {
-        //if (Touchscreen.current == null || modeManager.Mode == Modes.None) return;
-
-        //foreach (TouchControl _touch in Touchscreen.current.touches)
-        //{
-        //    Vector2 _position = _touch.position.ReadValue();
-        Debug.Log(_position);
-            Ray _ray = mainCamera.ScreenPointToRay(_position);
+        Ray _ray = mainCamera.ScreenPointToRay(_position);
 
         Debug.DrawRay(_ray.origin, _ray.direction * 100f, Color.red, Mathf.Infinity);
 
         if (Physics.Raycast(_ray, out RaycastHit _hit, Mathf.Infinity, _layerMask) && _hit.collider.CompareTag(_towerTag))
+        {
+            if (modeManager.Mode == Modes.None)
+            { 
+                
+            }
+            else
             {
                 TowerController _tower = _hit.collider.GetComponent<TowerController>();
-            Debug.Log(modeManager.Mode);
-                int _result = _tower.HandleTowerInteraction(modeManager.Mode);
-                if (_result != -1)
-                {
-                    crystals.SubtractCrystals(_result);
-                    UpdateParams();
-                }
-
-                modeManager.SetModeControl(Modes.None);
+                TowerInteraction(_tower);
             }
-        //}
+        }
+    }
+
+    public void TowerInteraction(TowerController _tower)
+    {
+
+        int _result = _tower.HandleTowerInteraction(modeManager.Mode);
+        if (_result != -1)
+        {
+            crystals.SubtractCrystals(_result);
+            UpdateParams();
+        }
+
+        modeManager.SetModeControl(Modes.None);
     }
 
     void UpdateParams()

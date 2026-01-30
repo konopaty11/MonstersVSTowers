@@ -8,8 +8,6 @@ public class StarsController : MonoBehaviour
     [SerializeField] List<AudioSource> audioSources;
     [SerializeField] VisibilityUIManager visibilityUIManager;
 
-    string _starsID = "Stars";
-
     public void ShowStars(int _count)
     {
         StartCoroutine(VisibleStarsControl(Vector3.zero, Vector3.one, stars.GetRange(0, _count)));
@@ -17,7 +15,6 @@ public class StarsController : MonoBehaviour
 
     IEnumerator VisibleStarsControl(Vector3 _startScale, Vector3 _targetScale, List<RectTransform> _stars)
     {
-        visibilityUIManager.ShowUI(_starsID, ShowType.Fading);
         yield return new WaitForSeconds(0.5f);
 
         for (int i = 0; i < _stars.Count; i++) 
@@ -27,8 +24,6 @@ public class StarsController : MonoBehaviour
 
             yield return new WaitForSeconds(0.2f);
         }
-
-        visibilityUIManager.HideUI(_starsID, ShowType.Fading);
     }
 
     IEnumerator VisibleStarControl(Vector3 _startScale, Vector3 _targetScale, RectTransform _star)
