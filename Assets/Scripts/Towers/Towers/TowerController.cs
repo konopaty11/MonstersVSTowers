@@ -14,6 +14,8 @@ public class TowerController : MonoBehaviour, IUpgradable
     [SerializeField] TowersUpgradeSerializable towerUpgrades;
     [SerializeField] MeshFilter meshFilter;
     [SerializeField] CollectMonsters collection;
+    [SerializeField] VisibilityUIManager visibilityUIManager;
+    [SerializeField] GameObject towerControlWindowObject;
 
     [Header("Lock\\Unlock")]
     [SerializeField] MeshRenderer meshRenderer;
@@ -38,6 +40,8 @@ public class TowerController : MonoBehaviour, IUpgradable
     float _refundRatioForDeleteGun = 0.75f;
 
     CrystalsAnimateManager _crystalsAnimate;
+
+    string _towerWindowID = "Tower";
 
     void Start()
     {
@@ -69,6 +73,19 @@ public class TowerController : MonoBehaviour, IUpgradable
         }
 
         _crystalsAnimate = ServiceLocator.Get<CrystalsAnimateManager>();
+    }
+
+    public void OpenControlWindow()
+    {
+        towerControlWindowObject.SetActive(true);
+        visibilityUIManager.ShowUI(_towerWindowID, ShowType.Fading);
+    }
+
+    // корутина для открывания закрывания окна
+
+    public void CloseControlWindow()
+    {
+        visibilityUIManager.ShowUI(_towerWindowID, ShowType.Fading);
     }
 
     void LockControl(Modes _mode)
@@ -140,8 +157,6 @@ public class TowerController : MonoBehaviour, IUpgradable
             >= Modes.CreatingCannon => CanAffordGun(_mode),
             _ => -1
         };
-
-        //LockControl(_mode);
 
         return _result;
     }

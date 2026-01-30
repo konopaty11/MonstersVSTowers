@@ -344,13 +344,14 @@ public class GameManager : MonoBehaviour
 
         if (Physics.Raycast(_ray, out RaycastHit _hit, Mathf.Infinity, _layerMask) && _hit.collider.CompareTag(_towerTag))
         {
+            TowerController _tower = _hit.collider.GetComponent<TowerController>();
+
             if (modeManager.Mode == Modes.None)
             { 
                 
             }
             else
             {
-                TowerController _tower = _hit.collider.GetComponent<TowerController>();
                 TowerInteraction(_tower);
             }
         }
