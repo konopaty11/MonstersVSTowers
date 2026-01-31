@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class TowerController : MonoBehaviour, IUpgradable
 {
@@ -14,8 +16,6 @@ public class TowerController : MonoBehaviour, IUpgradable
     [SerializeField] TowersUpgradeSerializable towerUpgrades;
     [SerializeField] MeshFilter meshFilter;
     [SerializeField] CollectMonsters collection;
-    [SerializeField] VisibilityUIManager visibilityUIManager;
-    [SerializeField] GameObject towerControlWindowObject;
 
     [Header("Lock\\Unlock")]
     [SerializeField] MeshRenderer meshRenderer;
@@ -26,11 +26,27 @@ public class TowerController : MonoBehaviour, IUpgradable
     [SerializeField] Crystals crystals;
     [SerializeField] Prices prices;
 
+    [Header("Energy")]
+    [SerializeField] Energy energy;
+
     [Header("Saves")]
     [SerializeField] RestoreTower restoreTower;
 
     public int Level { get; private set; } = 1;
     public bool IsLock { get; private set; }
+
+    public static UnityAction<TowerController, int> OnLevelUpgrade;
+    public static UnityAction<TowerController, int> OnEnergyUpgrade;
+
+    int _currentEnergy;
+    public int CurrentEnergy
+    {
+        get => _currentEnergy;
+        set
+        {
+            _currentEnergy = Mathf.Clamp(value, 0, energy.maxTowerEnergy);
+        }
+    }
 
     bool _isFree = true;
 
@@ -38,15 +54,9 @@ public class TowerController : MonoBehaviour, IUpgradable
     public GunController CurrentGun => _currentGun;
 
     float _refundRatioForDeleteGun = 0.75f;
+    float _timeConsuption = 0f;
 
     CrystalsAnimateManager _crystalsAnimate;
-
-    string _towerWindowID = "Tower";
-
-    void Start()
-    {
-        Init();
-    }
 
     void OnEnable()
     {
@@ -62,6 +72,16 @@ public class TowerController : MonoBehaviour, IUpgradable
         GameManager.OnMenuTransition -= ResetTower;
     }
 
+    void Start()
+    {
+        Init();
+    }
+
+    void Update()
+    {
+        HandleEnergyConsuption();
+    }
+
     void Init()
     {
         foreach (TowerLevelUpgradeSerializable _levelUpgrade in towerUpgrades.towers)
@@ -72,20 +92,38 @@ public class TowerController : MonoBehaviour, IUpgradable
             }
         }
 
+        CurrentEnergy = energy.maxTowerEnergy;
         _crystalsAnimate = ServiceLocator.Get<CrystalsAnimateManager>();
     }
 
-    public void OpenControlWindow()
+    void HandleEnergyConsuption()
     {
-        towerControlWindowObject.SetActive(true);
-        visibilityUIManager.ShowUI(_towerWindowID, ShowType.Fading);
+        if (!GameManager.TimerActive || isMenu) return;
+
+        _timeConsuption += Time.deltaTime;
+        if (_timeConsuption >= energy.energyConsuptionTime)
+        {
+            _timeConsuption = 0f;
+            CurrentEnergy -= energy.energyConsuption;
+
+            if (CurrentEnergy == 0)
+                _currentGun.Active = false;
+
+            OnEnergyUpgrade?.Invoke(this, CurrentEnergy);
+        }
     }
 
-    // корутина для открывания закрывания окна
-
-    public void CloseControlWindow()
+    public void AddEnergy()
     {
-        visibilityUIManager.ShowUI(_towerWindowID, ShowType.Fading);
+        if (energy.energy < energy.energyForTowerCharge) return;
+
+        CurrentEnergy += energy.energyForTowerCharge;
+        energy.SetEnergy(energy.energy - energy.energyForTowerCharge);
+
+        if (_currentGun != null)
+            _currentGun.Active = true;
+
+        OnEnergyUpgrade?.Invoke(this, CurrentEnergy);
     }
 
     void LockControl(Modes _mode)
@@ -246,6 +284,8 @@ public class TowerController : MonoBehaviour, IUpgradable
             {
                 meshFilter.mesh = _levelUpgrade.mesh;
                 collection.RadiusMultyplier = _levelUpgrade.rangeMultiplier;
+
+                OnLevelUpgrade?.Invoke(this, Level);
                 return prices.upgradeTower;
             }
         }

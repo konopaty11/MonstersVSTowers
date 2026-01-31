@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5406995145452128022}
   - component: {fileID: 2822583747626148261}
   - component: {fileID: 2915687943227557444}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SmallTower
   m_TagString: Tower
   m_Icon: {fileID: 0}
@@ -129,6 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 039b460cb9651db4ea4c60dd2e626c4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerController
+  isMenu: 0
   gunSpawn: {fileID: 2822583747626148261}
   cartridgesSpawn: {fileID: 0}
   deltaCrystals: {fileID: 8941243682837536831}
@@ -140,6 +141,7 @@ MonoBehaviour:
   unlockMaterial: {fileID: 2100000, guid: 80ee5d0cd56b34844830929640b37797, type: 2}
   crystals: {fileID: 11400000, guid: 94cc5327363d22846a789eaebe77ee16, type: 2}
   prices: {fileID: 11400000, guid: 20fd6a26554f3994aa9fe44a909ad22c, type: 2}
+  energy: {fileID: 11400000, guid: 35880ea8795571b498e59795fa94a072, type: 2}
   restoreTower: {fileID: 2915687943227557444}
 --- !u!114 &2822583747626148261
 MonoBehaviour:
@@ -182,7 +184,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8941243682837536831}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CrystalsDeltaPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -215,7 +217,7 @@ GameObject:
   - component: {fileID: 8551983459350619104}
   - component: {fileID: 5038123332578256402}
   - component: {fileID: 3486683745719395239}
-  m_Layer: 2
+  m_Layer: 7
   m_Name: Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}

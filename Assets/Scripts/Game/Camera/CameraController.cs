@@ -14,7 +14,7 @@ public class CameraController : MonoBehaviour
         Vector3 _targetPosition = _towerTransform.position + offsetPosition;
         StartCoroutine(MovementHandle(camera.position, _targetPosition, duration));
 
-        Quaternion _targetRotation = Quaternion.LookRotation(_towerTransform.position + offsetRotation - camera.position);
+        Quaternion _targetRotation = Quaternion.LookRotation(offsetRotation - offsetPosition);
         StartCoroutine(RotationHandle(camera.rotation, _targetRotation, duration));
     }
 

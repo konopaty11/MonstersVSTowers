@@ -29,6 +29,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] Saves saves;
     [SerializeField] TextMeshProUGUI timerText;
     [SerializeField] WaveResultWindowController waveResultWindowController;
+    [SerializeField] CameraController cameraController;
+    [SerializeField] GameObject towerControlWindowObject;
+    [SerializeField] LayerMask mask;
+    [SerializeField] TowerWindowController towerWindowController;
 
     public static UnityAction<int, bool> OnUpdateWave;
     public static UnityAction OnRestart;
@@ -43,22 +47,21 @@ public class GameManager : MonoBehaviour
 
     InputSystem_Actions _inputSystem;
 
-    LayerMask _layerMask;
-    string _ignoreRaycastLayerName = "Ignore Raycast";
-
     bool _isLoose;
 
     string _winBackgroundID = "Win background";
     string _winID = "Win";
     string _looseBackgroundID = "Loose background";
     string _looseID = "Loose";
+    string _towerWindowID = "Tower";
 
     public int CountKilledMonsters { get; set; }
     int _ñountCreatedGuns;
     int _ñountUpdatedGuns;
     int _ñountUpdatedTowers;
     float _timer;
-    bool _timerActive;
+
+    public static bool TimerActive { get; set; }
 
     float _previusCatleHealth;
     float _previusTime;
@@ -66,6 +69,8 @@ public class GameManager : MonoBehaviour
     SaveData _data;
 
     List<MonsterSerializable> _monstersSerializable;
+
+    TowerController _currentTower;
 
     void Awake()
     {
@@ -86,19 +91,9 @@ public class GameManager : MonoBehaviour
         Saves.OnDataLoaded -= OnLoadData;
     }
 
-    void Start()
-    {
-        Init();
-    }
-
     void Update()
     {
         TimerControl();
-    }
-
-    void Init()
-    {
-        _layerMask = ~LayerMask.GetMask(_ignoreRaycastLayerName);
     }
 
     void OnLoadData(SaveData _saveData)
@@ -168,7 +163,7 @@ public class GameManager : MonoBehaviour
 
     void TimerControl()
     {
-        if (_timerActive)
+        if (TimerActive)
             _timer += Time.deltaTime;
 
         TimeSpan _span = TimeSpan.FromSeconds(_timer);
@@ -214,7 +209,7 @@ public class GameManager : MonoBehaviour
 
     void StartGame()
     {
-        _timerActive = true;
+        TimerActive = true;
 
         SetPreviusParams();
         _spawnCoroutine = StartCoroutine(Spawn());
@@ -229,7 +224,7 @@ public class GameManager : MonoBehaviour
 
     public void NextWave()
     {
-        _timerActive = true;
+        TimerActive = true;
 
         SetPreviusParams();
 
@@ -265,7 +260,7 @@ public class GameManager : MonoBehaviour
         SaveGame();
         CloseResultWindow();
         soundManager.ToMenuMusic();
-        _timerActive = false;
+        TimerActive = false;
 
         menuController.LoadGameButtonActive(_data.isWaveSave);
 
@@ -275,12 +270,14 @@ public class GameManager : MonoBehaviour
     void ResetWave()
     {
         OnRestart?.Invoke();
+
+        _isLoose = false;
         _currentWaveIndex = 0;
 
         _ñountCreatedGuns = 0;
         _ñountUpdatedGuns = 0;
         _ñountUpdatedTowers = 0;
-        _timerActive = false;
+        TimerActive = false;
         _timer = 0f;
 
         saves.SetWave(CurrentWave, false);
@@ -327,7 +324,7 @@ public class GameManager : MonoBehaviour
 
     void ClickHandle(InputAction.CallbackContext context)
     {
-        if (Touchscreen.current == null || modeManager.Mode == Modes.None) return;
+        if (Touchscreen.current == null) return;
 
         foreach (TouchControl _touch in Touchscreen.current.touches)
         {
@@ -342,13 +339,15 @@ public class GameManager : MonoBehaviour
 
         Debug.DrawRay(_ray.origin, _ray.direction * 100f, Color.red, Mathf.Infinity);
 
-        if (Physics.Raycast(_ray, out RaycastHit _hit, Mathf.Infinity, _layerMask) && _hit.collider.CompareTag(_towerTag))
+        if (Physics.Raycast(_ray, out RaycastHit _hit, Mathf.Infinity, mask) && _hit.collider.CompareTag(_towerTag))
         {
             TowerController _tower = _hit.collider.GetComponent<TowerController>();
 
             if (modeManager.Mode == Modes.None)
-            { 
-                
+            {
+                cameraController.GoToTower(_tower.transform);
+                _currentTower = _tower;
+                OpenControlWindow();
             }
             else
             {
@@ -357,9 +356,34 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void OpenControlWindow()
+    {
+        towerControlWindowObject.SetActive(true);
+        visibleUIManager.ShowUI(_towerWindowID, ShowType.Fading);
+        towerWindowController.Init(_currentTower, _currentTower.CurrentEnergy, _currentTower.Level);
+    }
+
+    public void CloseControlWindow()
+    {
+        StartCoroutine(CloseTowerWindowWithDelay());
+    }
+
+    public void AddTowerEnergy()
+        => _currentTower.AddEnergy();
+
+    IEnumerator CloseTowerWindowWithDelay()
+    {
+        float _delay = 0.3f;
+
+        visibleUIManager.HideUI(_towerWindowID, ShowType.Fading);
+        cameraController.GoToStartPosition();
+
+        yield return new WaitForSeconds(_delay);
+        towerControlWindowObject.SetActive(false);
+    }
+
     public void TowerInteraction(TowerController _tower)
     {
-
         int _result = _tower.HandleTowerInteraction(modeManager.Mode);
         if (_result != -1)
         {

@@ -10,12 +10,14 @@ public abstract class GunController : MonoBehaviour, IUpgradable
     public GunType Type => type;
     public CollectMonsters Collection { get; set; }
     public abstract int Level { get; protected set; }
+    public bool Active { get; set; }
 
     protected GunLevelSettingsSerializable _levelSettings;
 
     void Update()
     {
-        GunHandle();
+        if (Active)
+            GunHandle();
     }
 
     public abstract GunLevelSettingsSerializable GetLevelSettings();

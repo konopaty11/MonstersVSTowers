@@ -79,7 +79,6 @@ public class MenuController : MonoBehaviour
         MonsterController _monster = _monsterObject.GetComponent<MonsterController>();
         _monster.InitMonster(spline, _healthBar, null, true, true);
     }
-
  
     void CheckMonsters(MonsterController _monsterDestroy, bool _isMenu)
     {
