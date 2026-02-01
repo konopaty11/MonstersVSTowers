@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject towerControlWindowObject;
     [SerializeField] LayerMask mask;
     [SerializeField] TowerWindowController towerWindowController;
+    [SerializeField] Prices prices;
 
     public static UnityAction<int, bool> OnUpdateWave;
     public static UnityAction OnRestart;
@@ -326,11 +327,9 @@ public class GameManager : MonoBehaviour
     {
         if (Touchscreen.current == null) return;
 
-        foreach (TouchControl _touch in Touchscreen.current.touches)
-        {
-            Vector2 _position = _touch.position.ReadValue();
-            ThrowRaycast(_position);
-        }
+        TouchControl _touch = Touchscreen.current.touches[0];
+        Vector2 _position = _touch.position.ReadValue();
+        ThrowRaycast(_position);
     }
 
     public void ThrowRaycast(Vector2 _position)
@@ -343,6 +342,7 @@ public class GameManager : MonoBehaviour
         {
             TowerController _tower = _hit.collider.GetComponent<TowerController>();
 
+            Debug.Log(modeManager.Mode);
             if (modeManager.Mode == Modes.None)
             {
                 cameraController.GoToTower(_tower.transform);
@@ -360,7 +360,7 @@ public class GameManager : MonoBehaviour
     {
         towerControlWindowObject.SetActive(true);
         visibleUIManager.ShowUI(_towerWindowID, ShowType.Fading);
-        towerWindowController.Init(_currentTower, _currentTower.CurrentEnergy, _currentTower.Level);
+        towerWindowController.Init(_currentTower, _currentTower.CurrentEnergy, _currentTower.Level, prices.upgradeTower);
     }
 
     public void CloseControlWindow()
@@ -370,6 +370,18 @@ public class GameManager : MonoBehaviour
 
     public void AddTowerEnergy()
         => _currentTower.AddEnergy();
+
+    public void UpgradeTower()
+    {
+        modeManager.SetModeControl(Modes.UpgradingTowers);
+        TowerInteraction(_currentTower);
+    }
+
+    public void UpgradeGun()
+    {
+        modeManager.SetModeControl(Modes.UpgradingGuns);
+        TowerInteraction(_currentTower);
+    }
 
     IEnumerator CloseTowerWindowWithDelay()
     {

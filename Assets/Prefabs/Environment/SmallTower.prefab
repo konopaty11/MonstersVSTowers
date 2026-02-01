@@ -184,7 +184,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8941243682837536831}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: CrystalsDeltaPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -217,7 +217,7 @@ GameObject:
   - component: {fileID: 8551983459350619104}
   - component: {fileID: 5038123332578256402}
   - component: {fileID: 3486683745719395239}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}

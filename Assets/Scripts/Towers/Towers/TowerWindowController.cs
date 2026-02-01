@@ -5,6 +5,7 @@ public class TowerWindowController : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI energyText;
     [SerializeField] TextMeshProUGUI levelText;
+    [SerializeField] TextMeshProUGUI priceTowerUpgradeText;
 
     TowerController _currentTower;
 
@@ -32,10 +33,11 @@ public class TowerWindowController : MonoBehaviour
             energyText.text = _energy.ToString();
     }
 
-    public void Init(TowerController _tower, int _energy, int _level)
+    public void Init(TowerController _tower, int _energy, int _level, float _priceTowerUpgrade)
     {
         _currentTower = _tower;
         energyText.text = _energy.ToString();
         levelText.text = _level.ToString();
+        priceTowerUpgradeText.text = _priceTowerUpgrade.ToString();
     }
 }

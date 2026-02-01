@@ -47,18 +47,13 @@ public class CastleController : MonoBehaviour, IDamageable
     public void LoadData(SaveData _saveData)
     {
         CurrentHealth = _saveData.castleHealth;
+
         float _value = CurrentHealth / generalSettings.castleHealth;
-        if (_value < 1)
-        {
-            healthSlider.gameObject.SetActive(true);
-            healthSlider.value = _value;
-        }
+        healthSlider.value = _value;
     }
 
     public void SubtractHealth(float _damage)
     {
-        healthSlider.gameObject.SetActive(true);
-
         CurrentHealth -= _damage;
         healthSlider.value = CurrentHealth / generalSettings.castleHealth;
 
@@ -72,7 +67,6 @@ public class CastleController : MonoBehaviour, IDamageable
     {
         CurrentHealth = generalSettings.castleHealth;
         healthSlider.value = 1f;
-        healthSlider.gameObject.SetActive(false);
         saves.SetCastleHealth(CurrentHealth);
     }
 }

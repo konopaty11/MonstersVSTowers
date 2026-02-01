@@ -106,7 +106,8 @@ public class TowerController : MonoBehaviour, IUpgradable
             _timeConsuption = 0f;
             CurrentEnergy -= energy.energyConsuption;
 
-            if (CurrentEnergy == 0)
+            // добавить деактивацию при спавне пушки если ее не было
+            if (CurrentEnergy == 0 && _currentGun != null)
                 _currentGun.Active = false;
 
             OnEnergyUpgrade?.Invoke(this, CurrentEnergy);
@@ -185,6 +186,7 @@ public class TowerController : MonoBehaviour, IUpgradable
 
     public int HandleTowerInteraction(Modes _mode)
     {
+        Debug.Log(_mode);
         if (IsLock) return -1;
 
         int _result = _mode switch
@@ -284,7 +286,7 @@ public class TowerController : MonoBehaviour, IUpgradable
             {
                 meshFilter.mesh = _levelUpgrade.mesh;
                 collection.RadiusMultyplier = _levelUpgrade.rangeMultiplier;
-
+                Debug.Log("dsfs");
                 OnLevelUpgrade?.Invoke(this, Level);
                 return prices.upgradeTower;
             }

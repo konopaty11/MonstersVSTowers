@@ -13,6 +13,11 @@ public class Energy : ScriptableObject
 
     public static UnityAction<int> OnEnergyChange;
 
+    void Awake()
+    {
+        OnEnergyChange?.Invoke(energy);
+    }
+
     public void SetEnergy(int _value)
     {
         energy = _value;

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PauseManager : MonoBehaviour
 {
@@ -14,14 +15,62 @@ public class PauseManager : MonoBehaviour
     string _pauseID = "Pause";
     float _duration = 0.5f;
 
+    public bool IsPause { get; private set; }
+
+    InputSystem_Actions _inputSystem;
+
+    float _doubleTapTime = 0.3f;
+    float _currentTime = 0f;
+    bool _isTimeActive = true;
+
+    void Awake()
+    {
+        _inputSystem = new();
+        Debug.Log("<color=green>Hello world</color>");
+    }
+
     void OnEnable()
     {
+        _inputSystem.Player.Attack.Enable();
+        _inputSystem.Player.Attack.performed += ClickHandle;
         LoadManager.OnLoad += ChangeButtons;
     }
 
     void OnDisable()
     {
+        _inputSystem.Player.Attack.Disable();
+        _inputSystem.Player.Attack.performed -= ClickHandle;
         LoadManager.OnLoad -= ChangeButtons;
+    }
+
+    void Update()
+    {
+        Timer();
+    }
+
+    void Timer()
+    {
+        if (_isTimeActive)
+            _currentTime += Time.deltaTime;
+    }
+
+    void ClickHandle(InputAction.CallbackContext context)
+    {
+        if (IsPause) return;
+
+        if (_currentTime == 0f)
+        {
+            _isTimeActive = true;
+        }
+        else
+        {
+            if (_currentTime <= _doubleTapTime)
+            {
+                OpenPause();
+                _isTimeActive = false;
+            }
+            _currentTime = 0f;
+        }
     }
 
     void ChangeButtons(LocationType _type)
@@ -48,11 +97,13 @@ public class PauseManager : MonoBehaviour
 
     void PauseGame()
     {
+        IsPause = true;
         Time.timeScale = 0f;
     }
 
     void ResumeGame()
     {
+        IsPause = false;
         Time.timeScale = 1f;
     }
 

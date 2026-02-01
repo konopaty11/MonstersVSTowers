@@ -37,6 +37,8 @@ public class ConsoleManager : MonoBehaviour
         AddCommand(new("console", HandleConsole));
     }
 
+    
+
     void ReadTouch()
     {
         if (Touchscreen.current == null) return;

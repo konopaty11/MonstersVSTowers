@@ -33,6 +33,7 @@ public class CreateButtonModeController : MonoBehaviour, IDragHandler, IEndDragH
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        Debug.Log("sdfdsf");
         gameManager.ThrowRaycast(eventData.position);
         modeManager.SetModeControl(Modes.None);
         rectTransform.anchoredPosition = _starPosition;
