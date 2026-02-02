@@ -109,7 +109,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &150319534778421742
 Transform:
   m_ObjectHideFlags: 0
@@ -139,6 +139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdef3c2f2b53ca84eba41f01a287f209, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CartridgeController
+  type: 11
   particleSystemPrefab: {fileID: 2561426712713471951, guid: 1dd4d158a805cae4190a9015003f9b2a, type: 3}
   particleSystemDelayDestroy: 3
 --- !u!54 &-8068250736615796313

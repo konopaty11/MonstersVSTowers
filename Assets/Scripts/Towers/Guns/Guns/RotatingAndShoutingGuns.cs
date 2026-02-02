@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class RotatingAndShoutingGuns : GunController
 {
-    [SerializeField] GameObject cartridgePrefab;
     [SerializeField] List<CartridgeSpawnSerializable> cartridgeSpawns;
     [SerializeField] RotatingAndShoutingGunsSettings gunSettings;
     [SerializeField] Crystals crystals;
@@ -19,6 +18,8 @@ public class RotatingAndShoutingGuns : GunController
     int _countCartridges;
     int _currentCartridgeIndex = 0;
 
+    CartridgePool _cartridgePool;
+
     public override int Level { get; protected set; } = 1;
 
     public RotatingAndShoutingGunSettingsSerializable Settings { get; private set; }
@@ -26,6 +27,11 @@ public class RotatingAndShoutingGuns : GunController
     {
         get => (RotatingAndShoutingGunLevelSettingsSerializable)_levelSettings;
         set => _levelSettings = value; 
+    }
+
+    void Start()
+    {
+        _cartridgePool = ServiceLocator.Get<CartridgePool>();
     }
 
     public override void Init(CollectMonsters _collection)
@@ -66,9 +72,9 @@ public class RotatingAndShoutingGuns : GunController
         {
             if (_cartrides.spawns.Count == _countCartridges)
             {
-                GameObject _cartridgeObject = Instantiate
+                GameObject _cartridgeObject = _cartridgePool.InstantiateByPoll
                 (
-                    cartridgePrefab, 
+                    Type,
                     _cartrides.spawns[_currentCartridgeIndex].position, 
                     _cartrides.spawns[_currentCartridgeIndex].rotation
                 );

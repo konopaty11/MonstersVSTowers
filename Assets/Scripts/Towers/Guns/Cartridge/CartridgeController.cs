@@ -2,12 +2,19 @@ using UnityEngine;
 
 public class CartridgeController : MonoBehaviour
 {
+    [SerializeField] GunType type;
     [SerializeField] GameObject particleSystemPrefab;
     [SerializeField] float particleSystemDelayDestroy;
 
     public RotatingAndShoutingGuns Gun { get; set; }
 
     string _monsterTag = "Monster";
+    CartridgePool _cartridgePool;
+
+    void Start()
+    {
+        _cartridgePool = ServiceLocator.Get<CartridgePool>();
+    }
 
     void OnCollisionEnter(Collision collision)
     {
@@ -27,7 +34,7 @@ public class CartridgeController : MonoBehaviour
             );
 
         Destroy(_particleSystemObject, particleSystemDelayDestroy);
-        Destroy(gameObject);
+        _cartridgePool.ReturnCartridgeToPool(type, gameObject);
 
         ParticleSystemRenderer _psRenderer = _particleSystemObject.GetComponent<ParticleSystemRenderer>();
         _psRenderer.renderMode = ParticleSystemRenderMode.Mesh;

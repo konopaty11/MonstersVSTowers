@@ -80,15 +80,17 @@ public class GameManager : MonoBehaviour
 
     void OnEnable()
     {
-        _inputSystem.Player.Attack.Enable();
-        _inputSystem.Player.Attack.performed += ClickHandle;
+        _inputSystem.Enable();
+        _inputSystem.UI.Click.canceled += ClickHandle;
+        _inputSystem.Player.Look.started += DragStartedHandle;
+        _inputSystem.Player.Look.performed += DragHandle;
         Saves.OnDataLoaded += OnLoadData;
     }
 
     void OnDisable()
     {
-        _inputSystem.Player.Attack.Disable();
-        _inputSystem.Player.Attack.performed -= ClickHandle;
+        _inputSystem.Disable();
+        _inputSystem.UI.Point.started -= ClickHandle;
         Saves.OnDataLoaded -= OnLoadData;
     }
 
@@ -323,9 +325,25 @@ public class GameManager : MonoBehaviour
         visibleUIManager.ShowUI(_looseID, ShowType.Moving);
     }
 
+    void DragStartedHandle(InputAction.CallbackContext context)
+    {
+        Debug.Log("drag start");
+
+    }
+
+    void DragHandle(InputAction.CallbackContext context)
+    {
+        Debug.Log("drag");
+
+    }
+
     void ClickHandle(InputAction.CallbackContext context)
     {
+        Debug.Log("click start");
+
+
         if (Touchscreen.current == null) return;
+
 
         TouchControl _touch = Touchscreen.current.touches[0];
         Vector2 _position = _touch.position.ReadValue();
