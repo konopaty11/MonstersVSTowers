@@ -26,7 +26,6 @@ public class PauseManager : MonoBehaviour
     void Awake()
     {
         _inputSystem = new();
-        Debug.Log("<color=green>Hello world</color>");
     }
 
     void OnEnable()

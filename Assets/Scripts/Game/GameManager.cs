@@ -342,7 +342,6 @@ public class GameManager : MonoBehaviour
         {
             TowerController _tower = _hit.collider.GetComponent<TowerController>();
 
-            Debug.Log(modeManager.Mode);
             if (modeManager.Mode == Modes.None)
             {
                 cameraController.GoToTower(_tower.transform);
