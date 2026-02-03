@@ -81,8 +81,8 @@ public class GameManager : MonoBehaviour
     void OnEnable()
     {
         _inputSystem.Enable();
-        _inputSystem.UI.Click.canceled += ClickHandle;
-        _inputSystem.Player.Look.started += DragStartedHandle;
+        _inputSystem.UI.TouchDown.started += PressStarted;
+        _inputSystem.UI.TouchDown.canceled += PressCancaled;
         _inputSystem.Player.Look.performed += DragHandle;
         Saves.OnDataLoaded += OnLoadData;
     }
@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
     void OnDisable()
     {
         _inputSystem.Disable();
-        _inputSystem.UI.Point.started -= ClickHandle;
+        _inputSystem.UI.Point.started -= PressStarted;
         Saves.OnDataLoaded -= OnLoadData;
     }
 
@@ -337,7 +337,7 @@ public class GameManager : MonoBehaviour
 
     }
 
-    void ClickHandle(InputAction.CallbackContext context)
+    void PressStarted(InputAction.CallbackContext context)
     {
         Debug.Log("click start");
 
@@ -348,6 +348,11 @@ public class GameManager : MonoBehaviour
         TouchControl _touch = Touchscreen.current.touches[0];
         Vector2 _position = _touch.position.ReadValue();
         ThrowRaycast(_position);
+    }
+
+    void PressCancaled(InputAction.CallbackContext context)
+    {
+        Debug.Log("press canceled");
     }
 
     public void ThrowRaycast(Vector2 _position)
