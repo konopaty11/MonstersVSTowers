@@ -382,7 +382,7 @@ public class GameManager : MonoBehaviour
     {
         towerControlWindowObject.SetActive(true);
         visibleUIManager.ShowUI(_towerWindowID, ShowType.Fading);
-        towerWindowController.Init(_currentTower, _currentTower.CurrentEnergy, _currentTower.Level, prices.upgradeTower);
+        towerWindowController.Setup(_currentTower, _currentTower.CurrentEnergy, _currentTower.Level, prices.upgradeTower);
     }
 
     public void CloseControlWindow()

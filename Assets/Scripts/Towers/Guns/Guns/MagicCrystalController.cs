@@ -39,6 +39,8 @@ public class MagicCrystalController : GunController
         meshFilter.mesh = LevelSettings.mesh;
         Collection.Radius = LevelSettings.radius;
 
+        base.Upgrade();
+
         return LevelSettings.price;
     }
 

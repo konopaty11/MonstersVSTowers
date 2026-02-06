@@ -7,6 +7,8 @@ public abstract class GunController : MonoBehaviour, IUpgradable
     [SerializeField] GunType type;
     [SerializeField] protected MeshFilter meshFilter;
 
+    public static UnityAction<GunController, int> OnUpgrade;
+
     public GunType Type => type;
     public CollectMonsters Collection { get; set; }
     public abstract int Level { get; protected set; }
@@ -29,7 +31,11 @@ public abstract class GunController : MonoBehaviour, IUpgradable
 
     protected abstract void GunHandle();
 
-    public abstract int Upgrade();
+    public virtual int Upgrade()
+    {
+        OnUpgrade?.Invoke(this, Level);
+        return -1;
+    }
 
     public abstract bool IsCanUpgrade();
 

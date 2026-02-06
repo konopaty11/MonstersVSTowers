@@ -133,6 +133,9 @@ public class RotatingAndShoutingGuns : GunController
 
         meshFilter.mesh = LevelSettings.mesh;
         Collection.Radius = LevelSettings.radius;
+
+        base.Upgrade();
+
         return LevelSettings.price;
     }
 
