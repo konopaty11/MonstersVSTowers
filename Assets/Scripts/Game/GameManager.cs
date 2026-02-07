@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] VisibilityUIManager visibleUIManager;
     [SerializeField] LoadManager loadManager;
     [SerializeField] Crystals crystals;
+    [SerializeField] Energy energy;
     [SerializeField] SoundManager soundManager;
     [SerializeField] MenuController menuController;
     [SerializeField] CastleController castleController;
@@ -339,13 +340,9 @@ public class GameManager : MonoBehaviour
 
     void PressStarted(InputAction.CallbackContext context)
     {
-        Debug.Log("click start");
-
-
         if (Touchscreen.current == null) return;
 
-
-        TouchControl _touch = Touchscreen.current.touches[0];
+        TouchControl _touch = Touchscreen.current.primaryTouch;
         Vector2 _position = _touch.position.ReadValue();
         ThrowRaycast(_position);
     }
@@ -382,7 +379,17 @@ public class GameManager : MonoBehaviour
     {
         towerControlWindowObject.SetActive(true);
         visibleUIManager.ShowUI(_towerWindowID, ShowType.Fading);
-        towerWindowController.Setup(_currentTower, _currentTower.CurrentEnergy, _currentTower.Level, prices.upgradeTower);
+
+        if (_currentTower.CurrentGun == null)
+            towerWindowController.Setup(_currentTower, _currentTower.CurrentEnergy, energy.energyForTowerCharge, _currentTower.Level, _currentTower.GetUpgradePrice(), 0, 0);
+        else
+        {
+            towerWindowController.Setup
+                (
+                _currentTower, _currentTower.CurrentEnergy, energy.energyForTowerCharge, _currentTower.Level, _currentTower.GetUpgradePrice(), 
+                _currentTower.CurrentGun.Level, _currentTower.CurrentGun.GetUpgradePrice()
+                );
+        }
     }
 
     public void CloseControlWindow()

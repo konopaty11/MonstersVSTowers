@@ -4,4 +4,5 @@ using System;
 public class LevelSettings
 {
     public int level;
+    public int price;
 }

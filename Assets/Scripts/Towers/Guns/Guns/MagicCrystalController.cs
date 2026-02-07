@@ -22,18 +22,17 @@ public class MagicCrystalController : GunController
 
         if (crystals.crystals < _price)
         {
-            Level--;
-            LevelSettings = (MagicCrystalLevelSettingsSerializable)GetLevelSettings();
+            LevelSettings = (MagicCrystalLevelSettingsSerializable)GetLevelSettings(Level);
             return -1;
         }
 
+        Level++;
         return _price;
     }
 
     public override int Upgrade()
     {
-        Level++;
-        LevelSettings = (MagicCrystalLevelSettingsSerializable)GetLevelSettings();
+        LevelSettings = (MagicCrystalLevelSettingsSerializable)GetLevelSettings(Level + 1);
 
         stonesMeshFilter.mesh = LevelSettings.stonesMesh;
         meshFilter.mesh = LevelSettings.mesh;
@@ -58,7 +57,7 @@ public class MagicCrystalController : GunController
     public override void Init(CollectMonsters _collection)
     {
         base.Init(_collection);
-        LevelSettings = (MagicCrystalLevelSettingsSerializable)GetLevelSettings();
+        LevelSettings = (MagicCrystalLevelSettingsSerializable)GetLevelSettings(Level);
         Collection.Radius = LevelSettings.radius;
 
         _currentTime = LevelSettings.rechargeTime;
@@ -96,11 +95,11 @@ public class MagicCrystalController : GunController
         }
     }
 
-    public override GunLevelSettingsSerializable GetLevelSettings()
+    public override GunLevelSettingsSerializable GetLevelSettings(int _level)
     {
         foreach (MagicCrystalLevelSettingsSerializable _levelSettings in settings.levels)
         {
-            if (_levelSettings.level == Level)
+            if (_levelSettings.level == _level)
                 return _levelSettings;
         }
 

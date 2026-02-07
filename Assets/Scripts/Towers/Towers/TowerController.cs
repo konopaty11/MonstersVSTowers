@@ -186,7 +186,6 @@ public class TowerController : MonoBehaviour, IUpgradable
 
     public int HandleTowerInteraction(Modes _mode)
     {
-        Debug.Log(_mode);
         if (IsLock) return -1;
 
         int _result = _mode switch
@@ -248,7 +247,7 @@ public class TowerController : MonoBehaviour, IUpgradable
 
     public int CanAffordUpgrade()
     {
-        if (crystals.crystals < prices.upgradeTower)
+        if (crystals.crystals < GetUpgradePrice())
             return -1;
 
         int _price = Upgrade();
@@ -276,6 +275,19 @@ public class TowerController : MonoBehaviour, IUpgradable
         return _price;
     }
 
+    public int GetUpgradePrice()
+    {
+        foreach (TowerLevelUpgradeSerializable _levelUpgrade in towerUpgrades.towers)
+        {
+            if (_levelUpgrade.level == Level + 1)
+            {
+                return _levelUpgrade.price;
+            }
+        }
+
+        return -1;
+    }
+
     public int Upgrade()
     {
         Level++;
@@ -286,9 +298,8 @@ public class TowerController : MonoBehaviour, IUpgradable
             {
                 meshFilter.mesh = _levelUpgrade.mesh;
                 collection.RadiusMultyplier = _levelUpgrade.rangeMultiplier;
-                Debug.Log("dsfs");
                 OnLevelUpgrade?.Invoke(this, Level);
-                return prices.upgradeTower;
+                return _levelUpgrade.price;
             }
         }
 

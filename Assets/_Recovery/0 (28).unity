@@ -8350,9 +8350,9 @@ RectTransform:
   - {fileID: 638154593}
   m_Father: {fileID: 1974024807}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -130, y: 120}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 170, y: 120}
   m_SizeDelta: {x: 208, y: 385}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &473859074
@@ -8747,7 +8747,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 69959886}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.6
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -14565,13 +14565,8 @@ MonoBehaviour:
   priceGunUpgradeText: {fileID: 117364788}
   towerSection: {fileID: 168112460}
   gunSection: {fileID: 473047914}
-  energySection: {fileID: 1438067109}
   towerSectionPositionAlone: {x: 0, y: 120, z: 0}
   towerSectionPositionWithGunSection: {x: 130, y: 120, z: 0}
-  gunSectionPositionAlone: {x: 0, y: 120, z: 0}
-  gunSectionPositionWithTowerSection: {x: -130, y: 120, z: 0}
-  energySectionPositionAlone: {x: 0, y: 0, z: 0}
-  energySectionPositionNotAlone: {x: 0, y: -180, z: 0}
 --- !u!1001 &823413871
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25266,9 +25261,9 @@ RectTransform:
   - {fileID: 1573380793}
   m_Father: {fileID: 1974024807}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -180}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 270}
   m_SizeDelta: {x: 400, y: 112}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1438067111

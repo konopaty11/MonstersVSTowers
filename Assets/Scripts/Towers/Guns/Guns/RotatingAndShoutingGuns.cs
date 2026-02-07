@@ -38,10 +38,15 @@ public class RotatingAndShoutingGuns : GunController
     {
         base.Init(_collection);
         SetSettings();
-        LevelSettings = (RotatingAndShoutingGunLevelSettingsSerializable)GetLevelSettings();
+        LevelSettings = (RotatingAndShoutingGunLevelSettingsSerializable)GetLevelSettings(Level);
         Collection.Radius = LevelSettings.radius;
 
         _currentAttackTime = LevelSettings.attackInterval;
+
+        foreach (LevelSettings _levelUpgrade in Settings.levels)
+        {
+            _maxLevel = Mathf.Max(_maxLevel, _levelUpgrade.level);
+        }
     }
 
     public void SetSettings()
@@ -118,18 +123,17 @@ public class RotatingAndShoutingGuns : GunController
 
         if (crystals.crystals < _price)
         {
-            Level--;
-            LevelSettings = (RotatingAndShoutingGunLevelSettingsSerializable)GetLevelSettings();
+            LevelSettings = (RotatingAndShoutingGunLevelSettingsSerializable)GetLevelSettings(Level);
             return -1;
         }
 
+        Level++;
         return _price;
     }
 
     public override int Upgrade()
     {
-        Level++;
-        LevelSettings = (RotatingAndShoutingGunLevelSettingsSerializable)GetLevelSettings();
+        LevelSettings = (RotatingAndShoutingGunLevelSettingsSerializable)GetLevelSettings(Level + 1);
 
         meshFilter.mesh = LevelSettings.mesh;
         Collection.Radius = LevelSettings.radius;
@@ -178,11 +182,11 @@ public class RotatingAndShoutingGuns : GunController
         }
     }
 
-    public override GunLevelSettingsSerializable GetLevelSettings()
+    public override GunLevelSettingsSerializable GetLevelSettings(int _level)
     {
         foreach (RotatingAndShoutingGunLevelSettingsSerializable _levelSettings in Settings.levels)
         {
-            if (_levelSettings.level == Level)
+            if (_levelSettings.level == _level)
                 return _levelSettings;
         }
 

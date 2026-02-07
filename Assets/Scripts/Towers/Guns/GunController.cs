@@ -15,6 +15,7 @@ public abstract class GunController : MonoBehaviour, IUpgradable
     public bool Active { get; set; } = true;
 
     protected GunLevelSettingsSerializable _levelSettings;
+    protected int _maxLevel;
 
     void Update()
     {
@@ -22,11 +23,19 @@ public abstract class GunController : MonoBehaviour, IUpgradable
             GunHandle();
     }
 
-    public abstract GunLevelSettingsSerializable GetLevelSettings();
+    public abstract GunLevelSettingsSerializable GetLevelSettings(int _level);
 
     public virtual void Init(CollectMonsters _collection)
     {
         Collection = _collection;
+    }
+
+    public int GetUpgradePrice()
+    {
+        if (IsCanUpgrade())
+            return GetLevelSettings(Level + 1).price;
+
+        return -1;
     }
 
     protected abstract void GunHandle();

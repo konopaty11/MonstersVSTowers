@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TowersUpdateSerializable
   towers:
   - level: 1
+    price: 0
     mesh: {fileID: 3707614849416653456, guid: 052c946269965e9498b9bf52a58281a7, type: 3}
     rangeMultiplier: 1
   - level: 2
+    price: 80
     mesh: {fileID: -4789008860567682384, guid: 052c946269965e9498b9bf52a58281a7, type: 3}
     rangeMultiplier: 1.4

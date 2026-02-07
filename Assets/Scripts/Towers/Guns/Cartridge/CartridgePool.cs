@@ -90,7 +90,14 @@ public class CartridgePool : MonoBehaviour
             return Instantiate(cannonballPrefab, cartridgesParent);
         }
 
-        return _cannonballs.Dequeue();
+        GameObject _cartridge = _cannonballs.Dequeue();
+        while (!_cartridge)
+        {
+            Debug.Log("cannon destroy");
+            _cartridge = _cannonballs.Dequeue();
+        }
+
+        return _cartridge;
     }
 
     GameObject GetArrow()
@@ -101,6 +108,14 @@ public class CartridgePool : MonoBehaviour
             return Instantiate(arrowPrefab, cartridgesParent);
         }
 
-        return _cannonballs.Dequeue();
+        GameObject _cartridge = _arrows.Dequeue();
+        while (!_cartridge)
+        {
+            Debug.Log("arrow destroy");
+
+            _cartridge = _arrows.Dequeue();
+        }
+
+        return _cartridge;
     }
 }

@@ -20,5 +20,4 @@ public class RotatingAndShoutingGunLevelSettingsSerializable : GunLevelSettingsS
 {
     public int countCartridges;
     public float attackInterval;
-    public int price;
 }
