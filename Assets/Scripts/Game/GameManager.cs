@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] LayerMask mask;
     [SerializeField] TowerWindowController towerWindowController;
     [SerializeField] Prices prices;
+    [SerializeField] GunIconManager gunIconManager;
 
     public static UnityAction<int, bool> OnUpdateWave;
     public static UnityAction OnRestart;
@@ -46,6 +47,7 @@ public class GameManager : MonoBehaviour
     Coroutine _spawnCoroutine;
 
     string _towerTag = "Tower"; 
+    string _deleteColliderTag = "Delete Gun"; 
 
     InputSystem_Actions _inputSystem;
 
@@ -73,6 +75,8 @@ public class GameManager : MonoBehaviour
     List<MonsterSerializable> _monstersSerializable;
 
     TowerController _currentTower;
+    bool _isDraged;
+    bool _isTowerWindowOpen;
 
     void Awake()
     {
@@ -83,7 +87,7 @@ public class GameManager : MonoBehaviour
     {
         _inputSystem.Enable();
         _inputSystem.UI.TouchDown.started += PressStarted;
-        _inputSystem.UI.TouchDown.canceled += PressCancaled;
+        _inputSystem.UI.TouchDown.canceled += PressCanceled;
         _inputSystem.Player.Look.performed += DragHandle;
         Saves.OnDataLoaded += OnLoadData;
     }
@@ -326,57 +330,88 @@ public class GameManager : MonoBehaviour
         visibleUIManager.ShowUI(_looseID, ShowType.Moving);
     }
 
-    void DragStartedHandle(InputAction.CallbackContext context)
-    {
-        Debug.Log("drag start");
-
-    }
-
     void DragHandle(InputAction.CallbackContext context)
     {
-        Debug.Log("drag");
+        _isDraged = true;
+        if (_currentTower == null || _currentTower.CurrentGun == null || Touchscreen.current == null) return;
 
+        TouchControl _touch = Touchscreen.current.primaryTouch;
+        Vector2 _position = _touch.position.ReadValue();
+        gunIconManager.IconHandle(_currentTower.CurrentGun.Type, _position);
     }
 
     void PressStarted(InputAction.CallbackContext context)
     {
-        if (Touchscreen.current == null) return;
+        if (Touchscreen.current == null || _isTowerWindowOpen) return;
 
         TouchControl _touch = Touchscreen.current.primaryTouch;
         Vector2 _position = _touch.position.ReadValue();
-        ThrowRaycast(_position);
+
+        TowerController _tower = GetCurrentTower(_position);
+        if (_tower != null)
+            _currentTower = _tower;
     }
 
-    void PressCancaled(InputAction.CallbackContext context)
+    void PressCanceled(InputAction.CallbackContext context)
     {
-        Debug.Log("press canceled");
+        if (_currentTower == null || _isTowerWindowOpen) return;
+
+        gunIconManager.DisableIcons();
+
+        if (modeManager.Mode == Modes.None)
+        {
+            if (_isDraged)
+            {
+                TouchControl _touch = Touchscreen.current.primaryTouch;
+                Vector2 _position = _touch.position.ReadValue();
+
+                Collider _hitCollider = ThrowRaycast(_position);
+                if (_hitCollider != null && _hitCollider.CompareTag(_deleteColliderTag))
+                {
+                    modeManager.SetModeControl(Modes.DeletingGun);
+                    TowerInteraction(_currentTower);
+                }
+
+                _isDraged = false;
+                return;
+            }
+
+            cameraController.GoToTower(_currentTower.transform);
+            OpenControlWindow();
+        }
+        else if (!ModeManager.IsCreatingMode(modeManager.Mode))
+        {
+            TowerInteraction(_currentTower);
+        }
     }
 
-    public void ThrowRaycast(Vector2 _position)
+    public TowerController GetCurrentTower(Vector2 _position)
+    {
+        Collider _hitCollider = ThrowRaycast(_position);
+
+        if (_hitCollider != null && _hitCollider.CompareTag(_towerTag))
+            return _hitCollider.GetComponent<TowerController>();
+
+        return null;
+    }
+
+    public Collider ThrowRaycast(Vector2 _position)
     {
         Ray _ray = mainCamera.ScreenPointToRay(_position);
 
         Debug.DrawRay(_ray.origin, _ray.direction * 100f, Color.red, Mathf.Infinity);
 
-        if (Physics.Raycast(_ray, out RaycastHit _hit, Mathf.Infinity, mask) && _hit.collider.CompareTag(_towerTag))
+        if (Physics.Raycast(_ray, out RaycastHit _hit, Mathf.Infinity, mask))
         {
-            TowerController _tower = _hit.collider.GetComponent<TowerController>();
-
-            if (modeManager.Mode == Modes.None)
-            {
-                cameraController.GoToTower(_tower.transform);
-                _currentTower = _tower;
-                OpenControlWindow();
-            }
-            else
-            {
-                TowerInteraction(_tower);
-            }
+            return _hit.collider;
         }
+
+        return null;
     }
 
     public void OpenControlWindow()
     {
+        _isTowerWindowOpen = true;
         towerControlWindowObject.SetActive(true);
         visibleUIManager.ShowUI(_towerWindowID, ShowType.Fading);
 
@@ -421,6 +456,7 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(_delay);
         towerControlWindowObject.SetActive(false);
+        _isTowerWindowOpen = false;
     }
 
     public void TowerInteraction(TowerController _tower)

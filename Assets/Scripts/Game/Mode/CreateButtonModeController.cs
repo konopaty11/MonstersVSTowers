@@ -33,8 +33,10 @@ public class CreateButtonModeController : MonoBehaviour, IDragHandler, IEndDragH
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        Debug.Log("sdfdsf");
-        gameManager.ThrowRaycast(eventData.position);
+        TowerController _tower = gameManager.GetCurrentTower(eventData.position);
+        if (_tower != null)
+            gameManager.TowerInteraction(_tower);
+
         modeManager.SetModeControl(Modes.None);
         rectTransform.anchoredPosition = _starPosition;
     }

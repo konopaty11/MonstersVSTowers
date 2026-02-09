@@ -19,6 +19,5 @@ public class EnergyUIManager : MonoBehaviour
     void UpdateEnergyUI(int _energy)
     {
         energySlider.value = (float)_energy / energy.maxEnergy;
-        Debug.Log(_energy);
     }
 }

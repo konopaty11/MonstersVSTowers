@@ -93,7 +93,6 @@ public class CartridgePool : MonoBehaviour
         GameObject _cartridge = _cannonballs.Dequeue();
         while (!_cartridge)
         {
-            Debug.Log("cannon destroy");
             _cartridge = _cannonballs.Dequeue();
         }
 
@@ -111,8 +110,6 @@ public class CartridgePool : MonoBehaviour
         GameObject _cartridge = _arrows.Dequeue();
         while (!_cartridge)
         {
-            Debug.Log("arrow destroy");
-
             _cartridge = _arrows.Dequeue();
         }
 

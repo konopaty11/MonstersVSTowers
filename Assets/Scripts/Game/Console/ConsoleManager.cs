@@ -71,7 +71,7 @@ public class ConsoleManager : MonoBehaviour
 
     void OpenConsole()
     {
-        consoleObject.SetActive(true);
+        //consoleObject.SetActive(true);
     }
 
     void CloseConsole()

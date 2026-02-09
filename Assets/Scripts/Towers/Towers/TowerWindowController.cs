@@ -46,7 +46,6 @@ public class TowerWindowController : MonoBehaviour
 
     void UpdateTowerLevel(TowerController _tower, int _level)
     {
-        Debug.Log(_level);
         if (_tower == _currentTower)
             levelTowerText.text = _level.ToString();
 
@@ -57,7 +56,9 @@ public class TowerWindowController : MonoBehaviour
     void UpdateEnergy(TowerController _tower, int _energy)
     {
         if (_tower == _currentTower)
+        {
             energyText.text = _energy.ToString();
+        }
     }
 
     void UpdateGunLevel(GunController _gun, int _level)
