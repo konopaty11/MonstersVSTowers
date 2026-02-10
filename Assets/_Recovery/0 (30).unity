@@ -8747,8 +8747,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 69959887}
   m_HandleRect: {fileID: 69959886}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.6
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -10909,7 +10909,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Saves
   gameManager: {fileID: 808669872}
   crystals: {fileID: 11400000, guid: 94cc5327363d22846a789eaebe77ee16, type: 2}
-  energy: {fileID: 11400000, guid: 35880ea8795571b498e59795fa94a072, type: 2}
   generalSettings: {fileID: 11400000, guid: 1c2b7f95990173c44abfa333ca16104c, type: 2}
   towers:
   - {fileID: 1152089540}

@@ -98,7 +98,7 @@ public class TowerController : MonoBehaviour, IUpgradable
 
     void HandleEnergyConsuption()
     {
-        if (!GameManager.TimerActive || isMenu) return;
+        if (!GameManager.TimerActive || isMenu || _currentGun == null) return;
 
         _timeConsuption += Time.deltaTime;
         if (_timeConsuption >= energy.energyConsuptionTime)
@@ -110,6 +110,8 @@ public class TowerController : MonoBehaviour, IUpgradable
             if (CurrentEnergy == 0 && _currentGun != null)
                 _currentGun.Active = false;
 
+            restoreTower.TowerSerializable.energy = CurrentEnergy;
+
             OnEnergyUpgrade?.Invoke(this, CurrentEnergy);
         }
     }
@@ -118,11 +120,14 @@ public class TowerController : MonoBehaviour, IUpgradable
     {
         if (energy.energy < energy.energyForTowerCharge) return;
 
-        CurrentEnergy += energy.energyForTowerCharge;
-        energy.SetEnergy(energy.energy - energy.energyForTowerCharge);
+        int _energyDelta = Mathf.Clamp(energy.maxTowerEnergy - CurrentEnergy, 0, energy.energyForTowerCharge);
+        CurrentEnergy += _energyDelta;
+        energy.SetEnergy(energy.energy - _energyDelta);
 
         if (_currentGun != null)
             _currentGun.Active = true;
+
+        restoreTower.TowerSerializable.energy = CurrentEnergy;
 
         OnEnergyUpgrade?.Invoke(this, CurrentEnergy);
     }

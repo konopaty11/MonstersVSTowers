@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class SaveData
 {
     public int crystals;
+    public int energy;
     public int wave;
     public float volume;
     public float castleHealth;
@@ -18,9 +19,10 @@ public class SaveData
     public int ñountUpdatedTowers;
     public float timer;
 
-    public SaveData(int _crystals, float _volume, float _castleHealth, int _wave, List<TowerSerializable> _towers)
+    public SaveData(int _crystals, int _energy, float _volume, float _castleHealth, int _wave, List<TowerSerializable> _towers)
     {
         crystals = _crystals;
+        energy = _energy;
         volume = _volume;
         wave = _wave;
         castleHealth = _castleHealth;
@@ -35,6 +37,7 @@ public class TowerSerializable
 {
     public int id;
     public int level;
+    public int energy;
     public GunType gunType = GunType.None;
     public int gunLevel;
 

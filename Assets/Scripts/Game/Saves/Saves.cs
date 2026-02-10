@@ -7,6 +7,7 @@ public class Saves : MonoBehaviour
 {
     [SerializeField] GameManager gameManager;
     [SerializeField] Crystals crystals;
+    [SerializeField] Energy energy;
     [SerializeField] GeneralSettings generalSettings;
     [SerializeField] List<RestoreTower> towers;
     [SerializeField] SoundManager soundManager;
@@ -26,12 +27,14 @@ public class Saves : MonoBehaviour
     {
         GameManager.OnUpdateWave += SetWave;
         Crystals.OnCountCrystalsChange += SetCrystals;
+        Energy.OnEnergyChange += SetEnergy;
     }
 
     void OnDisable()
     {
         GameManager.OnUpdateWave -= SetWave;
         Crystals.OnCountCrystalsChange -= SetCrystals;
+        Energy.OnEnergyChange -= SetEnergy;
     }
 
     void Start()
@@ -127,9 +130,15 @@ public class Saves : MonoBehaviour
         SaveData();
     }
 
+    public void SetEnergy(int _value)
+    {
+        _data.energy = _value;
+        SaveData();
+    }
+
     public void ResetData()
     {
-        _data = new(crystals.baseCrystals, soundManager.Volume, generalSettings.castleHealth, 1, _towersSerializable);
+        _data = new(crystals.baseCrystals, energy.maxEnergy, soundManager.Volume, generalSettings.castleHealth, 1, _towersSerializable);
         _data.isWaveSave = false;
     }
 }

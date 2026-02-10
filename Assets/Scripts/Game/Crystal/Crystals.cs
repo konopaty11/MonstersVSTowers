@@ -15,7 +15,7 @@ public class Crystals : ScriptableObject
     public int baseCrystals;
     public int crystals;
     public List<MonsterPriceSerializable> monsterPrices;
-    public List<WavePriceSerializable> wavePrices;
+    public List<WaveCrystalsSerializable> wavePrices;
 
     CrystalsAnimateManager _crystalsAnimate;
 
@@ -78,7 +78,7 @@ public class Crystals : ScriptableObject
     {
         if (_isStartWave) return;
 
-        foreach (WavePriceSerializable _wavePrice in wavePrices)
+        foreach (WaveCrystalsSerializable _wavePrice in wavePrices)
         {
             if (_wavePrice.wave == _wave)
             {
@@ -101,7 +101,7 @@ public class MonsterPriceSerializable
 }
 
 [Serializable]
-public class WavePriceSerializable
+public class WaveCrystalsSerializable
 {
     public int wave;
     public int price;

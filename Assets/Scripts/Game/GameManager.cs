@@ -95,7 +95,9 @@ public class GameManager : MonoBehaviour
     void OnDisable()
     {
         _inputSystem.Disable();
-        _inputSystem.UI.Point.started -= PressStarted;
+        _inputSystem.UI.TouchDown.started -= PressStarted;
+        _inputSystem.UI.TouchDown.canceled -= PressCanceled;
+        _inputSystem.Player.Look.performed -= DragHandle;
         Saves.OnDataLoaded -= OnLoadData;
     }
 
@@ -212,7 +214,21 @@ public class GameManager : MonoBehaviour
         if (_timer - _previusTime <= generalSettings.timeThresholdForStar)
             _countStars++;
 
-        waveResultWindowController.OpenWindow(_timer, 0, 0, _countStars);
+        int _crystals = 0;
+        foreach (WaveCrystalsSerializable _wavePrice in crystals.wavePrices)
+        {
+            if (_wavePrice.wave == CurrentWave)
+                _crystals = _wavePrice.price;
+        }
+
+        int _energy = 0;
+        foreach (WaveEnergySerializable _wavePrice in energy.waveEnergy)
+        {
+            if (_wavePrice.wave == CurrentWave)
+                _energy = _wavePrice.energy;
+        }
+
+        waveResultWindowController.OpenWinWindow(_timer, _crystals, _energy, _countStars);
     }
 
     void StartGame()
@@ -354,6 +370,7 @@ public class GameManager : MonoBehaviour
 
     void PressCanceled(InputAction.CallbackContext context)
     {
+        //Debug.Log($"{_currentTower} -- {_isTowerWindowOpen}");
         if (_currentTower == null || _isTowerWindowOpen) return;
 
         gunIconManager.DisableIcons();
@@ -373,11 +390,12 @@ public class GameManager : MonoBehaviour
                 }
 
                 _isDraged = false;
-                return;
             }
-
-            cameraController.GoToTower(_currentTower.transform);
-            OpenControlWindow();
+            else
+            {
+                cameraController.GoToTower(_currentTower.transform);
+                OpenControlWindow();
+            }
         }
         else if (!ModeManager.IsCreatingMode(modeManager.Mode))
         {
@@ -399,7 +417,7 @@ public class GameManager : MonoBehaviour
     {
         Ray _ray = mainCamera.ScreenPointToRay(_position);
 
-        Debug.DrawRay(_ray.origin, _ray.direction * 100f, Color.red, Mathf.Infinity);
+        Debug.DrawRay(_ray.origin, _ray.direction * 100f, Color.red, 10f);
 
         if (Physics.Raycast(_ray, out RaycastHit _hit, Mathf.Infinity, mask))
         {
@@ -429,6 +447,7 @@ public class GameManager : MonoBehaviour
 
     public void CloseControlWindow()
     {
+        _currentTower = null;
         StartCoroutine(CloseTowerWindowWithDelay());
     }
 

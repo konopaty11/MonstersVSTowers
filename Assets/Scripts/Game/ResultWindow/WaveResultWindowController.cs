@@ -12,7 +12,7 @@ public class WaveResultWindowController : MonoBehaviour
 
     string _waveID = "Wave";
 
-    public void OpenWindow(float _time, int _crystals, int _energy, int _countStars)
+    public void OpenWinWindow(float _time, int _crystals, int _energy, int _countStars)
     {
         waveWindowObject.SetActive(true);
 

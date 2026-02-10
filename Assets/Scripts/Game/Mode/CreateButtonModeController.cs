@@ -37,7 +37,6 @@ public class CreateButtonModeController : MonoBehaviour, IDragHandler, IEndDragH
         if (_tower != null)
             gameManager.TowerInteraction(_tower);
 
-        modeManager.SetModeControl(Modes.None);
         rectTransform.anchoredPosition = _starPosition;
     }
 }
