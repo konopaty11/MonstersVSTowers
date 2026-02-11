@@ -208,6 +208,8 @@ public class GameManager : MonoBehaviour
 
     void OpenWaveResultWindow()
     {
+        _currentWaveIndex++;
+
         int _countStars = 1;
         if (castleController.CurrentHealth == _previusCatleHealth)
             _countStars++;
@@ -217,7 +219,7 @@ public class GameManager : MonoBehaviour
         int _crystals = 0;
         foreach (WaveCrystalsSerializable _wavePrice in crystals.wavePrices)
         {
-            if (_wavePrice.wave == CurrentWave)
+            if (_wavePrice.wave == CurrentWave + 1)
                 _crystals = _wavePrice.price;
         }
 
@@ -252,7 +254,6 @@ public class GameManager : MonoBehaviour
 
         SetPreviusParams();
 
-        _currentWaveIndex++;
         _monstersSerializable = new();
         saves.SetMonsters(_monstersSerializable);
 
@@ -370,11 +371,9 @@ public class GameManager : MonoBehaviour
 
     void PressCanceled(InputAction.CallbackContext context)
     {
-        //Debug.Log($"{_currentTower} -- {_isTowerWindowOpen}");
         if (_currentTower == null || _isTowerWindowOpen) return;
 
         gunIconManager.DisableIcons();
-
         if (modeManager.Mode == Modes.None)
         {
             if (_isDraged)
@@ -388,8 +387,6 @@ public class GameManager : MonoBehaviour
                     modeManager.SetModeControl(Modes.DeletingGun);
                     TowerInteraction(_currentTower);
                 }
-
-                _isDraged = false;
             }
             else
             {
@@ -401,6 +398,7 @@ public class GameManager : MonoBehaviour
         {
             TowerInteraction(_currentTower);
         }
+
     }
 
     public TowerController GetCurrentTower(Vector2 _position)
@@ -487,6 +485,7 @@ public class GameManager : MonoBehaviour
             UpdateParams();
         }
 
+        _isDraged = false;
         modeManager.SetModeControl(Modes.None);
     }
 

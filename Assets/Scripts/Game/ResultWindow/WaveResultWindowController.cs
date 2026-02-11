@@ -23,4 +23,9 @@ public class WaveResultWindowController : MonoBehaviour
         visibilityUIManager.ShowUI(_waveID, ShowType.Moving);
         starsController.ShowStars(_countStars);
     }
+
+    public void CloseWinWondow()
+    {
+        visibilityUIManager.HideUI(_waveID, ShowType.Moving);
+    }
 }

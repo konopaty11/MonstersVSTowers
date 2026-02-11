@@ -12,9 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c7f103b6fd943b409d9c1e0eff219ba, type: 3}
   m_Name: Energy
   m_EditorClassIdentifier: Assembly-CSharp::Energy
-  energy: 80
+  energy: 96
   maxEnergy: 100
   energyForTowerCharge: 10
   maxTowerEnergy: 30
   energyConsuption: 1
   energyConsuptionTime: 2
+  waveEnergy:
+  - wave: 1
+    energy: 0
+  - wave: 2
+    energy: 25
+  - wave: 3
+    energy: 35
+  - wave: 4
+    energy: 40
