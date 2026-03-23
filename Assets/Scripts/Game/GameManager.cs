@@ -387,15 +387,19 @@ public class GameManager : MonoBehaviour
                     modeManager.SetModeControl(Modes.DeletingGun);
                     TowerInteraction(_currentTower);
                 }
+
+                Debug.Log("delete");
             }
             else
             {
                 cameraController.GoToTower(_currentTower.transform);
                 OpenControlWindow();
+                Debug.Log("open tower window");
             }
         }
         else if (!ModeManager.IsCreatingMode(modeManager.Mode))
         {
+            Debug.Log("create");
             TowerInteraction(_currentTower);
         }
 
@@ -406,8 +410,10 @@ public class GameManager : MonoBehaviour
         Collider _hitCollider = ThrowRaycast(_position);
 
         if (_hitCollider != null && _hitCollider.CompareTag(_towerTag))
+        {
+            Debug.Log(_hitCollider.name);
             return _hitCollider.GetComponent<TowerController>();
-
+        }
         return null;
     }
 

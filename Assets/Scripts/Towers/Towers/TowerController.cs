@@ -120,6 +120,8 @@ public class TowerController : MonoBehaviour, IUpgradable
     {
         if (energy.energy < energy.energyForTowerCharge) return;
 
+        Debug.Log("add energy");
+
         int _energyDelta = Mathf.Clamp(energy.maxTowerEnergy - CurrentEnergy, 0, energy.energyForTowerCharge);
         CurrentEnergy += _energyDelta;
         energy.SetEnergy(energy.energy - _energyDelta);
