@@ -69,7 +69,7 @@ public class Crystals : ScriptableObject
                 if (_crystalsAnimate == null)
                     _crystalsAnimate = ServiceLocator.Get<CrystalsAnimateManager>();
 
-                _crystalsAnimate.DeltaCrystalsPositionAnimate(_monster.transform.position, _monsterPrice.price);
+                _crystalsAnimate.DeltaCrystalsPositionAnimate(_monster.transform.position + Vector3.up, _monsterPrice.price);
             }
         }
     }

@@ -47,7 +47,6 @@ public class GameManager : MonoBehaviour
     Coroutine _spawnCoroutine;
 
     string _towerTag = "Tower"; 
-    string _deleteColliderTag = "Delete Gun"; 
 
     InputSystem_Actions _inputSystem;
 
@@ -75,7 +74,6 @@ public class GameManager : MonoBehaviour
     List<MonsterSerializable> _monstersSerializable;
 
     TowerController _currentTower;
-    bool _isDraged;
     bool _isTowerWindowOpen;
 
     void Awake()
@@ -88,7 +86,6 @@ public class GameManager : MonoBehaviour
         _inputSystem.Enable();
         _inputSystem.UI.TouchDown.started += PressStarted;
         _inputSystem.UI.TouchDown.canceled += PressCanceled;
-        _inputSystem.Player.Look.performed += DragHandle;
         Saves.OnDataLoaded += OnLoadData;
     }
 
@@ -97,7 +94,6 @@ public class GameManager : MonoBehaviour
         _inputSystem.Disable();
         _inputSystem.UI.TouchDown.started -= PressStarted;
         _inputSystem.UI.TouchDown.canceled -= PressCanceled;
-        _inputSystem.Player.Look.performed -= DragHandle;
         Saves.OnDataLoaded -= OnLoadData;
     }
 
@@ -347,16 +343,6 @@ public class GameManager : MonoBehaviour
         visibleUIManager.ShowUI(_looseID, ShowType.Moving);
     }
 
-    void DragHandle(InputAction.CallbackContext context)
-    {
-        _isDraged = true;
-        if (_currentTower == null || _currentTower.CurrentGun == null || Touchscreen.current == null) return;
-
-        TouchControl _touch = Touchscreen.current.primaryTouch;
-        Vector2 _position = _touch.position.ReadValue();
-        gunIconManager.IconHandle(_currentTower.CurrentGun.Type, _position);
-    }
-
     void PressStarted(InputAction.CallbackContext context)
     {
         if (Touchscreen.current == null || _isTowerWindowOpen) return;
@@ -376,33 +362,13 @@ public class GameManager : MonoBehaviour
         gunIconManager.DisableIcons();
         if (modeManager.Mode == Modes.None)
         {
-            if (_isDraged)
-            {
-                TouchControl _touch = Touchscreen.current.primaryTouch;
-                Vector2 _position = _touch.position.ReadValue();
-
-                Collider _hitCollider = ThrowRaycast(_position);
-                if (_hitCollider != null && _hitCollider.CompareTag(_deleteColliderTag))
-                {
-                    modeManager.SetModeControl(Modes.DeletingGun);
-                    TowerInteraction(_currentTower);
-                }
-
-                Debug.Log("delete");
-            }
-            else
-            {
-                cameraController.GoToTower(_currentTower.transform);
-                OpenControlWindow();
-                Debug.Log("open tower window");
-            }
+            cameraController.GoToTower(_currentTower.transform);
+            OpenControlWindow();
         }
         else if (!ModeManager.IsCreatingMode(modeManager.Mode))
         {
-            Debug.Log("create");
             TowerInteraction(_currentTower);
         }
-
     }
 
     public TowerController GetCurrentTower(Vector2 _position)
@@ -411,7 +377,6 @@ public class GameManager : MonoBehaviour
 
         if (_hitCollider != null && _hitCollider.CompareTag(_towerTag))
         {
-            Debug.Log(_hitCollider.name);
             return _hitCollider.GetComponent<TowerController>();
         }
         return null;
@@ -470,6 +435,14 @@ public class GameManager : MonoBehaviour
         TowerInteraction(_currentTower);
     }
 
+    public void DeleteGun()
+    {
+        modeManager.SetModeControl(Modes.DeletingGun);
+        TowerInteraction(_currentTower);
+
+        towerWindowController.GunSectionHandle();
+    }
+
     IEnumerator CloseTowerWindowWithDelay()
     {
         float _delay = 0.3f;
@@ -491,7 +464,6 @@ public class GameManager : MonoBehaviour
             UpdateParams();
         }
 
-        _isDraged = false;
         modeManager.SetModeControl(Modes.None);
     }
 

@@ -87,7 +87,7 @@ public class TowerWindowController : MonoBehaviour
         EnergySectionHandle();
     }
 
-    void GunSectionHandle()
+    public void GunSectionHandle()
     {
         if (_currentTower.CurrentGun == null || !_currentTower.CurrentGun.IsCanUpgrade())
             gunSection.SetActive(false);
@@ -103,6 +103,8 @@ public class TowerWindowController : MonoBehaviour
     {
         if (!_currentTower.IsCanUpgrade())
             towerSection.SetActive(false);
+        else
+            towerSection.SetActive(true);
 
         gunSection.transform.localPosition = towerSection.activeSelf ?
             gunSectionPositionWithTowerSection :
