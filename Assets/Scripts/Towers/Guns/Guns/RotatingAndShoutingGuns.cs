@@ -119,22 +119,24 @@ public class RotatingAndShoutingGuns : GunController
 
     public override int CanAffordUpgrade()
     {
-        int _price = Upgrade();
+        LevelSettings = (RotatingAndShoutingGunLevelSettingsSerializable)GetLevelSettings(Level + 1);
 
-        if (crystals.crystals < _price)
+        if (crystals.crystals < LevelSettings.price)
         {
             LevelSettings = (RotatingAndShoutingGunLevelSettingsSerializable)GetLevelSettings(Level);
             return -1;
         }
+        else
+        {
+            Level++;
+            Upgrade();
+        }
 
-        Level++;
-        return _price;
+        return LevelSettings.price;
     }
 
     public override int Upgrade()
     {
-        LevelSettings = (RotatingAndShoutingGunLevelSettingsSerializable)GetLevelSettings(Level + 1);
-
         meshFilter.mesh = LevelSettings.mesh;
         Collection.Radius = LevelSettings.radius;
 

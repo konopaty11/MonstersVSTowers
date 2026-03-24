@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -16,7 +17,9 @@ public class WaveResultWindowController : MonoBehaviour
     {
         waveWindowObject.SetActive(true);
 
-        timeText.text = _time.ToString();
+        TimeSpan _span = TimeSpan.FromSeconds(_time);
+        timeText.text = _span.ToString(@"m\:ss");
+
         crystalsText.text = _crystals.ToString();
         energyText.text = _energy.ToString();
 

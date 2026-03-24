@@ -247,6 +247,8 @@ public class GameManager : MonoBehaviour
     public void NextWave()
     {
         TimerActive = true;
+        _timer = 0f;
+        waveResultWindowController.CloseWinWondow();
 
         SetPreviusParams();
 

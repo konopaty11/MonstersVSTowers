@@ -30,15 +30,11 @@ public class PauseManager : MonoBehaviour
 
     void OnEnable()
     {
-        _inputSystem.Player.Attack.Enable();
-        _inputSystem.Player.Attack.performed += ClickHandle;
         LoadManager.OnLoad += ChangeButtons;
     }
 
     void OnDisable()
     {
-        _inputSystem.Player.Attack.Disable();
-        _inputSystem.Player.Attack.performed -= ClickHandle;
         LoadManager.OnLoad -= ChangeButtons;
     }
 
@@ -51,25 +47,6 @@ public class PauseManager : MonoBehaviour
     {
         if (_isTimeActive)
             _currentTime += Time.deltaTime;
-    }
-
-    void ClickHandle(InputAction.CallbackContext context)
-    {
-        if (IsPause) return;
-
-        if (_currentTime == 0f)
-        {
-            _isTimeActive = true;
-        }
-        else
-        {
-            if (_currentTime <= _doubleTapTime)
-            {
-                OpenPause();
-                _isTimeActive = false;
-            }
-            _currentTime = 0f;
-        }
     }
 
     void ChangeButtons(LocationType _type)

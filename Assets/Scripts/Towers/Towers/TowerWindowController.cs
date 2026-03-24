@@ -46,11 +46,22 @@ public class TowerWindowController : MonoBehaviour
     void UpdateTowerLevel(TowerController _tower, int _level)
     {
         if (_tower == _currentTower)
+        {
             levelTowerText.text = _level.ToString();
+
+            string _upgradePriceString;
+            int _upgradePrice = _tower.GetUpgradePrice();
+            if (_upgradePrice == -1)
+                _upgradePriceString = "MAX";
+            else
+                _upgradePriceString = _upgradePrice.ToString(); 
+            priceTowerUpgradeText.text = _upgradePriceString;
+        }
 
         Debug.Log($"tower: {_level}");
 
         TowerSectionHandle();
+        GunSectionHandle();
     }
 
     void UpdateEnergy(TowerController _tower, int _energy)
@@ -64,11 +75,21 @@ public class TowerWindowController : MonoBehaviour
     void UpdateGunLevel(GunController _gun, int _level)
     {
         if (_gun == _currentTower.CurrentGun)
+        {
             levelGunText.text = _level.ToString();
+
+            string _upgradePriceString;
+            int _upgradePrice = _gun.GetUpgradePrice();
+            if (_upgradePrice == -1)
+                _upgradePriceString = "MAX";
+            else
+                _upgradePriceString = _upgradePrice.ToString();
+            priceGunUpgradeText.text = _upgradePriceString;
+        }
 
         Debug.Log($"gun: {_level}");
 
-
+        TowerSectionHandle();
         GunSectionHandle();
     }
 
@@ -78,14 +99,10 @@ public class TowerWindowController : MonoBehaviour
         energyText.text = _energy.ToString();
         countEnergyAddedCountText.text = _countEnergyAddedCount.ToString();
 
-        levelTowerText.text = _levelTower.ToString();
-        priceTowerUpgradeText.text = _priceTowerUpgrade.ToString();
+        UpdateTowerLevel(_tower, _levelTower);
 
-        levelGunText.text = _levelGun.ToString();
-        priceGunUpgradeText.text = _priceGunUpgrade.ToString();
-
-        GunSectionHandle();
-        TowerSectionHandle();
+        if (_tower.CurrentGun != null)
+            UpdateGunLevel(_tower.CurrentGun, _levelGun);
     }
 
     public void GunSectionHandle()

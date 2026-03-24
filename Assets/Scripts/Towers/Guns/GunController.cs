@@ -42,7 +42,7 @@ public abstract class GunController : MonoBehaviour, IUpgradable
 
     public virtual int Upgrade()
     {
-        OnUpgrade?.Invoke(this, Level + 1);
+        OnUpgrade?.Invoke(this, Level);
         return -1;
     }
 

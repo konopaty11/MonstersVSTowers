@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 212655758384834322}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cartridges
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 5833177272151309274}
   - component: {fileID: 6958230114808315066}
   - component: {fileID: 3646060957286821564}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cannon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134,7 +134,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1276042919747549999}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: spawn 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -165,7 +165,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3681500912555155963}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: spawn 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -196,7 +196,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1423770038050557425}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: spawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -227,7 +227,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3272004056016029868}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: ThreeCartridge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -262,7 +262,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4983722105659067070}
   - component: {fileID: 5254908819756383236}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cannon1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -300,7 +300,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RotatingAndShoutingGuns
   type: 10
   meshFilter: {fileID: 6958230114808315066}
-  cartridgePrefab: {fileID: 4606921700713666437, guid: e75d2ba257781434a9b6545aa3799462, type: 3}
   cartridgeSpawns:
   - spawns:
     - {fileID: 1423770038050557425}
@@ -323,7 +322,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2912778383974130959}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: spawn 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -354,7 +353,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5660324674806697221}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: OneCartridge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -386,7 +385,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8778469353369712803}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: spawn 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -417,7 +416,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8611156417936117549}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: TwoCartridge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -450,7 +449,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8121653068396925614}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: spawn 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
