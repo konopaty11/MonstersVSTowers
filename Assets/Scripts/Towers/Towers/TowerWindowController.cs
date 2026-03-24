@@ -12,9 +12,8 @@ public class TowerWindowController : MonoBehaviour
     [SerializeField] TextMeshProUGUI priceGunUpgradeText;
 
     [Header("Sections")]
-    [SerializeField] GameObject towerSection;
-    [SerializeField] GameObject gunSection;
-    [SerializeField] GameObject energySection;
+    [SerializeField] CanvasGroup towerSection;
+    [SerializeField] CanvasGroup gunSection;
 
     [Header("Tower section positions")]
     [SerializeField] Vector3 towerSectionPositionAlone;
@@ -49,8 +48,9 @@ public class TowerWindowController : MonoBehaviour
         if (_tower == _currentTower)
             levelTowerText.text = _level.ToString();
 
+        Debug.Log($"tower: {_level}");
+
         TowerSectionHandle();
-        EnergySectionHandle();
     }
 
     void UpdateEnergy(TowerController _tower, int _energy)
@@ -66,8 +66,10 @@ public class TowerWindowController : MonoBehaviour
         if (_gun == _currentTower.CurrentGun)
             levelGunText.text = _level.ToString();
 
+        Debug.Log($"gun: {_level}");
+
+
         GunSectionHandle();
-        EnergySectionHandle();
     }
 
     public void Setup(TowerController _tower, int _energy, int _countEnergyAddedCount, int _levelTower, int _priceTowerUpgrade, int _levelGun, int _priceGunUpgrade)
@@ -84,38 +86,29 @@ public class TowerWindowController : MonoBehaviour
 
         GunSectionHandle();
         TowerSectionHandle();
-        EnergySectionHandle();
     }
 
     public void GunSectionHandle()
     {
         if (_currentTower.CurrentGun == null || !_currentTower.CurrentGun.IsCanUpgrade())
-            gunSection.SetActive(false);
+            gunSection.interactable = false;
         else
-            gunSection.SetActive(true);
-
-        towerSection.transform.localPosition = gunSection.activeSelf ?
-            towerSectionPositionWithGunSection :
-            towerSectionPositionAlone;
+            gunSection.interactable = true;
+        Debug.Log("gun handle");
+        //towerSection.transform.localPosition = gunSection.interactable ?
+        //    towerSectionPositionWithGunSection :
+        //    towerSectionPositionAlone;
     }
 
     void TowerSectionHandle()
     {
         if (!_currentTower.IsCanUpgrade())
-            towerSection.SetActive(false);
+            towerSection.interactable = false;
         else
-            towerSection.SetActive(true);
+            towerSection.interactable = true;
 
-        gunSection.transform.localPosition = towerSection.activeSelf ?
-            gunSectionPositionWithTowerSection :
-            gunSectionPositionAlone;
-    }
-
-    void EnergySectionHandle()
-    {
-        if (!gunSection.activeSelf && !towerSection.activeSelf)
-            energySection.transform.localPosition = energySectionPositionAlone;
-        else
-            energySection.transform.localPosition = energySectionPositionNotAlone;
+        //gunSection.transform.localPosition = towerSection.interactable ?
+        //    gunSectionPositionWithTowerSection :
+        //    gunSectionPositionAlone;
     }
 }

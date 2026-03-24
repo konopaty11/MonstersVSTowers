@@ -433,6 +433,8 @@ public class GameManager : MonoBehaviour
     {
         modeManager.SetModeControl(Modes.UpgradingGuns);
         TowerInteraction(_currentTower);
+
+        //towerWindowController.UpdateGunLevel();
     }
 
     public void DeleteGun()

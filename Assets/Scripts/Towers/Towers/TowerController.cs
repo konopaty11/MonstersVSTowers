@@ -305,6 +305,7 @@ public class TowerController : MonoBehaviour, IUpgradable
             {
                 meshFilter.mesh = _levelUpgrade.mesh;
                 collection.RadiusMultyplier = _levelUpgrade.rangeMultiplier;
+                Debug.Log($"tower-upgrade {Level}");
                 OnLevelUpgrade?.Invoke(this, Level);
                 return _levelUpgrade.price;
             }

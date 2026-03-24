@@ -1131,6 +1131,7 @@ GameObject:
   - component: {fileID: 77527261}
   - component: {fileID: 77527260}
   - component: {fileID: 77527259}
+  - component: {fileID: 77527264}
   m_Layer: 0
   m_Name: UpgradeTower
   m_TagString: Untagged
@@ -1284,6 +1285,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 77527257}
   m_CullTransparentMesh: 1
+--- !u!225 &77527264
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 77527257}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &83706639
 GameObject:
   m_ObjectHideFlags: 0
@@ -3140,6 +3153,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 168112461}
+  - component: {fileID: 168112462}
   m_Layer: 0
   m_Name: TowerSection
   m_TagString: Untagged
@@ -3168,6 +3182,18 @@ RectTransform:
   m_AnchoredPosition: {x: 130, y: 120}
   m_SizeDelta: {x: 208, y: 385}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &168112462
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 168112460}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &171239770
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8328,6 +8354,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 473047915}
+  - component: {fileID: 473047916}
   m_Layer: 0
   m_Name: GunSection
   m_TagString: Untagged
@@ -8357,6 +8384,18 @@ RectTransform:
   m_AnchoredPosition: {x: -130, y: 120}
   m_SizeDelta: {x: 208, y: 385}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &473047916
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 473047914}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &473859074
 GameObject:
   m_ObjectHideFlags: 0
@@ -8748,8 +8787,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 69959887}
   m_HandleRect: {fileID: 69959886}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 1
+  m_Value: 0
+  m_Size: 0.6000001
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -10371,6 +10410,7 @@ GameObject:
   - component: {fileID: 638154596}
   - component: {fileID: 638154595}
   - component: {fileID: 638154594}
+  - component: {fileID: 638154599}
   m_Layer: 0
   m_Name: UpgradeGun
   m_TagString: Untagged
@@ -10524,6 +10564,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 638154592}
   m_CullTransparentMesh: 1
+--- !u!225 &638154599
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 638154592}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &643265407
 GameObject:
   m_ObjectHideFlags: 0
@@ -14718,9 +14770,8 @@ MonoBehaviour:
   levelGunText: {fileID: 722092585}
   priceTowerUpgradeText: {fileID: 1768237287}
   priceGunUpgradeText: {fileID: 117364788}
-  towerSection: {fileID: 168112460}
-  gunSection: {fileID: 473047914}
-  energySection: {fileID: 1438067109}
+  towerSection: {fileID: 77527264}
+  gunSection: {fileID: 638154599}
   towerSectionPositionAlone: {x: 0, y: 120, z: 0}
   towerSectionPositionWithGunSection: {x: 130, y: 120, z: 0}
   gunSectionPositionAlone: {x: 0, y: 120, z: 0}
@@ -25632,6 +25683,7 @@ GameObject:
   - component: {fileID: 1438067113}
   - component: {fileID: 1438067112}
   - component: {fileID: 1438067111}
+  - component: {fileID: 1438067114}
   m_Layer: 0
   m_Name: AddEnergy
   m_TagString: Untagged
@@ -25757,6 +25809,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1438067109}
   m_CullTransparentMesh: 1
+--- !u!225 &1438067114
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1438067109}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &1444525456
 PrefabInstance:
   m_ObjectHideFlags: 0
