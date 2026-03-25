@@ -74,7 +74,7 @@ public class GameManager : MonoBehaviour
     List<MonsterSerializable> _monstersSerializable;
 
     TowerController _currentTower;
-    bool _isTowerWindowOpen;
+    bool _towerInteractable;
 
     void Awake()
     {
@@ -204,6 +204,7 @@ public class GameManager : MonoBehaviour
 
     void OpenWaveResultWindow()
     {
+        _towerInteractable = false;
         _currentWaveIndex++;
 
         int _countStars = 1;
@@ -322,6 +323,8 @@ public class GameManager : MonoBehaviour
             visibleUIManager.HideUI(_winID, ShowType.Moving);
             winWindow.SetActive(false);
         }
+
+        _towerInteractable = true;
     }
 
     public void Win()
@@ -347,7 +350,7 @@ public class GameManager : MonoBehaviour
 
     void PressStarted(InputAction.CallbackContext context)
     {
-        if (Touchscreen.current == null || _isTowerWindowOpen) return;
+        if (Touchscreen.current == null || _towerInteractable) return;
 
         TouchControl _touch = Touchscreen.current.primaryTouch;
         Vector2 _position = _touch.position.ReadValue();
@@ -359,7 +362,7 @@ public class GameManager : MonoBehaviour
 
     void PressCanceled(InputAction.CallbackContext context)
     {
-        if (_currentTower == null || _isTowerWindowOpen) return;
+        if (_currentTower == null || _towerInteractable) return;
 
         gunIconManager.DisableIcons();
         if (modeManager.Mode == Modes.None)
@@ -400,7 +403,7 @@ public class GameManager : MonoBehaviour
 
     public void OpenControlWindow()
     {
-        _isTowerWindowOpen = true;
+        _towerInteractable = true;
         towerControlWindowObject.SetActive(true);
         visibleUIManager.ShowUI(_towerWindowID, ShowType.Fading);
 
@@ -456,7 +459,7 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(_delay);
         towerControlWindowObject.SetActive(false);
-        _isTowerWindowOpen = false;
+        _towerInteractable = false;
     }
 
     public void TowerInteraction(TowerController _tower)

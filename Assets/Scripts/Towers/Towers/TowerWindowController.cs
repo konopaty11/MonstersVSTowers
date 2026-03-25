@@ -12,6 +12,8 @@ public class TowerWindowController : MonoBehaviour
     [SerializeField] TextMeshProUGUI priceGunUpgradeText;
 
     [Header("Sections")]
+    [SerializeField] GameObject gunSectionObject;
+    [SerializeField] RectTransform towerSectionRectTransform;
     [SerializeField] CanvasGroup towerSection;
     [SerializeField] CanvasGroup gunSection;
 
@@ -111,10 +113,17 @@ public class TowerWindowController : MonoBehaviour
             gunSection.interactable = false;
         else
             gunSection.interactable = true;
-        Debug.Log("gun handle");
-        //towerSection.transform.localPosition = gunSection.interactable ?
-        //    towerSectionPositionWithGunSection :
-        //    towerSectionPositionAlone;
+
+        if (_currentTower.CurrentGun == null)
+        {
+            gunSectionObject.SetActive(false);
+            towerSectionRectTransform.anchoredPosition = towerSectionPositionAlone;
+        }
+        else
+        {
+            gunSectionObject.SetActive(true);
+            towerSectionRectTransform.anchoredPosition = towerSectionPositionWithGunSection;
+        }
     }
 
     void TowerSectionHandle()
